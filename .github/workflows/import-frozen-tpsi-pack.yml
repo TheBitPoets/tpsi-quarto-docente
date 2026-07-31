@@ -1,0 +1,88 @@
+name: Import frozen TPSI pack
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/import-frozen-tpsi-pack.yml"
+
+jobs:
+  import-pack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout private target repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch the exact frozen public commit
+        env:
+          SOURCE_REPOSITORY: https://github.com/TheBitPoets/2cornot2c.git
+          SOURCE_SHA: 04475093db9b53f18f680498babe82610b11b2bb
+        run: |
+          set -euo pipefail
+          source_dir="$RUNNER_TEMP/2cornot2c-source"
+          rm -rf "$source_dir"
+          git init "$source_dir"
+          git -C "$source_dir" remote add origin "$SOURCE_REPOSITORY"
+          git -C "$source_dir" fetch --depth=1 origin "$SOURCE_SHA"
+          git -C "$source_dir" checkout --detach FETCH_HEAD
+          test "$(git -C "$source_dir" rev-parse HEAD)" = "$SOURCE_SHA"
+
+      - name: Copy exactly the 17 approved files and verify SHA-256
+        run: |
+          set -euo pipefail
+          source_dir="$RUNNER_TEMP/2cornot2c-source"
+          files=(
+            "activities/tpsi_quarto/fork_pipe_square/activity.json"
+            "activities/tpsi_quarto/fork_pipe_square/solution/main.c"
+            "activities/tpsi_quarto/fork_pipe_square/starter/main.c"
+            "activities/tpsi_quarto/fork_pipe_square/student/README.md"
+            "activities/tpsi_quarto/fork_pipe_square/teacher/NOTES.md"
+            "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md"
+            "content/tpsi_quarto/02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md"
+            "content/tpsi_quarto/03_REQUISITI_SOFTWARE.md"
+            "content/tpsi_quarto/04_DOCUMENTAZIONE_VERSIONAMENTO.md"
+            "content/tpsi_quarto/05_TESTING_DEBUGGING.md"
+            "content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md"
+            "content/tpsi_quarto/COVERAGE.md"
+            "content/tpsi_quarto/README.md"
+            "content/tpsi_quarto/manifest.json"
+            "doc/TPSI_QUARTO_CONTENT_PACK.md"
+            "doc/course_designs/tpsi_quarto_2026_2027.json"
+            "tests/test_tpsi_quarto_content_pack.py"
+          )
+
+          test "${#files[@]}" -eq 17
+          : > "$RUNNER_TEMP/source.sha256"
+          : > "$RUNNER_TEMP/target.sha256"
+
+          for path in "${files[@]}"; do
+            test -f "$source_dir/$path"
+            mkdir -p "$(dirname "$path")"
+            cp "$source_dir/$path" "$path"
+            source_hash="$(sha256sum "$source_dir/$path" | awk '{print $1}')"
+            target_hash="$(sha256sum "$path" | awk '{print $1}')"
+            printf '%s  %s\n' "$source_hash" "$path" >> "$RUNNER_TEMP/source.sha256"
+            printf '%s  %s\n' "$target_hash" "$path" >> "$RUNNER_TEMP/target.sha256"
+          done
+
+          diff -u "$RUNNER_TEMP/source.sha256" "$RUNNER_TEMP/target.sha256"
+          test "$(find activities/tpsi_quarto content/tpsi_quarto doc/course_designs tests -type f 2>/dev/null | grep -E '(^activities/tpsi_quarto/|^content/tpsi_quarto/|^doc/course_designs/tpsi_quarto_2026_2027.json$|^tests/test_tpsi_quarto_content_pack.py$)' | wc -l)" -eq 17
+
+      - name: Commit the verified private copy and remove this temporary workflow
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/import-frozen-tpsi-pack.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "content: import frozen TPSI fourth-year pack"
+          git push origin HEAD:main
