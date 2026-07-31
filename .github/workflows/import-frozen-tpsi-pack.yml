@@ -4,19 +4,22 @@ permissions:
   contents: write
 
 on:
-  push:
+  workflow_dispatch:
+  pull_request:
     branches:
       - main
     paths:
-      - ".github/workflows/import-frozen-tpsi-pack.yml"
+      - ".private-import-trigger"
 
 jobs:
   import-pack:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout private target repository
+      - name: Checkout private target main branch
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Fetch the exact frozen public commit
@@ -74,10 +77,11 @@ jobs:
           diff -u "$RUNNER_TEMP/source.sha256" "$RUNNER_TEMP/target.sha256"
           test "$(find activities/tpsi_quarto content/tpsi_quarto doc/course_designs tests -type f 2>/dev/null | grep -E '(^activities/tpsi_quarto/|^content/tpsi_quarto/|^doc/course_designs/tpsi_quarto_2026_2027.json$|^tests/test_tpsi_quarto_content_pack.py$)' | wc -l)" -eq 17
 
-      - name: Commit the verified private copy and remove this temporary workflow
+      - name: Commit the verified private copy and remove temporary migration files
         run: |
           set -euo pipefail
           rm -f .github/workflows/import-frozen-tpsi-pack.yml
+          rm -f .private-import-trigger
           rmdir .github/workflows 2>/dev/null || true
           rmdir .github 2>/dev/null || true
           git config user.name "github-actions[bot]"
@@ -86,3 +90,12 @@ jobs:
           git diff --cached --check
           git commit -m "content: import frozen TPSI fourth-year pack"
           git push origin HEAD:main
+
+      - name: Remove the private trigger branch
+        if: github.event_name == 'pull_request'
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          test -n "$HEAD_REF"
+          git push origin --delete "$HEAD_REF" || true
