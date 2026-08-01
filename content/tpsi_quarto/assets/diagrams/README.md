@@ -1,6 +1,6 @@
 # Standard dei diagrammi TPSI quarto
 
-Questa cartella contiene diagrammi **originali**, creati per il corso e non ricavati dalle immagini del libro adottato.
+Questa cartella contiene **27 diagrammi originali**, creati per il corso e non ricavati né ricalcati dalle immagini del libro adottato.
 
 ## Formato
 
@@ -30,7 +30,7 @@ Questa cartella contiene diagrammi **originali**, creati per il corso e non rica
 
 ## Inserimento nei Markdown
 
-Il diagramma è la rappresentazione principale; il blocco testuale originario viene conservato in un `<details>` per accessibilità, copia e consultazione senza immagini.
+Quando un SVG sostituisce una vera ASCII art nel modulo principale, il diagramma è la rappresentazione primaria e il blocco originario resta in un `<details>` per accessibilità, copia e consultazione senza immagini.
 
 ````md
 ![Descrizione completa del diagramma](assets/diagrams/nome-diagramma.svg)
@@ -45,6 +45,8 @@ Il diagramma è la rappresentazione principale; il blocco testuale originario vi
 </details>
 ````
 
+Gli altri diagrammi sono raccolti nelle sei guide sotto `content/tpsi_quarto/visuals/`. Questa separazione evita di interrompere continuamente teoria, codice e pseudocodice nei moduli principali.
+
 L'`alt text` deve descrivere il significato e non limitarsi a ripetere il titolo.
 
 ## Convenzione dei nomi
@@ -57,11 +59,11 @@ Esempi:
 
 ```text
 01-process-lifecycle.svg
-01-execution-models.svg
 02-producer-consumer-buffer.svg
-02-deadlock-cycle.svg
 03-requirements-traceability.svg
-04-architecture-layers.svg
+04-git-workflow.svg
+05-debug-cycle.svg
+06-responsible-ai.svg
 ```
 
 ## Cosa trasformare in immagine
@@ -85,6 +87,25 @@ Lasciare come testo o codice:
 - identificatori di activity;
 - diagrammi Mermaid già versionabili e semanticamente corretti.
 
+## Struttura delle guide
+
+```text
+content/tpsi_quarto/visuals/
+  01_PROCESSI_E_CONCORRENZA.md
+  02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md
+  03_REQUISITI_SOFTWARE.md
+  04_DOCUMENTAZIONE_VERSIONAMENTO.md
+  05_TESTING_DEBUGGING.md
+  06_CITTADINANZA_DIGITALE.md
+```
+
+Ogni guida:
+
+- collega il modulo teorico;
+- incorpora tutti i diagrammi del relativo nucleo;
+- usa alt text descrittivi;
+- spiega quali elementi restano testuali e perché.
+
 ## Controlli locali
 
 Non esistono workflow GitHub Actions nel repository privato. I controlli si eseguono localmente:
@@ -98,7 +119,8 @@ La suite verifica:
 - XML SVG valido;
 - `title`, `desc`, `role` e `aria-labelledby`;
 - assenza di script, font e risorse remote;
-- corrispondenza fra inventario e file SVG;
+- set esatto dei 27 SVG;
+- corrispondenza fra inventario, guide e file;
 - riferimenti Markdown a file esistenti;
 - alt text significativo;
 - fallback testuale per le ASCII art sostituite;
