@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 790" role="img" aria-labelledby="title desc">
+  <title id="title">Attesa con mutex e variabile di condizione</title>
+  <desc id="desc">Il thread acquisisce il mutex, controlla la condizione in un ciclo, rilascia atomicamente il mutex durante wait, viene risvegliato, riacquisisce il mutex e ricontrolla lo stato.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker><style>.t{font:700 30px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.h{font:700 22px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.b{font:19px system-ui,Segoe UI,Arial,sans-serif;fill:#334155}.step{fill:#FFFFFF;stroke:#2563EB;stroke-width:3}.wait{fill:#FFF7ED;stroke:#B45309;stroke-width:3}.ok{fill:#ECFDF5;stroke:#0F766E;stroke-width:3}.diamond{fill:#F5F3FF;stroke:#7C3AED;stroke-width:3}</style></defs>
+  <rect width="1400" height="790" fill="#F8FAFC"/><text class="t" x="700" y="55" text-anchor="middle">Variabile di condizione: attendere senza occupare il mutex</text>
+  <rect class="step" x="85" y="190" width="230" height="105" rx="20"/><text class="h" x="200" y="233" text-anchor="middle">lock(mutex)</text><text class="b" x="200" y="270" text-anchor="middle">acquisisce il possesso</text>
+  <path d="M315 242 H430" stroke="#2563EB" stroke-width="5" marker-end="url(#a)"/>
+  <polygon class="diamond" points="570,140 715,242 570,344 425,242"/><text class="h" x="570" y="225" text-anchor="middle">Condizione</text><text class="h" x="570" y="257" text-anchor="middle">vera?</text>
+  <path d="M715 242 H865" stroke="#0F766E" stroke-width="5" marker-end="url(#a)"/><text class="b" x="790" y="220" text-anchor="middle">sì</text>
+  <rect class="ok" x="865" y="190" width="230" height="105" rx="20"/><text class="h" x="980" y="233" text-anchor="middle">usa/modifica</text><text class="b" x="980" y="270" text-anchor="middle">stato protetto</text>
+  <path d="M1095 242 H1200" stroke="#2563EB" stroke-width="5" marker-end="url(#a)"/><rect class="step" x="1200" y="190" width="150" height="105" rx="20"/><text class="h" x="1275" y="235" text-anchor="middle">unlock</text><text class="b" x="1275" y="270" text-anchor="middle">rilascia</text>
+  <path d="M570 344 V445" stroke="#B45309" stroke-width="5" marker-end="url(#a)"/><text class="b" x="595" y="400">no</text>
+  <rect class="wait" x="390" y="445" width="360" height="125" rx="22"/><text class="h" x="570" y="488" text-anchor="middle">wait(condition, mutex)</text><text class="b" x="570" y="525" text-anchor="middle">rilascia il mutex e dorme</text><text class="b" x="570" y="553" text-anchor="middle">in modo coordinato</text>
+  <rect class="ok" x="860" y="445" width="360" height="125" rx="22"/><text class="h" x="1040" y="488" text-anchor="middle">signal / broadcast</text><text class="b" x="1040" y="525" text-anchor="middle">un altro thread modifica lo stato</text><text class="b" x="1040" y="553" text-anchor="middle">e segnala un possibile progresso</text>
+  <path d="M860 508 H750" stroke="#0F766E" stroke-width="5" marker-end="url(#a)"/>
+  <path d="M570 570 C570 690 360 690 360 410 C360 340 425 300 455 280" stroke="#7C3AED" stroke-width="5" fill="none" marker-end="url(#a)"/>
+  <text class="b" x="570" y="635" text-anchor="middle">Al risveglio il thread riacquisisce il mutex e torna al controllo.</text>
+  <rect class="wait" x="275" y="680" width="850" height="70" rx="20"/><text class="h" x="700" y="723" text-anchor="middle">Usare while, non if: il risveglio non garantisce che la condizione sia ancora vera.</text>
+</svg>
