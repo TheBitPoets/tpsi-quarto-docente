@@ -11,6 +11,21 @@ Questa cartella contiene materiali didattici originali per il quarto anno TPSI, 
 5. [Testing e debugging](05_TESTING_DEBUGGING.md)
 6. [Cittadinanza digitale](06_CITTADINANZA_DIGITALE.md)
 
+## Mappe visive
+
+Le guide seguenti raccolgono i diagrammi originali del corso. Affiancano i moduli senza sostituire comandi, pseudocodice, formule o template che devono restare copiabili.
+
+1. [Mappe visive — Processi, thread e concorrenza](visuals/01_PROCESSI_E_CONCORRENZA.md)
+2. [Mappe visive — Comunicazione e sincronizzazione](visuals/02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md)
+3. [Mappe visive — Requisiti software](visuals/03_REQUISITI_SOFTWARE.md)
+4. [Mappe visive — Documentazione e controllo di versione](visuals/04_DOCUMENTAZIONE_VERSIONAMENTO.md)
+5. [Mappe visive — Testing e debugging](visuals/05_TESTING_DEBUGGING.md)
+6. [Mappe visive — Cittadinanza digitale](visuals/06_CITTADINANZA_DIGITALE.md)
+
+- [`VISUALS.md`](VISUALS.md): inventario, decisioni di trasformazione e stato dei diagrammi;
+- [`assets/diagrams/README.md`](assets/diagrams/README.md): standard grafico, accessibilità e convenzioni;
+- `assets/diagrams/*.svg`: 27 diagrammi SVG originali, testuali e versionabili.
+
 ## File di controllo
 
 - [`manifest.json`](manifest.json): identità, fonti, versioni e relazioni del pacchetto;
@@ -21,7 +36,7 @@ Questa cartella contiene materiali didattici originali per il quarto anno TPSI, 
 
 Il riferimento curricolare è l'indice pubblico del volume 2 Hoepli *Tecnologie e progettazione di sistemi informatici e di telecomunicazioni*, di Paolo Camagni e Riccardo Nikolassy.
 
-I testi, gli esempi, gli esercizi e i laboratori presenti in questa cartella sono nuovi e non costituiscono una trascrizione del volume. Il riferimento al libro serve a verificare la copertura degli argomenti. Eventuali risorse ufficiali dell'editore devono essere gestite separatamente nel rispetto delle rispettive licenze.
+I testi, gli esempi, gli esercizi, i laboratori e i diagrammi presenti in questa cartella sono nuovi e non costituiscono una trascrizione o un ricalco del volume. Il riferimento al libro serve a verificare la copertura degli argomenti. Eventuali risorse ufficiali dell'editore devono essere gestite separatamente nel rispetto delle rispettive licenze.
 
 ## Relazione con `LINUX_PROGRAMMING.md`
 
