@@ -40,7 +40,7 @@
     <path d="M610 315 H702"/>
     <path d="M960 315 H1072"/>
     <path d="M835 380 V490"/>
-    <path d="M710 565 C565 565 500 500 500 390"/>
+    <path id="event-completed" data-connector="true" d="M710 565 C700 565 700 470 620 430 C560 400 500 410 500 390"/>
   </g>
 
   <g font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="18" font-weight="600" fill="#334155">
@@ -48,12 +48,12 @@
     <text x="656" y="296" text-anchor="middle">dispatch</text>
     <text x="1018" y="296" text-anchor="middle">fine</text>
     <text x="855" y="444">I/O o evento</text>
-    <text x="575" y="535" text-anchor="middle">evento completato</text>
+    <text x="620" y="418" text-anchor="middle">evento completato</text>
   </g>
 
   <g font-family="system-ui,Segoe UI,Arial,sans-serif">
-    <rect x="70" y="530" width="500" height="100" rx="18" fill="#E2E8F0"/>
+    <rect id="idea-key-box" data-node="true" x="70" y="530" width="620" height="125" rx="18" fill="#E2E8F0"/>
     <text x="95" y="568" font-size="21" font-weight="700" fill="#0F172A">Idea chiave</text>
-    <text x="95" y="602" font-size="19" fill="#334155">“Pronto” non significa “in esecuzione” e “in attesa” non consuma CPU in polling continuo.</text>
+    <text id="idea-key-text" data-contained-by="idea-key-box" x="95" y="598" font-size="18" fill="#334155"><tspan x="95" dy="0">“Pronto” non significa “in esecuzione”;</tspan><tspan x="95" dy="28">“in attesa” non consuma CPU in polling continuo.</tspan></text>
   </g>
 </svg>
