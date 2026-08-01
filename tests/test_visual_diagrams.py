@@ -30,6 +30,12 @@ INTEGRATED_REFERENCES = {
         "assets/diagrams/02-producer-consumer-buffer.svg",
         "assets/diagrams/02-deadlock-cycle.svg",
     },
+    "03_REQUISITI_SOFTWARE.md": {
+        "assets/diagrams/03-requirements-traceability.svg",
+    },
+    "04_DOCUMENTAZIONE_VERSIONAMENTO.md": {
+        "assets/diagrams/04-architecture-layers.svg",
+    },
 }
 
 
@@ -95,6 +101,10 @@ def test_visual_inventory_tracks_every_current_svg() -> None:
     inventory = (CONTENT_ROOT / "VISUALS.md").read_text(encoding="utf-8")
     for filename in EXPECTED_DIAGRAMS:
         assert filename in inventory
+        assert re.search(
+            rf"\|[^\n]*\|\s*integrato\s*\|\s*`assets/diagrams/{re.escape(filename)}`\s*\|",
+            inventory,
+        ), filename
 
 
 def test_private_repository_defines_no_github_actions_workflow() -> None:
