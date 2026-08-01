@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Produttore e consumatore con buffer limitato</title>
+  <desc id="desc">Il produttore crea dati e li inserisce in una coda di capacità limitata. Il consumatore estrae i dati e li salva. Il produttore attende quando la coda è piena, il consumatore attende quando è vuota, e un mutex protegge la struttura condivisa.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0 L12 6 L0 12 z" fill="#2563EB"/></marker>
+    <marker id="arrowTeal" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0 L12 6 L0 12 z" fill="#0F766E"/></marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#0F172A" flood-opacity="0.13"/></filter>
+  </defs>
+  <rect width="1400" height="760" rx="28" fill="#F8FAFC"/>
+  <text x="70" y="74" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="38" font-weight="700" fill="#0F172A">Produttore–consumatore con buffer limitato</text>
+  <text x="70" y="112" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="22" fill="#475569">Comunicazione attraverso una coda condivisa e sincronizzazione sulle condizioni vuoto/pieno</text>
+
+  <g font-family="system-ui,Segoe UI,Arial,sans-serif" filter="url(#shadow)">
+    <rect x="70" y="235" width="300" height="210" rx="28" fill="#FFFFFF" stroke="#2563EB" stroke-width="4"/>
+    <circle cx="220" cy="292" r="32" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+    <path d="M205 292 h30 M220 277 v30" stroke="#2563EB" stroke-width="5" stroke-linecap="round"/>
+    <text x="220" y="357" text-anchor="middle" font-size="31" font-weight="700" fill="#0F172A">Produttore</text>
+    <text x="220" y="394" text-anchor="middle" font-size="20" fill="#475569">crea e inserisce dati</text>
+
+    <rect x="1030" y="235" width="300" height="210" rx="28" fill="#FFFFFF" stroke="#7C3AED" stroke-width="4"/>
+    <circle cx="1180" cy="292" r="32" fill="#EDE9FE" stroke="#7C3AED" stroke-width="3"/>
+    <path d="M1164 294 l11 11 24-30" fill="none" stroke="#7C3AED" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1180" y="357" text-anchor="middle" font-size="31" font-weight="700" fill="#0F172A">Consumatore</text>
+    <text x="1180" y="394" text-anchor="middle" font-size="20" fill="#475569">estrae e salva dati</text>
+
+    <rect x="465" y="205" width="470" height="275" rx="28" fill="#FFFFFF" stroke="#0F766E" stroke-width="4"/>
+    <text x="700" y="255" text-anchor="middle" font-size="30" font-weight="700" fill="#0F172A">Buffer condiviso</text>
+    <text x="700" y="286" text-anchor="middle" font-size="19" fill="#475569">capacità = 5 elementi</text>
+    <g>
+      <rect x="515" y="326" width="62" height="82" rx="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="3"/>
+      <rect x="590" y="326" width="62" height="82" rx="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="3"/>
+      <rect x="665" y="326" width="62" height="82" rx="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="3"/>
+      <rect x="740" y="326" width="62" height="82" rx="10" fill="#FFFFFF" stroke="#64748B" stroke-width="3" stroke-dasharray="8 6"/>
+      <rect x="815" y="326" width="62" height="82" rx="10" fill="#FFFFFF" stroke="#64748B" stroke-width="3" stroke-dasharray="8 6"/>
+      <g font-size="22" font-weight="700" fill="#0F172A" text-anchor="middle"><text x="546" y="376">d1</text><text x="621" y="376">d2</text><text x="696" y="376">d3</text><text x="771" y="376">—</text><text x="846" y="376">—</text></g>
+    </g>
+    <rect x="588" y="424" width="224" height="38" rx="14" fill="#E2E8F0"/>
+    <text x="700" y="449" text-anchor="middle" font-size="18" font-weight="700" fill="#334155">mutex protegge indici e contatore</text>
+  </g>
+
+  <g fill="none" stroke-width="6">
+    <path d="M370 340 H452" stroke="#2563EB" marker-end="url(#arrow)"/>
+    <path d="M935 340 H1017" stroke="#7C3AED" marker-end="url(#arrow)"/>
+  </g>
+  <g font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">
+    <text x="412" y="318" text-anchor="middle" fill="#2563EB">inserisci</text>
+    <text x="976" y="318" text-anchor="middle" fill="#7C3AED">estrai</text>
+  </g>
+
+  <g font-family="system-ui,Segoe UI,Arial,sans-serif" filter="url(#shadow)">
+    <rect x="120" y="545" width="500" height="135" rx="22" fill="#FFF7ED" stroke="#B45309" stroke-width="3"/>
+    <text x="155" y="590" font-size="24" font-weight="700" fill="#0F172A">Quando il buffer è pieno</text>
+    <text x="155" y="626" font-size="20" fill="#334155">Il produttore attende la condizione <tspan font-family="monospace" font-weight="700">not_full</tspan>.</text>
+    <text x="155" y="655" font-size="18" fill="#475569">Non sovrascrive elementi ancora da consumare.</text>
+
+    <rect x="780" y="545" width="500" height="135" rx="22" fill="#EFF6FF" stroke="#2563EB" stroke-width="3"/>
+    <text x="815" y="590" font-size="24" font-weight="700" fill="#0F172A">Quando il buffer è vuoto</text>
+    <text x="815" y="626" font-size="20" fill="#334155">Il consumatore attende la condizione <tspan font-family="monospace" font-weight="700">not_empty</tspan>.</text>
+    <text x="815" y="655" font-size="18" fill="#475569">Non estrae un elemento inesistente.</text>
+  </g>
+
+  <path d="M620 545 C650 505 750 505 780 545" fill="none" stroke="#0F766E" stroke-width="4" marker-end="url(#arrowTeal)"/>
+  <text x="700" y="510" text-anchor="middle" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700" fill="#0F766E">segnali dopo inserimento/estrazione</text>
+</svg>
