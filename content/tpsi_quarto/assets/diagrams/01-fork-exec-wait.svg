@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Flusso fork, exec e waitpid</title>
+  <desc id="desc">Il processo padre chiama fork, prosegue nel ramo padre e attende il figlio; il figlio può sostituire il proprio programma con exec e terminare restituendo uno stato al padre.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker><style>.t{font:700 30px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.h{font:700 23px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.b{font:20px system-ui,Segoe UI,Arial,sans-serif;fill:#334155}.p{fill:#EFF6FF;stroke:#2563EB;stroke-width:3}.c{fill:#F5F3FF;stroke:#7C3AED;stroke-width:3}.ok{fill:#ECFDF5;stroke:#0F766E;stroke-width:3}.wait{fill:#FFF7ED;stroke:#B45309;stroke-width:3}</style></defs>
+  <rect width="1400" height="760" fill="#F8FAFC"/><text class="t" x="700" y="56" text-anchor="middle">Creazione, sostituzione e raccolta di un processo</text>
+  <rect class="p" x="80" y="130" width="250" height="110" rx="20"/><text class="h" x="205" y="177" text-anchor="middle">Processo padre</text><text class="b" x="205" y="213" text-anchor="middle">esegue il programma</text>
+  <rect class="p" x="425" y="130" width="220" height="110" rx="20"/><text class="h" x="535" y="178" text-anchor="middle">fork()</text><text class="b" x="535" y="213" text-anchor="middle">duplica il flusso</text>
+  <path d="M330 185 H425" stroke="#2563EB" stroke-width="5" marker-end="url(#a)"/>
+  <path d="M645 185 H760" stroke="#2563EB" stroke-width="5" marker-end="url(#a)"/><path d="M645 185 C710 185 690 430 760 430" stroke="#7C3AED" stroke-width="5" fill="none" marker-end="url(#a)"/>
+  <rect class="p" x="760" y="105" width="250" height="160" rx="20"/><text class="h" x="885" y="150" text-anchor="middle">Ramo padre</text><text class="b" x="885" y="190" text-anchor="middle">fork restituisce PID figlio</text><text class="b" x="885" y="225" text-anchor="middle">continua il coordinamento</text>
+  <rect class="wait" x="1080" y="105" width="240" height="160" rx="20"/><text class="h" x="1200" y="150" text-anchor="middle">waitpid()</text><text class="b" x="1200" y="190" text-anchor="middle">attende/raccoglie</text><text class="b" x="1200" y="225" text-anchor="middle">lo stato del figlio</text>
+  <path d="M1010 185 H1080" stroke="#2563EB" stroke-width="5" marker-end="url(#a)"/>
+  <rect class="c" x="760" y="350" width="250" height="160" rx="20"/><text class="h" x="885" y="395" text-anchor="middle">Ramo figlio</text><text class="b" x="885" y="435" text-anchor="middle">fork restituisce 0</text><text class="b" x="885" y="470" text-anchor="middle">ha PID e memoria propri</text>
+  <rect class="c" x="1080" y="350" width="240" height="160" rx="20"/><text class="h" x="1200" y="395" text-anchor="middle">exec()</text><text class="b" x="1200" y="435" text-anchor="middle">sostituisce il programma</text><text class="b" x="1200" y="470" text-anchor="middle">mantiene il processo</text>
+  <path d="M1010 430 H1080" stroke="#7C3AED" stroke-width="5" marker-end="url(#a)"/>
+  <rect class="ok" x="1080" y="585" width="240" height="110" rx="20"/><text class="h" x="1200" y="630" text-anchor="middle">Terminazione</text><text class="b" x="1200" y="666" text-anchor="middle">stato disponibile al padre</text>
+  <path d="M1200 510 V585" stroke="#0F766E" stroke-width="5" marker-end="url(#a)"/><path d="M1200 585 C1370 520 1370 250 1320 210" stroke="#B45309" stroke-width="4" fill="none" stroke-dasharray="10 8" marker-end="url(#a)"/>
+  <text class="b" x="700" y="690" text-anchor="middle">Se exec riesce, il codice successivo nel vecchio programma non viene eseguito.</text>
+</svg>
