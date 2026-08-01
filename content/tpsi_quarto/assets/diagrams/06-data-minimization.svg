@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 780" role="img" aria-labelledby="title desc">
+  <title id="title">Minimizzazione dei dati scolastici</title>
+  <desc id="desc">La raccolta dei dati deve essere limitata da uno scopo definito, dalla durata necessaria e dagli accessi autorizzati; al centro resta soltanto il dato minimo indispensabile.</desc>
+  <defs><style>.t{font:700 30px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.h{font:700 23px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.b{font:19px system-ui,Segoe UI,Arial,sans-serif;fill:#334155}.side1{fill:#EFF6FF;stroke:#2563EB;stroke-width:3}.side2{fill:#FFF7ED;stroke:#B45309;stroke-width:3}.side3{fill:#F5F3FF;stroke:#7C3AED;stroke-width:3}.core{fill:#ECFDF5;stroke:#0F766E;stroke-width:4}.bad{fill:#FEF2F2;stroke:#B91C1C;stroke-width:3}</style></defs>
+  <rect width="1400" height="780" fill="#F8FAFC"/><text class="t" x="700" y="55" text-anchor="middle">Minimizzazione: raccogliere meno, proteggere meglio</text>
+  <polygon class="side1" points="700,120 1090,610 310,610"/>
+  <polygon class="side2" points="700,120 700,610 310,610" opacity="0.78"/>
+  <polygon class="side3" points="700,120 1090,610 700,610" opacity="0.72"/>
+  <text class="h" x="700" y="175" text-anchor="middle">SCOPO</text><text class="b" x="700" y="210" text-anchor="middle">perché serve il dato?</text>
+  <text class="h" x="450" y="560" text-anchor="middle">DURATA</text><text class="b" x="450" y="592" text-anchor="middle">per quanto tempo?</text>
+  <text class="h" x="950" y="560" text-anchor="middle">ACCESSO</text><text class="b" x="950" y="592" text-anchor="middle">chi può vederlo?</text>
+  <circle class="core" cx="700" cy="430" r="155"/><text class="h" x="700" y="395" text-anchor="middle">DATO MINIMO</text><text class="b" x="700" y="435" text-anchor="middle">necessario e proporzionato</text><text class="b" x="700" y="472" text-anchor="middle">pseudonimizzato quando possibile</text>
+  <rect class="bad" x="80" y="190" width="250" height="155" rx="22"/><text class="h" x="205" y="235" text-anchor="middle">DA EVITARE</text><text class="b" x="205" y="275" text-anchor="middle">«potrebbe servire»</text><text class="b" x="205" y="308" text-anchor="middle">conservazione indefinita</text>
+  <rect class="bad" x="1070" y="190" width="250" height="155" rx="22"/><text class="h" x="1195" y="235" text-anchor="middle">DA EVITARE</text><text class="b" x="1195" y="275" text-anchor="middle">accesso a tutti</text><text class="b" x="1195" y="308" text-anchor="middle">log con dati e segreti</text>
+  <text class="b" x="700" y="695" text-anchor="middle">Prima di raccogliere: il nome completo è davvero necessario? Il report può usare un ID?</text><text class="b" x="700" y="730" text-anchor="middle">Alla fine dello scopo: elimina, anonimizza o conserva soltanto quanto giustificato.</text>
+</svg>
