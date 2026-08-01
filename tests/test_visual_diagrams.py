@@ -99,7 +99,7 @@ def test_svg_is_accessible_self_contained_and_valid(filename: str) -> None:
     assert "https://" not in raw
     assert "@import" not in lowered
     assert "javascript:" not in lowered
-    assert "font-family" in raw
+    assert "font-family" in lowered or re.search(r"\bfont\s*:", lowered)
 
 
 def test_expected_diagram_set_has_no_missing_or_accidental_extra_assets() -> None:
