@@ -94,12 +94,19 @@ Collegamenti alla fonte tecnica:
 
 Per ragionare sul sistema operativo è utile un modello semplificato a stati:
 
+![Ciclo di vita semplificato di un processo: nuovo, pronto, in esecuzione, in attesa e terminato, con ritorno dall'attesa allo stato pronto](assets/diagrams/01-process-lifecycle.svg)
+
+<details>
+<summary>Versione testuale del diagramma</summary>
+
 ```text
 nuovo -> pronto -> in esecuzione -> terminato
                    |          ^
                    v          |
                 in attesa -----
 ```
+
+</details>
 
 - **Nuovo**: il sistema sta creando le strutture necessarie.
 - **Pronto**: il processo può essere eseguito, ma aspetta la CPU.
@@ -146,32 +153,32 @@ L'isolamento riduce alcuni errori, ma rende necessaria una comunicazione esplici
 
 I termini non sono sinonimi.
 
-### Esecuzione sequenziale
+![Confronto temporale fra esecuzione sequenziale, concorrente su una CPU e parallela su due CPU](assets/diagrams/01-execution-models.svg)
 
-Una sola attività logica avanza alla volta secondo un ordine determinato dal programma.
+<details>
+<summary>Versione testuale dei tre modelli</summary>
 
 ```text
-A1 -> A2 -> A3 -> B1 -> B2
+Sequenziale: A1 -> A2 -> A3 -> B1 -> B2
+Concorrente: A1 -> B1 -> A2 -> B2 -> A3
+Parallelo:
+CPU 1: A1 -> A2 -> A3
+CPU 2: B1 -> B2 -> B3
 ```
+
+</details>
+
+### Esecuzione sequenziale
+
+Una sola attività logica avanza alla volta secondo un ordine determinato dal programma. L'attività B inizia dopo il completamento dei passi di A.
 
 ### Esecuzione concorrente
 
-Più attività sono in corso nello stesso intervallo di tempo. Su una sola CPU possono alternarsi:
-
-```text
-A1 -> B1 -> A2 -> B2 -> A3
-```
-
-La concorrenza riguarda la struttura e la possibilità di avanzamento indipendente.
+Più attività sono in corso nello stesso intervallo di tempo. Su una sola CPU possono alternarsi. La concorrenza riguarda la struttura e la possibilità di avanzamento indipendente.
 
 ### Esecuzione parallela
 
 Due o più attività eseguono realmente istruzioni nello stesso istante su unità di calcolo diverse.
-
-```text
-CPU 1: A1 -> A2 -> A3
-CPU 2: B1 -> B2 -> B3
-```
 
 Il parallelismo può aumentare le prestazioni, ma soltanto se il lavoro può essere suddiviso e il costo di comunicazione e sincronizzazione non annulla il beneficio.
 
