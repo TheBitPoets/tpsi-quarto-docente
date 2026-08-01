@@ -32,7 +32,7 @@ Questa cartella contiene diagrammi **originali**, creati per il corso e non rica
 
 Il diagramma è la rappresentazione principale; il blocco testuale originario viene conservato in un `<details>` per accessibilità, copia e consultazione senza immagini.
 
-```md
+````md
 ![Descrizione completa del diagramma](assets/diagrams/nome-diagramma.svg)
 
 <details>
@@ -43,7 +43,7 @@ Il diagramma è la rappresentazione principale; il blocco testuale originario vi
 ```
 
 </details>
-```
+````
 
 L'`alt text` deve descrivere il significato e non limitarsi a ripetere il titolo.
 
