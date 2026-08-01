@@ -43,14 +43,14 @@ Questo inventario distingue i diagrammi che migliorano realmente la comprensione
 | --- | --- | --- | --- |
 | bisogno, requisito, soluzione, vincolo | mappa a quattro concetti | da creare | `assets/diagrams/03-requirement-concepts.svg` |
 | diagramma di contesto TheBitLab | mantenere Mermaid | Mermaid | — |
-| tracciabilità bisogno → risultato | catena bidirezionale SVG | pronto | `assets/diagrams/03-requirements-traceability.svg` |
+| tracciabilità bisogno → risultato | catena bidirezionale SVG | integrato | `assets/diagrams/03-requirements-traceability.svg` |
 | caso d'uso | mantenere template testuale | testo | — |
 
 ## Modulo 4 — Documentazione e versionamento
 
 | Concetto | Decisione | Stato | File |
 | --- | --- | --- | --- |
-| architettura GUI/API/service/provider | livelli e confini SVG | pronto | `assets/diagrams/04-architecture-layers.svg` |
+| architettura GUI/API/service/provider | livelli e confini SVG | integrato | `assets/diagrams/04-architecture-layers.svg` |
 | sequenza Course Board / catalogo / activity | mantenere Mermaid | Mermaid | — |
 | flusso Git branch/commit/PR/review | diagramma di processo | da creare | `assets/diagrams/04-git-workflow.svg` |
 | provenienza delle fonti | grafo fonte/versione/trasformazione/revisione | da creare | `assets/diagrams/04-provenance.svg` |
