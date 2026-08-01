@@ -84,3 +84,22 @@ Lasciare come testo o codice:
 - pseudocodice destinato alla modifica;
 - identificatori di activity;
 - diagrammi Mermaid già versionabili e semanticamente corretti.
+
+## Controlli locali
+
+Non esistono workflow GitHub Actions nel repository privato. I controlli si eseguono localmente:
+
+```bash
+python -m pytest tests/test_visual_diagrams.py
+```
+
+La suite verifica:
+
+- XML SVG valido;
+- `title`, `desc`, `role` e `aria-labelledby`;
+- assenza di script, font e risorse remote;
+- corrispondenza fra inventario e file SVG;
+- riferimenti Markdown a file esistenti;
+- alt text significativo;
+- fallback testuale per le ASCII art sostituite;
+- assenza di file in `.github/workflows`.
