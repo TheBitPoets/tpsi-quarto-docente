@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 800" role="img" aria-labelledby="title desc">
+  <title id="title">Livelli di test del software</title>
+  <desc id="desc">Scala crescente dai test unitari ai test di integrazione, sistema e accettazione; aumenta l'ampiezza del contesto mentre diminuisce il dettaglio locale e cresce il costo della prova.</desc>
+  <defs><style>.t{font:700 30px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.h{font:700 23px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.b{font:18px system-ui,Segoe UI,Arial,sans-serif;fill:#334155}.u{fill:#EFF6FF;stroke:#2563EB;stroke-width:3}.i{fill:#F5F3FF;stroke:#7C3AED;stroke-width:3}.s{fill:#FFF7ED;stroke:#B45309;stroke-width:3}.a{fill:#ECFDF5;stroke:#0F766E;stroke-width:3}</style></defs>
+  <rect width="1400" height="800" fill="#F8FAFC"/><text class="t" x="700" y="55" text-anchor="middle">Dal componente isolato al bisogno dello stakeholder</text>
+  <polygon class="u" points="480,650 920,650 850,530 550,530"/><text class="h" x="700" y="580" text-anchor="middle">TEST UNITARIO</text><text class="b" x="700" y="616" text-anchor="middle">funzione o classe con dipendenze controllate</text>
+  <polygon class="i" points="550,530 850,530 790,405 610,405"/><text class="h" x="700" y="452" text-anchor="middle">INTEGRAZIONE</text><text class="b" x="700" y="489" text-anchor="middle">componenti che collaborano</text>
+  <polygon class="s" points="610,405 790,405 755,280 645,280"/><text class="h" x="700" y="326" text-anchor="middle">SISTEMA</text><text class="b" x="700" y="363" text-anchor="middle">prodotto completo</text>
+  <polygon class="a" points="645,280 755,280 725,155 675,155"/><text class="h" x="700" y="205" text-anchor="middle">ACCETTAZIONE</text><text class="b" x="700" y="242" text-anchor="middle">requisiti e bisogno</text>
+  <text class="h" x="180" y="210">Più contesto reale</text><text class="b" x="180" y="250">• più lento</text><text class="b" x="180" y="285">• più costoso</text><text class="b" x="180" y="320">• diagnosi meno locale</text>
+  <text class="h" x="1030" y="575">Più isolamento</text><text class="b" x="1030" y="615">• rapido</text><text class="b" x="1030" y="650">• preciso</text><text class="b" x="1030" y="685">• non prova il sistema intero</text>
+  <path d="M400 615 C290 540 250 400 270 285" stroke="#0F766E" stroke-width="5" fill="none"/><path d="M1000 235 C1110 335 1130 500 1080 585" stroke="#2563EB" stroke-width="5" fill="none"/>
+  <text class="b" x="700" y="742" text-anchor="middle">Una strategia equilibrata combina livelli diversi: nessuno sostituisce completamente gli altri.</text>
+</svg>
