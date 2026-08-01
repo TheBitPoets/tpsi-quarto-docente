@@ -34,8 +34,8 @@
       <rect x="815" y="326" width="62" height="82" rx="10" fill="#FFFFFF" stroke="#64748B" stroke-width="3" stroke-dasharray="8 6"/>
       <g font-size="22" font-weight="700" fill="#0F172A" text-anchor="middle"><text x="546" y="376">d1</text><text x="621" y="376">d2</text><text x="696" y="376">d3</text><text x="771" y="376">—</text><text x="846" y="376">—</text></g>
     </g>
-    <rect x="588" y="424" width="224" height="38" rx="14" fill="#E2E8F0"/>
-    <text x="700" y="449" text-anchor="middle" font-size="18" font-weight="700" fill="#334155">mutex protegge indici e contatore</text>
+    <rect id="mutex-badge" data-node="true" x="525" y="416" width="350" height="50" rx="16" fill="#E2E8F0"/>
+    <text id="mutex-text" data-contained-by="mutex-badge" x="700" y="447" text-anchor="middle" font-size="17" font-weight="700" fill="#334155">mutex protegge indici e contatore</text>
   </g>
 
   <g fill="none" stroke-width="6">
@@ -47,18 +47,16 @@
     <text x="976" y="318" text-anchor="middle" fill="#7C3AED">estrai</text>
   </g>
 
+  <path d="M620 550 C650 510 750 510 780 550" fill="none" stroke="#0F766E" stroke-width="4" marker-end="url(#arrowTeal)"/>
+  <text x="700" y="515" text-anchor="middle" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700" fill="#0F766E">segnali dopo inserimento/estrazione</text>
+
   <g font-family="system-ui,Segoe UI,Arial,sans-serif" filter="url(#shadow)">
-    <rect x="120" y="545" width="500" height="135" rx="22" fill="#FFF7ED" stroke="#B45309" stroke-width="3"/>
-    <text x="155" y="590" font-size="24" font-weight="700" fill="#0F172A">Quando il buffer è pieno</text>
-    <text x="155" y="626" font-size="20" fill="#334155">Il produttore attende la condizione <tspan font-family="monospace" font-weight="700">not_full</tspan>.</text>
-    <text x="155" y="655" font-size="18" fill="#475569">Non sovrascrive elementi ancora da consumare.</text>
+    <rect id="full-card" data-node="true" x="120" y="550" width="500" height="160" rx="22" fill="#FFF7ED" stroke="#B45309" stroke-width="3"/>
+    <text x="155" y="592" font-size="24" font-weight="700" fill="#0F172A">Quando il buffer è pieno</text>
+    <text id="full-card-text" data-contained-by="full-card" x="155" y="625" font-size="18" fill="#334155"><tspan x="155" dy="0">Il produttore attende la condizione</tspan><tspan x="155" dy="27" font-family="monospace" font-weight="700">not_full.</tspan><tspan x="155" dy="28" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="17" fill="#475569">Non sovrascrive elementi ancora da consumare.</tspan></text>
 
-    <rect x="780" y="545" width="500" height="135" rx="22" fill="#EFF6FF" stroke="#2563EB" stroke-width="3"/>
-    <text x="815" y="590" font-size="24" font-weight="700" fill="#0F172A">Quando il buffer è vuoto</text>
-    <text x="815" y="626" font-size="20" fill="#334155">Il consumatore attende la condizione <tspan font-family="monospace" font-weight="700">not_empty</tspan>.</text>
-    <text x="815" y="655" font-size="18" fill="#475569">Non estrae un elemento inesistente.</text>
+    <rect id="empty-card" data-node="true" x="780" y="550" width="500" height="160" rx="22" fill="#EFF6FF" stroke="#2563EB" stroke-width="3"/>
+    <text x="815" y="592" font-size="24" font-weight="700" fill="#0F172A">Quando il buffer è vuoto</text>
+    <text id="empty-card-text" data-contained-by="empty-card" x="815" y="625" font-size="18" fill="#334155"><tspan x="815" dy="0">Il consumatore attende la condizione</tspan><tspan x="815" dy="27" font-family="monospace" font-weight="700">not_empty.</tspan><tspan x="815" dy="28" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="17" fill="#475569">Non estrae un elemento inesistente.</tspan></text>
   </g>
-
-  <path d="M620 545 C650 505 750 505 780 545" fill="none" stroke="#0F766E" stroke-width="4" marker-end="url(#arrowTeal)"/>
-  <text x="700" y="510" text-anchor="middle" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700" fill="#0F766E">segnali dopo inserimento/estrazione</text>
 </svg>
