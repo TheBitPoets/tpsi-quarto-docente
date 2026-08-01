@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Monitor con stato privato, operazioni e condizioni</title>
+  <desc id="desc">Un monitor incapsula stato privato, metodi sincronizzati e code di attesa su condizioni; i thread accedono attraverso le operazioni pubbliche e uno solo modifica lo stato alla volta.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker><style>.t{font:700 30px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.h{font:700 23px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.b{font:19px system-ui,Segoe UI,Arial,sans-serif;fill:#334155}.mon{fill:#FFFFFF;stroke:#7C3AED;stroke-width:4}.state{fill:#ECFDF5;stroke:#0F766E;stroke-width:3}.method{fill:#EFF6FF;stroke:#2563EB;stroke-width:3}.cond{fill:#FFF7ED;stroke:#B45309;stroke-width:3}.thread{fill:#F8FAFC;stroke:#334155;stroke-width:3}</style></defs>
+  <rect width="1400" height="760" fill="#F8FAFC"/><text class="t" x="700" y="55" text-anchor="middle">Monitor: proteggere l'invariante dentro il componente</text>
+  <rect class="thread" x="60" y="170" width="250" height="100" rx="20"/><text class="h" x="185" y="212" text-anchor="middle">Thread A</text><text class="b" x="185" y="247" text-anchor="middle">chiama put()</text>
+  <rect class="thread" x="60" y="485" width="250" height="100" rx="20"/><text class="h" x="185" y="527" text-anchor="middle">Thread B</text><text class="b" x="185" y="562" text-anchor="middle">chiama take()</text>
+  <rect class="mon" x="395" y="105" width="930" height="560" rx="30"/><text class="h" x="860" y="150" text-anchor="middle">Monitor OneSlotMailbox</text>
+  <rect class="method" x="460" y="200" width="260" height="120" rx="20"/><text class="h" x="590" y="245" text-anchor="middle">put(value)</text><text class="b" x="590" y="280" text-anchor="middle">attende se pieno</text>
+  <rect class="method" x="460" y="445" width="260" height="120" rx="20"/><text class="h" x="590" y="490" text-anchor="middle">take()</text><text class="b" x="590" y="525" text-anchor="middle">attende se vuoto</text>
+  <rect class="state" x="820" y="240" width="390" height="190" rx="24"/><text class="h" x="1015" y="285" text-anchor="middle">Stato privato</text><text class="b" x="1015" y="330" text-anchor="middle">value</text><text class="b" x="1015" y="370" text-anchor="middle">full</text><text class="b" x="1015" y="405" text-anchor="middle">invariante protetto</text>
+  <rect class="cond" x="810" y="480" width="190" height="105" rx="20"/><text class="h" x="905" y="520" text-anchor="middle">notFull</text><text class="b" x="905" y="555" text-anchor="middle">coda attesa</text>
+  <rect class="cond" x="1020" y="480" width="190" height="105" rx="20"/><text class="h" x="1115" y="520" text-anchor="middle">notEmpty</text><text class="b" x="1115" y="555" text-anchor="middle">coda attesa</text>
+  <path d="M310 220 H460 M310 535 H460" stroke="#2563EB" stroke-width="5" marker-end="url(#a)"/>
+  <path d="M720 260 H820 M720 505 C765 505 770 400 820 380" stroke="#2563EB" stroke-width="5" fill="none" marker-end="url(#a)"/>
+  <path d="M590 320 C590 385 905 400 905 480 M590 445 C590 390 1115 400 1115 480" stroke="#B45309" stroke-width="4" fill="none" stroke-dasharray="10 8" marker-end="url(#a)"/>
+  <text class="b" x="860" y="625" text-anchor="middle">Mutua esclusione e condizioni sono incapsulate: i chiamanti non manipolano direttamente lo stato.</text>
+</svg>
