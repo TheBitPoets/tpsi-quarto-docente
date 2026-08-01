@@ -37,12 +37,17 @@ Prima di iniziare è necessario conoscere:
 
 Un thread acquisisce misure e le inserisce in una coda. Un secondo thread le salva su disco.
 
-Le operazioni logiche sono:
+![Produttore che inserisce dati in un buffer limitato e consumatore che li estrae, con mutex e condizioni not full e not empty](assets/diagrams/02-producer-consumer-buffer.svg)
+
+<details>
+<summary>Versione testuale del flusso</summary>
 
 ```text
 produttore: crea dato -> inserisce dato
 consumatore: estrae dato -> salva dato
 ```
+
+</details>
 
 Se la coda è limitata, emergono almeno tre vincoli:
 
@@ -504,10 +509,17 @@ Collegamenti:
 
 ### Esempio di ordine incoerente
 
+![Ciclo di deadlock: il thread A possiede X e attende Y, mentre il thread B possiede Y e attende X](assets/diagrams/02-deadlock-cycle.svg)
+
+<details>
+<summary>Versione testuale del ciclo di attesa</summary>
+
 ```text
 thread A: lock X -> lock Y
 thread B: lock Y -> lock X
 ```
+
+</details>
 
 Se A possiede X e B possiede Y, entrambi possono attendere per sempre.
 
