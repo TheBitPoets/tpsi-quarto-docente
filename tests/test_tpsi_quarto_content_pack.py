@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -24,6 +23,8 @@ CONTENT_PACK_V1_PATH = PACK_ROOT / "content-pack.json"
 DESIGN_PATH = ROOT / "doc" / "course_designs" / "tpsi_quarto_2026_2027.json"
 ACTIVITY_ROOT = ROOT / "activities" / "tpsi_quarto" / "fork_pipe_square"
 ACTIVITY_PATH = ACTIVITY_ROOT / "activity.json"
+LINUX_SOURCE_ID = "tpsi4-source-linux-programming"
+PINNED_PLATFORM_SHA = "39936004d3dc777b4e56d089dac0e61a138a1913"
 
 
 def load_json(path: Path) -> dict:
@@ -53,7 +54,7 @@ def compile_c(source: Path, output: Path) -> subprocess.CompletedProcess[str]:
     )
 
 
-def test_manifest_references_existing_content() -> None:
+def test_legacy_v0_manifest_keeps_original_identity_and_declared_overlay() -> None:
     manifest = load_json(MANIFEST_PATH)
 
     assert manifest["schema_version"] == "thebitlab.content-pack.v0"
@@ -68,18 +69,25 @@ def test_manifest_references_existing_content() -> None:
         content_ids.add(item["id"])
         assert (ROOT / item["path"]).is_file()
 
-    source_ids = set()
-    for source in manifest["sources"]:
-        assert source["id"] not in source_ids
-        source_ids.add(source["id"])
-        directory = source.get("path", "")
-        for filename in source["files"]:
-            path = ROOT / directory / filename if directory else ROOT / filename
-            assert path.is_file(), path
+    sources = {source["id"]: source for source in manifest["sources"]}
+    assert set(sources) == {
+        "tpsi4-source-originali",
+        LINUX_SOURCE_ID,
+    }
+
+    original = sources["tpsi4-source-originali"]
+    for filename in original["files"]:
+        assert (ROOT / original["path"] / filename).is_file()
+
+    # Il v0 descriveva implicitamente un overlay col checkout di 2cornot2c.
+    # Non inventiamo il file nel repo privato: la v1 rende questa dipendenza remota.
+    legacy_linux = sources[LINUX_SOURCE_ID]
+    assert legacy_linux.get("path", "") == ""
+    assert legacy_linux["files"] == ["LINUX_PROGRAMMING.md"]
+    assert not (ROOT / "LINUX_PROGRAMMING.md").exists()
 
     assert "tpsi4-content-processi-concorrenza" in content_ids
     assert "tpsi4-content-comunicazione-sincronizzazione" in content_ids
-    assert "tpsi4-source-linux-programming" in source_ids
 
 
 def test_content_pack_v1_is_valid_and_preserves_v0_identity() -> None:
@@ -120,6 +128,14 @@ def test_content_pack_v1_is_valid_and_preserves_v0_identity() -> None:
             }
         ]
 
+    source_map = {source["id"]: source for source in pack["sources"]}
+    linux = source_map[LINUX_SOURCE_ID]
+    assert linux["provider"] == "github"
+    assert linux["repository"] == "TheBitPoets/2cornot2c"
+    assert linux["ref"] == PINNED_PLATFORM_SHA
+    assert linux["files"] == ["LINUX_PROGRAMMING.md"]
+    assert "path" not in linux
+
 
 def test_content_pack_v1_sources_project_to_course_board_catalog() -> None:
     pack = load_json(CONTENT_PACK_V1_PATH)
@@ -130,9 +146,9 @@ def test_content_pack_v1_sources_project_to_course_board_catalog() -> None:
 
     assert [source.source_id for source in normalized] == [
         "tpsi4-source-originali",
-        "tpsi4-source-linux-programming",
+        LINUX_SOURCE_ID,
     ]
-    assert all(source.provider == "local" for source in normalized)
+    assert normalized[0].provider == "local"
     assert normalized[0].files == (
         "README.md",
         "COVERAGE.md",
@@ -143,17 +159,30 @@ def test_content_pack_v1_sources_project_to_course_board_catalog() -> None:
         "05_TESTING_DEBUGGING.md",
         "06_CITTADINANZA_DIGITALE.md",
     )
+    assert normalized[1].provider == "github"
+    assert normalized[1].repository == "TheBitPoets/2cornot2c"
+    assert normalized[1].ref == PINNED_PLATFORM_SHA
     assert normalized[1].files == ("LINUX_PROGRAMMING.md",)
 
 
-def test_archived_course_design_has_valid_catalog_and_33_weeks() -> None:
+def test_archived_course_design_remains_a_valid_33_week_legacy_design() -> None:
     design = load_json(DESIGN_PATH)
     source_files = course_source_catalog.local_markdown_source_files(design, ROOT)
 
+    # Il CourseDesign storico mantiene ancora la vecchia sorgente overlay Linux.
+    # In un checkout standalone vengono indicizzati soltanto gli otto file locali reali.
     indexed_paths = {item.relative_path for item in source_files}
-    assert "LINUX_PROGRAMMING.md" in indexed_paths
+    assert "LINUX_PROGRAMMING.md" not in indexed_paths
     assert "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md" in indexed_paths
-    assert len(indexed_paths) == 9
+    assert len(indexed_paths) == 8
+
+    normalized_sources = course_source_catalog.normalize_course_sources(design)
+    assert [source.source_id for source in normalized_sources] == [
+        "tpsi4-source-originali",
+        LINUX_SOURCE_ID,
+    ]
+    assert normalized_sources[1].provider == "local"
+    assert normalized_sources[1].files == ("LINUX_PROGRAMMING.md",)
 
     years = design["years"]
     assert len(years) == 1
@@ -180,23 +209,29 @@ def test_archived_course_design_has_valid_catalog_and_33_weeks() -> None:
 
 def test_activity_contract_assets_and_provenance() -> None:
     activity = load_json(ACTIVITY_PATH)
-    manifest = load_json(MANIFEST_PATH)
+    legacy = load_json(MANIFEST_PATH)
+    pack = load_json(CONTENT_PACK_V1_PATH)
 
     assert validate_activity(activity, str(ACTIVITY_PATH)) == []
     assert activity["id"] == "tpsi4-activity-c-fork-pipe-square-001"
     assert activity["linguaggio"] == "c"
     assert activity["student_support_mode"] == "feedback-tecnico"
 
-    known_content_ids = {item["id"] for item in manifest["content_items"]}
+    known_content_ids = {item["id"] for item in legacy["content_items"]}
     assert set(activity["content_ids"]) <= known_content_ids
 
+    v1_sources = {source["id"]: source for source in pack["sources"]}
     for source_ref in activity["source_refs"]:
-        assert source_ref["source_id"] in {
-            "tpsi4-source-originali",
-            "tpsi4-source-linux-programming",
-        }
-        assert (ROOT / source_ref["path"]).is_file()
+        source_id = source_ref["source_id"]
+        assert source_id in v1_sources
         assert source_ref["anchor"]
+        if source_id == "tpsi4-source-originali":
+            assert (ROOT / source_ref["path"]).is_file()
+        else:
+            assert source_id == LINUX_SOURCE_ID
+            assert source_ref["path"] == "LINUX_PROGRAMMING.md"
+            assert v1_sources[source_id]["provider"] == "github"
+            assert v1_sources[source_id]["ref"] == PINNED_PLATFORM_SHA
 
     student_targets = set()
     for asset in activity["assets"]:
