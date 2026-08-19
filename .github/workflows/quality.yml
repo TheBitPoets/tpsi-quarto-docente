@@ -1,0 +1,41 @@
+name: Quality
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python-version: "3.11"
+          - os: ubuntu-latest
+            python-version: "3.12"
+          - os: windows-latest
+            python-version: "3.11"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout TPSI quarto content pack
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned TheBitLab platform contracts
+        uses: actions/checkout@v4
+        with:
+          repository: TheBitPoets/2cornot2c
+          ref: 39936004d3dc777b4e56d089dac0e61a138a1913
+          path: _thebitlab-platform
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install test dependencies
+        run: python -m pip install pytest
+
+      - name: Validate content pack, Course Design and Activity
+        env:
+          PYTHONPATH: ${{ github.workspace }}/_thebitlab-platform
+        run: python -m pytest -q tests/test_tpsi_quarto_content_pack.py
