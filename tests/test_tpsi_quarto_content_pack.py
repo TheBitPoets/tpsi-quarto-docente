@@ -10,12 +10,17 @@ import sys
 import pytest
 
 from scripts import course_source_catalog
+from scripts.content_pack_contract import (
+    project_course_design_sources,
+    validate_content_pack,
+)
 from scripts.validate_activity import validate_activity
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK_ROOT = ROOT / "content" / "tpsi_quarto"
 MANIFEST_PATH = PACK_ROOT / "manifest.json"
+CONTENT_PACK_V1_PATH = PACK_ROOT / "content-pack.json"
 DESIGN_PATH = ROOT / "doc" / "course_designs" / "tpsi_quarto_2026_2027.json"
 ACTIVITY_ROOT = ROOT / "activities" / "tpsi_quarto" / "fork_pipe_square"
 ACTIVITY_PATH = ACTIVITY_ROOT / "activity.json"
@@ -75,6 +80,70 @@ def test_manifest_references_existing_content() -> None:
     assert "tpsi4-content-processi-concorrenza" in content_ids
     assert "tpsi4-content-comunicazione-sincronizzazione" in content_ids
     assert "tpsi4-source-linux-programming" in source_ids
+
+
+def test_content_pack_v1_is_valid_and_preserves_v0_identity() -> None:
+    legacy = load_json(MANIFEST_PATH)
+    pack = load_json(CONTENT_PACK_V1_PATH)
+
+    assert validate_content_pack(
+        pack,
+        str(CONTENT_PACK_V1_PATH),
+        root=ROOT,
+    ) == []
+
+    for field in ("id", "title", "version", "status", "language", "audience", "ownership"):
+        assert pack[field] == legacy[field]
+
+    assert [item["id"] for item in pack["references"]] == [
+        item["id"] for item in legacy["curriculum_references"]
+    ]
+    assert [item["id"] for item in pack["content_items"]] == [
+        item["id"] for item in legacy["content_items"]
+    ]
+    assert pack["course_designs"] == legacy["course_designs"]
+    assert pack["activity_roots"] == legacy["activity_roots"]
+    assert pack["coverage"] == {
+        "path": "content/tpsi_quarto/COVERAGE.md",
+        "status": "draft",
+    }
+    assert pack["policies"]["book_text_reproduction_forbidden"] is True
+    assert pack["policies"]["restricted_source_copying_forbidden"] is True
+    assert pack["extensions"]["v0_compatibility"] == legacy["compatibility"]
+
+    for item in pack["content_items"]:
+        assert item["source_refs"] == [
+            {
+                "id": "tpsi4-source-originali",
+                "role": "content-origin",
+                "locator": item["path"],
+            }
+        ]
+
+
+def test_content_pack_v1_sources_project_to_course_board_catalog() -> None:
+    pack = load_json(CONTENT_PACK_V1_PATH)
+    projected = project_course_design_sources(pack)
+    normalized = course_source_catalog.normalize_course_sources(
+        {"sources": projected}
+    )
+
+    assert [source.source_id for source in normalized] == [
+        "tpsi4-source-originali",
+        "tpsi4-source-linux-programming",
+    ]
+    assert all(source.provider == "local" for source in normalized)
+    assert normalized[0].files == (
+        "README.md",
+        "COVERAGE.md",
+        "01_PROCESSI_E_CONCORRENZA.md",
+        "02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md",
+        "03_REQUISITI_SOFTWARE.md",
+        "04_DOCUMENTAZIONE_VERSIONAMENTO.md",
+        "05_TESTING_DEBUGGING.md",
+        "06_CITTADINANZA_DIGITALE.md",
+    )
+    assert normalized[1].files == ("LINUX_PROGRAMMING.md",)
 
 
 def test_archived_course_design_has_valid_catalog_and_33_weeks() -> None:
