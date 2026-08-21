@@ -1,0 +1,69 @@
+name: Slides
+
+on:
+  pull_request:
+    paths:
+      - "README.md"
+      - "slides/**"
+      - "teacher/**"
+      - "student/**"
+      - "doc/DELIVERY_CHANGELOG.md"
+      - "scripts/build_slides.py"
+      - "tests/test_slide_delivery.py"
+      - ".github/workflows/slides.yml"
+  push:
+    branches: [main]
+    paths:
+      - "README.md"
+      - "slides/**"
+      - "teacher/**"
+      - "student/**"
+      - "doc/DELIVERY_CHANGELOG.md"
+      - "scripts/build_slides.py"
+      - "tests/test_slide_delivery.py"
+      - ".github/workflows/slides.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  build-slides:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout course
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Validate slide delivery contract
+        run: python scripts/build_slides.py --check-only
+
+      - name: Check Chrome for PDF/PPTX rendering
+        run: google-chrome --version
+
+      - name: Build HTML, PDF and PPTX decks
+        run: >-
+          python scripts/build_slides.py
+          --formats html,pdf,pptx
+          --browser chrome
+          --output build/tpsi4-slides
+
+      - name: Upload slide bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: tpsi4-slides-${{ env.SOURCE_SHA }}
+          path: build/tpsi4-slides
+          if-no-files-found: error
+          retention-days: 30
