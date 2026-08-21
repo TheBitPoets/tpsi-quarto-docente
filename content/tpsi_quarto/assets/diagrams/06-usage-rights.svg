@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 790" role="img" aria-labelledby="title desc">
+  <title id="title">Diritti distinti su una risorsa digitale</title>
+  <desc id="desc">Accesso, uso personale, riproduzione, modifica, redistribuzione, pubblicazione e uso commerciale sono permessi differenti; possedere o leggere una risorsa non implica automaticamente gli altri diritti.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker><style>.t{font:700 30px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.h{font:700 21px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.b{font:18px system-ui,Segoe UI,Arial,sans-serif;fill:#334155}.base{fill:#EFF6FF;stroke:#2563EB;stroke-width:3}.perm{fill:#FFFFFF;stroke:#64748B;stroke-width:3}.warn{fill:#FFF7ED;stroke:#B45309;stroke-width:3}.no{fill:#FEF2F2;stroke:#B91C1C;stroke-width:3}</style></defs>
+  <rect width="1400" height="790" fill="#F8FAFC"/><text class="t" x="700" y="55" text-anchor="middle">Avere accesso non significa avere tutti i diritti</text>
+  <rect class="base" x="510" y="120" width="380" height="110" rx="24"/><text class="h" x="700" y="165" text-anchor="middle">RISORSA DIGITALE ACCESSIBILE</text><text class="b" x="700" y="202" text-anchor="middle">libro, immagine, software, dataset</text>
+  <path d="M700 230 V285" stroke="#2563EB" stroke-width="5" marker-end="url(#a)"/>
+  <rect class="perm" x="55" y="315" width="170" height="120" rx="20"/><text class="h" x="140" y="360" text-anchor="middle">LEGGERE</text><text class="b" x="140" y="397" text-anchor="middle">consultare</text>
+  <rect class="perm" x="245" y="315" width="170" height="120" rx="20"/><text class="h" x="330" y="360" text-anchor="middle">USARE</text><text class="b" x="330" y="397" text-anchor="middle">uso personale</text>
+  <rect class="warn" x="435" y="315" width="170" height="120" rx="20"/><text class="h" x="520" y="360" text-anchor="middle">COPIARE</text><text class="b" x="520" y="397" text-anchor="middle">riprodurre</text>
+  <rect class="warn" x="625" y="315" width="170" height="120" rx="20"/><text class="h" x="710" y="360" text-anchor="middle">MODIFICARE</text><text class="b" x="710" y="397" text-anchor="middle">opera derivata</text>
+  <rect class="warn" x="815" y="315" width="170" height="120" rx="20"/><text class="h" x="900" y="360" text-anchor="middle">DISTRIBUIRE</text><text class="b" x="900" y="397" text-anchor="middle">consegnare copie</text>
+  <rect class="no" x="1005" y="315" width="170" height="120" rx="20"/><text class="h" x="1090" y="360" text-anchor="middle">PUBBLICARE</text><text class="b" x="1090" y="397" text-anchor="middle">rendere pubblico</text>
+  <rect class="no" x="1195" y="315" width="170" height="120" rx="20"/><text class="h" x="1280" y="360" text-anchor="middle">COMMERCIALE</text><text class="b" x="1280" y="397" text-anchor="middle">uso economico</text>
+  <path d="M700 285 H140 V315 M700 285 H330 V315 M700 285 H520 V315 M700 285 H710 V315 M700 285 H900 V315 M700 285 H1090 V315 M700 285 H1280 V315" stroke="#334155" stroke-width="3" fill="none" marker-end="url(#a)"/>
+  <rect class="base" x="220" y="535" width="960" height="135" rx="24"/><text class="h" x="700" y="580" text-anchor="middle">Ogni azione richiede una base distinta</text><text class="b" x="700" y="620" text-anchor="middle">licenza, autorizzazione, contratto o eccezione applicabile</text><text class="b" x="700" y="652" text-anchor="middle">Repository privato e acquisto non trasformano automaticamente i permessi.</text>
+  <text class="b" x="700" y="735" text-anchor="middle">In caso di dubbio: conserva il riferimento e crea un contenuto originale.</text>
+</svg>

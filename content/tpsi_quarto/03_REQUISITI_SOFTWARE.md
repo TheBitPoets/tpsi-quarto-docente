@@ -456,6 +456,11 @@ La qualità è più importante della quantità. Un documento breve ma verificato
 
 La tracciabilità collega il perché al cosa e al come.
 
+![Catena di tracciabilità dal bisogno al risultato: requisito, caso d'uso, componente, activity o test ed evidenza osservabile](assets/diagrams/03-requirements-traceability.svg)
+
+<details>
+<summary>Versione testuale della catena di tracciabilità</summary>
+
 ```text
 bisogno
   -> requisito
@@ -464,6 +469,8 @@ bisogno
               -> activity/test
                   -> risultato
 ```
+
+</details>
 
 Esempio:
 

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Ownership singola e scambio di messaggi</title>
+  <desc id="desc">Più thread client inviano comandi a una coda; un solo thread database possiede la connessione e modifica lo stato, quindi restituisce risultati attraverso messaggi.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker><style>.t{font:700 30px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.h{font:700 23px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.b{font:19px system-ui,Segoe UI,Arial,sans-serif;fill:#334155}.client{fill:#EFF6FF;stroke:#2563EB;stroke-width:3}.queue{fill:#FFF7ED;stroke:#B45309;stroke-width:3}.owner{fill:#F5F3FF;stroke:#7C3AED;stroke-width:4}.state{fill:#ECFDF5;stroke:#0F766E;stroke-width:3}</style></defs>
+  <rect width="1400" height="760" fill="#F8FAFC"/><text class="t" x="700" y="55" text-anchor="middle">Ridurre la condivisione: un proprietario, molti messaggi</text>
+  <rect class="client" x="70" y="150" width="260" height="100" rx="20"/><text class="h" x="200" y="192" text-anchor="middle">Thread client A</text><text class="b" x="200" y="227" text-anchor="middle">invia richiesta</text>
+  <rect class="client" x="70" y="330" width="260" height="100" rx="20"/><text class="h" x="200" y="372" text-anchor="middle">Thread client B</text><text class="b" x="200" y="407" text-anchor="middle">invia richiesta</text>
+  <rect class="client" x="70" y="510" width="260" height="100" rx="20"/><text class="h" x="200" y="552" text-anchor="middle">Thread client C</text><text class="b" x="200" y="587" text-anchor="middle">invia richiesta</text>
+  <rect class="queue" x="475" y="205" width="250" height="360" rx="28"/><text class="h" x="600" y="250" text-anchor="middle">Coda comandi</text>
+  <rect x="520" y="295" width="160" height="55" rx="12" fill="#FFFFFF" stroke="#B45309" stroke-width="2"/><text class="b" x="600" y="330" text-anchor="middle">richiesta 42</text>
+  <rect x="520" y="375" width="160" height="55" rx="12" fill="#FFFFFF" stroke="#B45309" stroke-width="2"/><text class="b" x="600" y="410" text-anchor="middle">richiesta 43</text>
+  <rect x="520" y="455" width="160" height="55" rx="12" fill="#FFFFFF" stroke="#B45309" stroke-width="2"/><text class="b" x="600" y="490" text-anchor="middle">richiesta 44</text>
+  <path d="M330 200 C400 200 400 315 475 315 M330 380 H475 M330 560 C400 560 400 455 475 455" stroke="#2563EB" stroke-width="5" fill="none" marker-end="url(#a)"/>
+  <rect class="owner" x="850" y="180" width="420" height="220" rx="28"/><text class="h" x="1060" y="230" text-anchor="middle">Thread database</text><text class="b" x="1060" y="275" text-anchor="middle">unico proprietario della connessione</text><text class="b" x="1060" y="315" text-anchor="middle">esegue i comandi in ordine</text><text class="b" x="1060" y="355" text-anchor="middle">produce risultati o errori</text>
+  <path d="M725 385 H850" stroke="#7C3AED" stroke-width="6" marker-end="url(#a)"/>
+  <rect class="state" x="890" y="490" width="340" height="135" rx="24"/><text class="h" x="1060" y="535" text-anchor="middle">Stato mutabile</text><text class="b" x="1060" y="575" text-anchor="middle">connessione + transazione</text><text class="b" x="1060" y="606" text-anchor="middle">non condivise direttamente</text>
+  <path d="M1060 400 V490" stroke="#0F766E" stroke-width="5" marker-end="url(#a)"/>
+  <path d="M850 275 C760 120 430 100 330 170" stroke="#0F766E" stroke-width="4" fill="none" stroke-dasharray="10 8" marker-end="url(#a)"/><text class="b" x="660" y="118" text-anchor="middle">risposte tramite messaggi</text>
+  <text class="b" x="700" y="700" text-anchor="middle">L'ownership riduce i punti di modifica; coda e protocollo devono comunque essere corretti.</text>
+</svg>

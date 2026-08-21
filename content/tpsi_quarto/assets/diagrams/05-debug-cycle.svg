@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 790" role="img" aria-labelledby="title desc">
+  <title id="title">Ciclo sistematico di debugging</title>
+  <desc id="desc">Il debugging procede dalla riproduzione alla riduzione, raccolta di evidenze, ipotesi, esperimento, correzione, test di regressione e verifica più ampia, tornando indietro quando l'ipotesi non è confermata.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker><style>.t{font:700 30px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.h{font:700 20px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.b{font:18px system-ui,Segoe UI,Arial,sans-serif;fill:#334155}.step{fill:#FFFFFF;stroke:#2563EB;stroke-width:3}.hyp{fill:#F5F3FF;stroke:#7C3AED;stroke-width:3}.fix{fill:#ECFDF5;stroke:#0F766E;stroke-width:3}.warn{fill:#FFF7ED;stroke:#B45309;stroke-width:3}</style></defs>
+  <rect width="1400" height="790" fill="#F8FAFC"/><text class="t" x="700" y="55" text-anchor="middle">Debugging: un ciclo di ipotesi ed evidenze</text>
+  <rect class="step" x="80" y="155" width="220" height="100" rx="20"/><text class="h" x="190" y="195" text-anchor="middle">1. RIPRODUCI</text><text class="b" x="190" y="230" text-anchor="middle">passi e ambiente</text>
+  <rect class="step" x="360" y="155" width="220" height="100" rx="20"/><text class="h" x="470" y="195" text-anchor="middle">2. RIDUCI</text><text class="b" x="470" y="230" text-anchor="middle">caso minimo</text>
+  <rect class="step" x="640" y="155" width="220" height="100" rx="20"/><text class="h" x="750" y="195" text-anchor="middle">3. OSSERVA</text><text class="b" x="750" y="230" text-anchor="middle">log, stack, stato</text>
+  <rect class="hyp" x="920" y="155" width="220" height="100" rx="20"/><text class="h" x="1030" y="195" text-anchor="middle">4. IPOTESI</text><text class="b" x="1030" y="230" text-anchor="middle">causa falsificabile</text>
+  <path d="M300 205 H360 M580 205 H640 M860 205 H920" stroke="#2563EB" stroke-width="5" marker-end="url(#a)"/>
+  <rect class="hyp" x="920" y="385" width="220" height="100" rx="20"/><text class="h" x="1030" y="425" text-anchor="middle">5. ESPERIMENTO</text><text class="b" x="1030" y="460" text-anchor="middle">distingue le ipotesi</text>
+  <path d="M1030 255 V385" stroke="#7C3AED" stroke-width="5" marker-end="url(#a)"/>
+  <polygon class="warn" points="750,340 875,435 750,530 625,435"/><text class="h" x="750" y="420" text-anchor="middle">Confermata?</text><text class="b" x="750" y="454" text-anchor="middle">evidenza coerente</text>
+  <path d="M920 435 H875" stroke="#7C3AED" stroke-width="5" marker-end="url(#a)"/>
+  <path d="M750 340 C750 290 1030 305 1030 255" stroke="#B45309" stroke-width="4" fill="none" stroke-dasharray="10 8" marker-end="url(#a)"/><text class="b" x="890" y="315" text-anchor="middle">no: riformula</text>
+  <rect class="fix" x="360" y="385" width="220" height="100" rx="20"/><text class="h" x="470" y="425" text-anchor="middle">6. CORREGGI</text><text class="b" x="470" y="460" text-anchor="middle">fix minimo</text>
+  <path d="M625 435 H580" stroke="#0F766E" stroke-width="5" marker-end="url(#a)"/><text class="b" x="605" y="410" text-anchor="middle">sì</text>
+  <rect class="fix" x="80" y="385" width="220" height="100" rx="20"/><text class="h" x="190" y="425" text-anchor="middle">7. REGRESSIONE</text><text class="b" x="190" y="460" text-anchor="middle">test che falliva prima</text>
+  <path d="M360 435 H300" stroke="#0F766E" stroke-width="5" marker-end="url(#a)"/>
+  <rect class="step" x="360" y="610" width="680" height="105" rx="22"/><text class="h" x="700" y="650" text-anchor="middle">8. VERIFICA PIÙ AMPIA E DOCUMENTA</text><text class="b" x="700" y="687" text-anchor="middle">suite completa, causa, impatto e limiti della correzione</text>
+  <path d="M190 485 C190 620 300 662 360 662" stroke="#2563EB" stroke-width="5" fill="none" marker-end="url(#a)"/>
+  <path d="M1040 662 C1260 662 1280 110 300 110 C190 110 160 130 160 155" stroke="#2563EB" stroke-width="4" fill="none" stroke-dasharray="10 8" marker-end="url(#a)"/>
+  <text class="b" x="700" y="755" text-anchor="middle">Se il difetto ricompare o la suite fallisce, il ciclo riparte da una nuova riproduzione controllata.</text>
+</svg>

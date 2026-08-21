@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860" role="img" aria-labelledby="title desc">
+  <title id="title">Confronto tra esecuzione sequenziale, concorrente e parallela</title>
+  <desc id="desc">Tre pannelli mostrano: attività A completata prima di B; attività A e B alternate su una CPU; attività A e B eseguite nello stesso intervallo su due CPU.</desc>
+  <defs>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#2563EB"/></marker>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="130%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.12"/></filter>
+  </defs>
+  <rect width="1400" height="860" rx="28" fill="#F8FAFC"/>
+  <text x="70" y="72" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="38" font-weight="700" fill="#0F172A">Tre modi di organizzare l’esecuzione</text>
+  <text x="70" y="110" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="22" fill="#475569">La concorrenza riguarda l’avanzamento indipendente; il parallelismo l’esecuzione simultanea.</text>
+
+  <g font-family="system-ui,Segoe UI,Arial,sans-serif" filter="url(#shadow)">
+    <rect x="70" y="155" width="1260" height="190" rx="24" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+    <text x="105" y="202" font-size="28" font-weight="700" fill="#0F172A">1. Sequenziale</text>
+    <text x="105" y="235" font-size="19" fill="#475569">Una sola attività logica avanza; B inizia dopo il completamento di A.</text>
+    <line x1="360" y1="285" x2="1210" y2="285" stroke="#94A3B8" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <text x="310" y="292" font-size="18" font-weight="600" fill="#334155">tempo</text>
+    <g>
+      <rect x="390" y="258" width="145" height="54" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+      <rect x="545" y="258" width="145" height="54" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+      <rect x="700" y="258" width="145" height="54" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+      <rect x="855" y="258" width="145" height="54" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="3"/>
+      <rect x="1010" y="258" width="145" height="54" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="3"/>
+      <g font-size="20" font-weight="700" fill="#0F172A" text-anchor="middle"><text x="462" y="292">A1</text><text x="617" y="292">A2</text><text x="772" y="292">A3</text><text x="927" y="292">B1</text><text x="1082" y="292">B2</text></g>
+    </g>
+  </g>
+
+  <g font-family="system-ui,Segoe UI,Arial,sans-serif" filter="url(#shadow)">
+    <rect x="70" y="370" width="1260" height="190" rx="24" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+    <text x="105" y="417" font-size="28" font-weight="700" fill="#0F172A">2. Concorrente su una CPU</text>
+    <text x="105" y="450" font-size="19" fill="#475569">A e B sono entrambe in corso; lo scheduler alterna i loro passi.</text>
+    <line x1="360" y1="500" x2="1210" y2="500" stroke="#94A3B8" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <text x="310" y="507" font-size="18" font-weight="600" fill="#334155">tempo</text>
+    <g>
+      <rect x="390" y="473" width="145" height="54" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+      <rect x="545" y="473" width="145" height="54" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="3"/>
+      <rect x="700" y="473" width="145" height="54" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+      <rect x="855" y="473" width="145" height="54" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="3"/>
+      <rect x="1010" y="473" width="145" height="54" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+      <g font-size="20" font-weight="700" fill="#0F172A" text-anchor="middle"><text x="462" y="507">A1</text><text x="617" y="507">B1</text><text x="772" y="507">A2</text><text x="927" y="507">B2</text><text x="1082" y="507">A3</text></g>
+    </g>
+  </g>
+
+  <g font-family="system-ui,Segoe UI,Arial,sans-serif" filter="url(#shadow)">
+    <rect x="70" y="585" width="1260" height="215" rx="24" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+    <text x="105" y="632" font-size="28" font-weight="700" fill="#0F172A">3. Parallela su due CPU</text>
+    <text x="105" y="665" font-size="19" fill="#475569">Passi di A e B possono essere eseguiti nello stesso istante su unità diverse.</text>
+    <text x="300" y="718" font-size="18" font-weight="700" fill="#334155">CPU 1</text>
+    <text x="300" y="775" font-size="18" font-weight="700" fill="#334155">CPU 2</text>
+    <line x1="360" y1="710" x2="1210" y2="710" stroke="#94A3B8" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <line x1="360" y1="767" x2="1210" y2="767" stroke="#94A3B8" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <g>
+      <rect x="390" y="686" width="220" height="48" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+      <rect x="625" y="686" width="220" height="48" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+      <rect x="860" y="686" width="220" height="48" rx="12" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+      <rect x="390" y="743" width="220" height="48" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="3"/>
+      <rect x="625" y="743" width="220" height="48" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="3"/>
+      <rect x="860" y="743" width="220" height="48" rx="12" fill="#EDE9FE" stroke="#7C3AED" stroke-width="3"/>
+      <g font-size="19" font-weight="700" fill="#0F172A" text-anchor="middle"><text x="500" y="717">A1</text><text x="735" y="717">A2</text><text x="970" y="717">A3</text><text x="500" y="774">B1</text><text x="735" y="774">B2</text><text x="970" y="774">B3</text></g>
+    </g>
+  </g>
+
+  <g font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="18">
+    <rect x="1100" y="170" width="190" height="60" rx="14" fill="#DBEAFE" stroke="#2563EB" stroke-width="2"/><text x="1195" y="207" text-anchor="middle" font-weight="700" fill="#0F172A">Attività A</text>
+    <rect x="1100" y="238" width="190" height="60" rx="14" fill="#EDE9FE" stroke="#7C3AED" stroke-width="2"/><text x="1195" y="275" text-anchor="middle" font-weight="700" fill="#0F172A">Attività B</text>
+  </g>
+</svg>

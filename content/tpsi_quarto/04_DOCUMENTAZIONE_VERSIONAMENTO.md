@@ -113,7 +113,10 @@ Una guida che funziona soltanto sul computer dell'autore non è ancora una guida
 
 Descrive componenti, responsabilità, confini e flussi.
 
-Esempio:
+![Architettura a livelli: GUI docente, API locali, service layer e porte separate verso storage, repository provider e servizi tecnici](assets/diagrams/04-architecture-layers.svg)
+
+<details>
+<summary>Versione testuale dell'architettura</summary>
 
 ```text
 GUI docente
@@ -123,6 +126,8 @@ GUI docente
             -> repository provider
             -> grading/AI services
 ```
+
+</details>
 
 È utile indicare anche ciò che un livello **non** deve fare. Un confine negativo impedisce che logica di dominio e persistenza tornino a concentrarsi nella UI o nel server HTTP.
 

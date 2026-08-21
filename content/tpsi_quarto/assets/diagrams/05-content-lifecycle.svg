@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Ciclo di vita di contenuti e activity</title>
+  <desc id="desc">Una bozza passa a revisione, approvazione, assegnazione e chiusura; correzioni possono riportarla in bozza e una versione superata viene conservata come superseded invece di essere confusa con quella corrente.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563EB"/></marker><style>.t{font:700 30px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.h{font:700 22px system-ui,Segoe UI,Arial,sans-serif;fill:#0F172A}.b{font:18px system-ui,Segoe UI,Arial,sans-serif;fill:#334155}.draft{fill:#FFF7ED;stroke:#B45309;stroke-width:3}.review{fill:#F5F3FF;stroke:#7C3AED;stroke-width:3}.ok{fill:#ECFDF5;stroke:#0F766E;stroke-width:3}.use{fill:#EFF6FF;stroke:#2563EB;stroke-width:3}.old{fill:#F1F5F9;stroke:#64748B;stroke-width:3}</style></defs>
+  <rect width="1400" height="760" fill="#F8FAFC"/><text class="t" x="700" y="55" text-anchor="middle">Ciclo di vita controllato di un contenuto didattico</text>
+  <rect class="draft" x="55" y="230" width="190" height="120" rx="20"/><text class="h" x="150" y="278" text-anchor="middle">DRAFT</text><text class="b" x="150" y="315" text-anchor="middle">bozza modificabile</text>
+  <rect class="review" x="305" y="230" width="190" height="120" rx="20"/><text class="h" x="400" y="278" text-anchor="middle">REVIEWED</text><text class="b" x="400" y="315" text-anchor="middle">controllata</text>
+  <rect class="ok" x="555" y="230" width="190" height="120" rx="20"/><text class="h" x="650" y="278" text-anchor="middle">APPROVED</text><text class="b" x="650" y="315" text-anchor="middle">pubblicabile</text>
+  <rect class="use" x="805" y="230" width="190" height="120" rx="20"/><text class="h" x="900" y="278" text-anchor="middle">ASSIGNED</text><text class="b" x="900" y="315" text-anchor="middle">in uso alla classe</text>
+  <rect class="old" x="1055" y="230" width="190" height="120" rx="20"/><text class="h" x="1150" y="278" text-anchor="middle">CLOSED</text><text class="b" x="1150" y="315" text-anchor="middle">attività conclusa</text>
+  <path d="M245 290 H305 M495 290 H555 M745 290 H805 M995 290 H1055" stroke="#2563EB" stroke-width="5" marker-end="url(#a)"/>
+  <text class="b" x="275" y="265" text-anchor="middle">revisione</text><text class="b" x="525" y="265" text-anchor="middle">approvazione</text><text class="b" x="775" y="265" text-anchor="middle">assegnazione</text><text class="b" x="1025" y="265" text-anchor="middle">chiusura</text>
+  <path d="M400 350 C400 465 150 465 150 350" stroke="#B45309" stroke-width="4" fill="none" stroke-dasharray="10 8" marker-end="url(#a)"/><text class="b" x="275" y="465" text-anchor="middle">correzioni richieste</text>
+  <rect class="old" x="545" y="520" width="310" height="120" rx="20"/><text class="h" x="700" y="565" text-anchor="middle">SUPERSEDED / RETIRED</text><text class="b" x="700" y="602" text-anchor="middle">versione sostituita o non più usata</text>
+  <path d="M650 350 V520 M1150 350 C1150 500 855 500 820 535" stroke="#64748B" stroke-width="4" fill="none" stroke-dasharray="10 8" marker-end="url(#a)"/>
+  <text class="b" x="700" y="705" text-anchor="middle">La versione assegnata resta identificabile: una nuova bozza non modifica silenziosamente il lavoro già svolto.</text>
+</svg>
