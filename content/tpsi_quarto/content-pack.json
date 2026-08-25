@@ -2,7 +2,7 @@
   "schema_version": "thebitlab.content-pack.v1",
   "id": "tpsi4-pack-hoepli-v2-original-2026",
   "title": "TPSI quarto anno - processi, progettazione e qualita del software",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "status": "draft",
   "language": "it",
   "audience": {
@@ -138,7 +138,7 @@
       "order": 6,
       "status": "draft",
       "curriculum_topics": ["cittadinanza-digitale", "licenze-e-provenienza", "collaborazione-responsabile", "sicurezza-e-privacy"],
-      "activity_ids": [],
+      "activity_ids": ["tpsi4-activity-d-responsible-capstone-001"],
       "source_refs": [{"id": "tpsi4-source-originali", "role": "content-origin", "locator": "content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md"}]
     }
   ],
