@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0",
+  "id": "tpsi4-activity-c-memory-debug-regression-001",
+  "titolo": "Debug di un errore di confine e test di regressione",
+  "tipo": "debug-didattico",
+  "student_support_mode": "feedback-tecnico",
+  "difficolta": "C",
+  "argomenti": [
+    "testing",
+    "debugging",
+    "valori-limite",
+    "address-sanitizer",
+    "undefined-behavior-sanitizer",
+    "regression-test",
+    "riproducibilita",
+    "c"
+  ],
+  "linguaggio": "c",
+  "contesto": {
+    "percorso": "quarto-anno",
+    "uda": "uda-15"
+  },
+  "content_ids": [
+    "tpsi4-content-testing-debugging"
+  ],
+  "source_refs": [
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/05_TESTING_DEBUGGING.md",
+      "anchor": "sanitizer",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/05_TESTING_DEBUGGING.md",
+      "anchor": "debugging-come-ciclo-di-ipotesi",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/05_TESTING_DEBUGGING.md",
+      "anchor": "regression-test",
+      "role": "lesson"
+    }
+  ],
+  "consegna": "Il file `main.c` compila ma contiene difetti di confine. Riproduci il comportamento con casi limite, compila anche con AddressSanitizer/UndefinedBehaviorSanitizer, identifica la causa radice, applica una correzione minima e completa `REGRESSION.md`. Il programma legge N (1..1000), costruisce i campioni 1..N e stampa esattamente `Somma: X`, `Min: 1`, `Max: N`. Per input non valido stampa `Input non valido` e termina con codice diverso da zero. La consegna finale deve superare i casi dichiarati senza errori sanitizer nei percorsi provati.",
+  "vincoli": [
+    "non riscrivere il programma da zero: correggi i difetti identificati",
+    "compila almeno una volta con -Wall -Wextra -Wpedantic -std=c17",
+    "esegui almeno una prova con -fsanitize=address,undefined -fno-omit-frame-pointer",
+    "usa almeno un valore limite che fallisce prima della correzione",
+    "REGRESSION.md deve distinguere sintomo, causa radice, fix e test che impedisce la ricomparsa",
+    "non rimuovere controlli o ridurre il dominio 1..1000 per far passare i test",
+    "non aggiungere messaggi di debug su stdout"
+  ],
+  "assets": [
+    {
+      "type": "starter",
+      "path": "starter/main.c",
+      "target_path": "main.c",
+      "visibility": "student",
+      "description": "Programma C compilabile con difetti di confine da diagnosticare"
+    },
+    {
+      "type": "starter",
+      "path": "starter/REGRESSION.md",
+      "target_path": "REGRESSION.md",
+      "visibility": "student",
+      "description": "Scheda riproduzione, causa radice, fix e regressione"
+    },
+    {
+      "type": "example",
+      "path": "student/README.md",
+      "target_path": "README.md",
+      "visibility": "student",
+      "description": "Workflow di debug, comandi e checklist"
+    },
+    {
+      "type": "teacher_only",
+      "path": "solution/main.c",
+      "visibility": "teacher",
+      "description": "Soluzione di riferimento verificata"
+    },
+    {
+      "type": "teacher_only",
+      "path": "teacher/NOTES.md",
+      "visibility": "teacher",
+      "description": "Causa dei bug, piano di prova e rubric"
+    }
+  ],
+  "soluzione_attesa": {
+    "tipo": "programma-c-con-regressione-documentata",
+    "file": "main.c",
+    "output": "Somma: X\\nMin: 1\\nMax: N",
+    "note": "La correzione deve eliminare sia l'errore funzionale sia l'accesso fuori limite; REGRESSION.md conserva la prova della causa radice e del caso che avrebbe impedito la regressione."
+  },
+  "correzione": {
+    "compila": true,
+    "test": true,
+    "sandbox": true,
+    "ai_feedback": false
+  },
+  "metriche": {
+    "tempo_stimato_minuti": 120,
+    "traccia_tempo_dichiarato": true,
+    "traccia_sessioni_thebitlab": true,
+    "traccia_eventi_didattici": true,
+    "traccia_errori_compilazione": true
+  },
+  "test_cases": [
+    {
+      "name": "limite-minimo",
+      "stdin": "1\n",
+      "expected_stdout": "Somma: 1\nMin: 1\nMax: 1\n"
+    },
+    {
+      "name": "due-elementi",
+      "stdin": "2\n",
+      "expected_stdout": "Somma: 3\nMin: 1\nMax: 2\n"
+    },
+    {
+      "name": "oltre-buffer-didattico",
+      "stdin": "5\n",
+      "expected_stdout": "Somma: 15\nMin: 1\nMax: 5\n"
+    },
+    {
+      "name": "valore-medio",
+      "stdin": "100\n",
+      "expected_stdout": "Somma: 5050\nMin: 1\nMax: 100\n"
+    },
+    {
+      "name": "limite-massimo",
+      "stdin": "1000\n",
+      "expected_stdout": "Somma: 500500\nMin: 1\nMax: 1000\n"
+    }
+  ],
+  "manual_checks": [
+    {
+      "name": "asan-ubsan",
+      "criterion": "lo studente documenta almeno una esecuzione sanitizer che esponeva il difetto e una dopo il fix senza segnalazioni nei percorsi provati"
+    },
+    {
+      "name": "causa-radice",
+      "criterion": "REGRESSION.md descrive gli errori di confine e non si limita a dire che l'output era sbagliato"
+    },
+    {
+      "name": "fix-minimo",
+      "criterion": "la correzione modifica le condizioni errate senza aggirare il contratto o riscrivere inutilmente il programma"
+    },
+    {
+      "name": "regressione",
+      "criterion": "e indicato almeno un caso che falliva prima del fix e passa dopo, collegato alla causa radice"
+    }
+  ],
+  "rubrica": [
+    {
+      "criterio": "Riproduzione e scelta di casi limite significativi",
+      "punti": 2
+    },
+    {
+      "criterio": "Uso e interpretazione di sanitizer/evidenze",
+      "punti": 2
+    },
+    {
+      "criterio": "Identificazione della causa radice",
+      "punti": 2
+    },
+    {
+      "criterio": "Correzione minima e correttezza dei test finali",
+      "punti": 2
+    },
+    {
+      "criterio": "Regression report chiaro e riproducibile",
+      "punti": 2
+    }
+  ]
+}
