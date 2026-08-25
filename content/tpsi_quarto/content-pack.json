@@ -2,7 +2,7 @@
   "schema_version": "thebitlab.content-pack.v1",
   "id": "tpsi4-pack-hoepli-v2-original-2026",
   "title": "TPSI quarto anno - processi, progettazione e qualita del software",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "draft",
   "language": "it",
   "audience": {
@@ -95,7 +95,10 @@
       "order": 2,
       "status": "draft",
       "curriculum_topics": ["comunicazione-tra-processi", "sincronizzazione-tra-processi", "semafori", "applicazione-dei-semafori", "produttori-consumatori", "lettori-scrittori", "deadlock", "monitor", "scambio-di-messaggi"],
-      "activity_ids": [],
+      "activity_ids": [
+        "tpsi4-activity-c-fork-pipe-square-001",
+        "tpsi4-activity-c-producer-consumer-buffer-001"
+      ],
       "source_refs": [{"id": "tpsi4-source-originali", "role": "content-origin", "locator": "content/tpsi_quarto/02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md"}]
     },
     {
