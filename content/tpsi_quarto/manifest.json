@@ -24,7 +24,10 @@
       "kind": "bibliographic-index",
       "role": "coverage-reference",
       "title": "Tecnologie e progettazione di sistemi informatici e di telecomunicazioni",
-      "authors": ["Paolo Camagni", "Riccardo Nikolassy"],
+      "authors": [
+        "Paolo Camagni",
+        "Riccardo Nikolassy"
+      ],
       "volume": 2,
       "publication_date": "2024-02",
       "isbn_print": "9788836015122",
@@ -63,9 +66,13 @@
       "provider": "local",
       "role": "technical-reference",
       "path": "",
-      "files": ["LINUX_PROGRAMMING.md"],
+      "files": [
+        "LINUX_PROGRAMMING.md"
+      ],
       "include_from_heading": "Linux Programming",
-      "excluded_headings": ["Controllo dei processi"],
+      "excluded_headings": [
+        "Controllo dei processi"
+      ],
       "license_status": "review-required-per-fragment",
       "indexing_status": "ready"
     }
@@ -77,8 +84,16 @@
       "path": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
       "order": 1,
       "status": "draft",
-      "curriculum_topics": ["modello-a-processi", "risorse-e-condivisione", "thread-processi-leggeri", "elaborazione-concorrente", "descrizione-della-concorrenza"],
-      "activity_ids": ["tpsi4-activity-c-fork-pipe-square-001"]
+      "curriculum_topics": [
+        "modello-a-processi",
+        "risorse-e-condivisione",
+        "thread-processi-leggeri",
+        "elaborazione-concorrente",
+        "descrizione-della-concorrenza"
+      ],
+      "activity_ids": [
+        "tpsi4-activity-c-fork-pipe-square-001"
+      ]
     },
     {
       "id": "tpsi4-content-comunicazione-sincronizzazione",
@@ -86,7 +101,17 @@
       "path": "content/tpsi_quarto/02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md",
       "order": 2,
       "status": "draft",
-      "curriculum_topics": ["comunicazione-tra-processi", "sincronizzazione-tra-processi", "semafori", "applicazione-dei-semafori", "produttori-consumatori", "lettori-scrittori", "deadlock", "monitor", "scambio-di-messaggi"],
+      "curriculum_topics": [
+        "comunicazione-tra-processi",
+        "sincronizzazione-tra-processi",
+        "semafori",
+        "applicazione-dei-semafori",
+        "produttori-consumatori",
+        "lettori-scrittori",
+        "deadlock",
+        "monitor",
+        "scambio-di-messaggi"
+      ],
       "activity_ids": [
         "tpsi4-activity-c-fork-pipe-square-001",
         "tpsi4-activity-c-producer-consumer-buffer-001"
@@ -98,8 +123,15 @@
       "path": "content/tpsi_quarto/03_REQUISITI_SOFTWARE.md",
       "order": 3,
       "status": "draft",
-      "curriculum_topics": ["specifica-dei-requisiti", "raccolta-e-analisi-dei-requisiti", "attori-casi-uso-scenari", "documentazione-dei-requisiti"],
-      "activity_ids": ["tpsi4-activity-c-mini-srs-traceability-001"]
+      "curriculum_topics": [
+        "specifica-dei-requisiti",
+        "raccolta-e-analisi-dei-requisiti",
+        "attori-casi-uso-scenari",
+        "documentazione-dei-requisiti"
+      ],
+      "activity_ids": [
+        "tpsi4-activity-c-mini-srs-traceability-001"
+      ]
     },
     {
       "id": "tpsi4-content-documentazione-versionamento",
@@ -107,7 +139,11 @@
       "path": "content/tpsi_quarto/04_DOCUMENTAZIONE_VERSIONAMENTO.md",
       "order": 4,
       "status": "draft",
-      "curriculum_topics": ["documentazione-del-progetto", "documentazione-del-codice", "controllo-versioni-documenti-software"],
+      "curriculum_topics": [
+        "documentazione-del-progetto",
+        "documentazione-del-codice",
+        "controllo-versioni-documenti-software"
+      ],
       "activity_ids": []
     },
     {
@@ -116,7 +152,11 @@
       "path": "content/tpsi_quarto/05_TESTING_DEBUGGING.md",
       "order": 5,
       "status": "draft",
-      "curriculum_topics": ["verifica-validazione-software", "verifica-statica-dinamica", "debugging"],
+      "curriculum_topics": [
+        "verifica-validazione-software",
+        "verifica-statica-dinamica",
+        "debugging"
+      ],
       "activity_ids": []
     },
     {
@@ -125,7 +165,12 @@
       "path": "content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md",
       "order": 6,
       "status": "draft",
-      "curriculum_topics": ["cittadinanza-digitale", "licenze-e-provenienza", "collaborazione-responsabile", "sicurezza-e-privacy"],
+      "curriculum_topics": [
+        "cittadinanza-digitale",
+        "licenze-e-provenienza",
+        "collaborazione-responsabile",
+        "sicurezza-e-privacy"
+      ],
       "activity_ids": []
     }
   ],
@@ -136,7 +181,9 @@
       "status": "draft"
     }
   ],
-  "activity_roots": ["activities/tpsi_quarto"],
+  "activity_roots": [
+    "activities/tpsi_quarto"
+  ],
   "policies": {
     "provenance_required": true,
     "teacher_review_required_before_publish": true,
@@ -146,7 +193,19 @@
     "java_automatic_grading_enabled": false
   },
   "compatibility": {
-    "current": ["course-source-catalog-markdown", "course-design-json-v1", "activity-schema-1.0"],
-    "future_targets": ["Source", "SourceFragment", "SourcePackage", "ProvenanceRecord", "LearningContent", "ContentBlock", "ContentVersion"]
+    "current": [
+      "course-source-catalog-markdown",
+      "course-design-json-v1",
+      "activity-schema-1.0"
+    ],
+    "future_targets": [
+      "Source",
+      "SourceFragment",
+      "SourcePackage",
+      "ProvenanceRecord",
+      "LearningContent",
+      "ContentBlock",
+      "ContentVersion"
+    ]
   }
 }
