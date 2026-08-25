@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0",
+  "id": "tpsi4-activity-c-producer-consumer-buffer-001",
+  "titolo": "Produttore e consumatore con buffer limitato",
+  "tipo": "laboratorio",
+  "student_support_mode": "feedback-tecnico",
+  "difficolta": "C",
+  "argomenti": [
+    "thread",
+    "mutex",
+    "variabili-di-condizione",
+    "produttori-consumatori",
+    "buffer-limitato",
+    "sezione-critica",
+    "invarianti"
+  ],
+  "linguaggio": "c",
+  "contesto": {
+    "percorso": "quarto-anno",
+    "uda": "uda-12"
+  },
+  "content_ids": [
+    "tpsi4-content-comunicazione-sincronizzazione"
+  ],
+  "source_refs": [
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md",
+      "anchor": "produttori-e-consumatori",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-linux-programming",
+      "path": "LINUX_PROGRAMMING.md",
+      "anchor": "mutex",
+      "role": "technical-reference"
+    },
+    {
+      "source_id": "tpsi4-source-linux-programming",
+      "path": "LINUX_PROGRAMMING.md",
+      "anchor": "variabili-di-condizione",
+      "role": "technical-reference"
+    }
+  ],
+  "consegna": "Completa main.c implementando un buffer circolare limitato di capacita 4 condiviso da due thread POSIX. Il programma legge un intero N compreso tra 1 e 1000. Il produttore inserisce nel buffer i valori da 1 a N; il consumatore li estrae e ne calcola la somma. L'accesso allo stato condiviso deve essere protetto da un mutex; il produttore deve attendere con una variabile di condizione quando il buffer e pieno e il consumatore quando e vuoto. Al termine stampa esattamente tre righe: `Somma: X`, `Prodotti: N`, `Consumati: N`. Per input non valido stampa `Input non valido` e termina con codice diverso da zero.",
+  "vincoli": [
+    "usa pthread_create e pthread_join con un thread produttore e un thread consumatore",
+    "usa un buffer circolare di capacita 4",
+    "proteggi head, tail, count e array condiviso con un pthread_mutex_t",
+    "usa due pthread_cond_t, una per not_empty e una per not_full",
+    "controlla le condizioni di attesa con while e non con if",
+    "non usare busy waiting, sleep/usleep come meccanismo di sincronizzazione o variabili globali non protette",
+    "non usare semafori in questa Activity: l'obiettivo e esercitare mutex e condition",
+    "non stampare trace concorrenti, PID/TID o messaggi di debug su stdout"
+  ],
+  "assets": [
+    {
+      "type": "starter",
+      "path": "starter/main.c",
+      "target_path": "main.c",
+      "visibility": "student",
+      "description": "Scheletro C con struttura del buffer e punti TODO"
+    },
+    {
+      "type": "example",
+      "path": "student/README.md",
+      "target_path": "README.md",
+      "visibility": "student",
+      "description": "Guida studente, invariante, contratto di output e checklist"
+    },
+    {
+      "type": "teacher_only",
+      "path": "solution/main.c",
+      "visibility": "teacher",
+      "description": "Soluzione di riferimento verificata con pthread mutex e condition"
+    },
+    {
+      "type": "teacher_only",
+      "path": "teacher/NOTES.md",
+      "visibility": "teacher",
+      "description": "Note didattiche, errori frequenti e rubriche"
+    }
+  ],
+  "soluzione_attesa": {
+    "tipo": "programma-c",
+    "file": "main.c",
+    "output": "Somma: X\\nProdotti: N\\nConsumati: N",
+    "note": "I valori devono attraversare realmente il buffer condiviso; l'output deterministico verifica il risultato, mentre l'uso corretto di mutex e condition resta anche un controllo architetturale/manuale."
+  },
+  "correzione": {
+    "compila": true,
+    "test": true,
+    "sandbox": true,
+    "ai_feedback": false
+  },
+  "metriche": {
+    "tempo_stimato_minuti": 120,
+    "traccia_tempo_dichiarato": true,
+    "traccia_sessioni_thebitlab": true,
+    "traccia_eventi_didattici": true,
+    "traccia_errori_compilazione": true
+  },
+  "test_cases": [
+    {
+      "name": "un-elemento",
+      "stdin": "1\n",
+      "expected_stdout": "Somma: 1\nProdotti: 1\nConsumati: 1\n"
+    },
+    {
+      "name": "buffer-esatto",
+      "stdin": "4\n",
+      "expected_stdout": "Somma: 10\nProdotti: 4\nConsumati: 4\n"
+    },
+    {
+      "name": "oltre-capacita",
+      "stdin": "5\n",
+      "expected_stdout": "Somma: 15\nProdotti: 5\nConsumati: 5\n"
+    },
+    {
+      "name": "piu-cicli-buffer",
+      "stdin": "10\n",
+      "expected_stdout": "Somma: 55\nProdotti: 10\nConsumati: 10\n"
+    }
+  ],
+  "manual_checks": [
+    {
+      "name": "input non valido",
+      "stdin": "abc\n",
+      "expected_stdout": "Input non valido\n",
+      "expected_exit": "non-zero"
+    },
+    {
+      "name": "invariante buffer",
+      "criterion": "ogni accesso a head, tail e count avviene sotto lo stesso mutex e il codice preserva 0 <= count <= 4"
+    },
+    {
+      "name": "attesa corretta",
+      "criterion": "producer e consumer usano pthread_cond_wait dentro un ciclo while e non fanno busy waiting"
+    },
+    {
+      "name": "responsabilita dei thread",
+      "criterion": "il produttore genera 1..N e il consumatore calcola la somma estraendo realmente dal buffer"
+    }
+  ],
+  "rubrica": [
+    {
+      "criterio": "Buffer circolare e invariante 0 <= count <= 4",
+      "punti": 2
+    },
+    {
+      "criterio": "Uso corretto del mutex sulla sezione critica",
+      "punti": 2
+    },
+    {
+      "criterio": "Uso corretto di not_empty/not_full con while",
+      "punti": 2
+    },
+    {
+      "criterio": "Creazione/join dei thread e risultato corretto nei test",
+      "punti": 2
+    },
+    {
+      "criterio": "Gestione input/errori e spiegazione dell'invariante",
+      "punti": 2
+    }
+  ]
+}
