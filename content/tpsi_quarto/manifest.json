@@ -2,7 +2,7 @@
   "schema_version": "thebitlab.content-pack.v0",
   "id": "tpsi4-pack-hoepli-v2-original-2026",
   "title": "TPSI quarto anno - processi, progettazione e qualita del software",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "status": "draft",
   "language": "it",
   "audience": {
@@ -144,7 +144,9 @@
         "documentazione-del-codice",
         "controllo-versioni-documenti-software"
       ],
-      "activity_ids": []
+      "activity_ids": [
+        "tpsi4-activity-c-docs-git-review-001"
+      ]
     },
     {
       "id": "tpsi4-content-testing-debugging",
