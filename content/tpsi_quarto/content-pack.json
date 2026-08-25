@@ -2,7 +2,7 @@
   "schema_version": "thebitlab.content-pack.v1",
   "id": "tpsi4-pack-hoepli-v2-original-2026",
   "title": "TPSI quarto anno - processi, progettazione e qualita del software",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "status": "draft",
   "language": "it",
   "audience": {
@@ -108,7 +108,7 @@
       "order": 3,
       "status": "draft",
       "curriculum_topics": ["specifica-dei-requisiti", "raccolta-e-analisi-dei-requisiti", "attori-casi-uso-scenari", "documentazione-dei-requisiti"],
-      "activity_ids": [],
+      "activity_ids": ["tpsi4-activity-c-mini-srs-traceability-001"],
       "source_refs": [{"id": "tpsi4-source-originali", "role": "content-origin", "locator": "content/tpsi_quarto/03_REQUISITI_SOFTWARE.md"}]
     },
     {
