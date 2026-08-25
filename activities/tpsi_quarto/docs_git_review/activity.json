@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0",
+  "id": "tpsi4-activity-c-docs-git-review-001",
+  "titolo": "Documentare, versionare e revisionare una modifica",
+  "tipo": "laboratorio",
+  "student_support_mode": "feedback-metodologico",
+  "difficolta": "C",
+  "argomenti": [
+    "documentazione-software",
+    "readme",
+    "adr",
+    "git",
+    "branch",
+    "commit",
+    "pull-request",
+    "code-review",
+    "docs-as-code",
+    "tracciabilita"
+  ],
+  "linguaggio": "markdown",
+  "contesto": {
+    "percorso": "quarto-anno",
+    "uda": "uda-14"
+  },
+  "content_ids": [
+    "tpsi4-content-documentazione-versionamento"
+  ],
+  "source_refs": [
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/04_DOCUMENTAZIONE_VERSIONAMENTO.md",
+      "anchor": "readme",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/04_DOCUMENTAZIONE_VERSIONAMENTO.md",
+      "anchor": "adr-architecture-decision-record",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/04_DOCUMENTAZIONE_VERSIONAMENTO.md",
+      "anchor": "github-pull-request-e-code-review",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/04_DOCUMENTAZIONE_VERSIONAMENTO.md",
+      "anchor": "docs-as-code",
+      "role": "lesson"
+    }
+  ],
+  "consegna": "Documenta e versiona una piccola modifica del progetto MonitorMisure. Completa `PROJECT_README.md`, `ADR-001.md`, `PR_DESCRIPTION.md`, `REVIEW.md` ed `EVIDENCE.md`; lavora su un branch dedicato; produci almeno due commit intenzionali; collega la modifica ad almeno un requisito RF/RNF della mini-SRS; descrivi verifiche, rischi e limiti; svolgi una breve self-review classificando i rilievi come blocking, important, suggestion o style. Le evidenze Git devono mostrare che i file consegnati appartengono al branch e ai commit dichiarati, senza includere token, credenziali o dati personali.",
+  "vincoli": [
+    "il README deve indicare scopo, stato, prerequisiti, avvio/prova, test o verifiche, limiti e provenienza",
+    "l'ADR deve contenere stato, contesto, decisione, alternative e conseguenze positive/negative",
+    "la descrizione PR deve collegare problema, requisito, soluzione, verifica, rischi e compatibilita",
+    "usa almeno due commit con scopi distinti e messaggi comprensibili",
+    "non usare commit che mescolano file estranei o artefatti generati non richiesti",
+    "la review deve valutare la modifica e non la persona",
+    "EVIDENCE.md deve riportare comandi Git e output sufficienti a ricostruire branch/diff/commit senza dati sensibili",
+    "non riscrivere la storia di un branch condiviso durante la prova salvo istruzione esplicita del docente"
+  ],
+  "assets": [
+    {
+      "type": "starter",
+      "path": "starter/PROJECT_README.md",
+      "target_path": "PROJECT_README.md",
+      "visibility": "student",
+      "description": "Template README del progetto"
+    },
+    {
+      "type": "starter",
+      "path": "starter/ADR-001.md",
+      "target_path": "ADR-001.md",
+      "visibility": "student",
+      "description": "Template Architecture Decision Record"
+    },
+    {
+      "type": "starter",
+      "path": "starter/PR_DESCRIPTION.md",
+      "target_path": "PR_DESCRIPTION.md",
+      "visibility": "student",
+      "description": "Template descrizione pull request"
+    },
+    {
+      "type": "starter",
+      "path": "starter/REVIEW.md",
+      "target_path": "REVIEW.md",
+      "visibility": "student",
+      "description": "Scheda di self-review con classificazione dei rilievi"
+    },
+    {
+      "type": "starter",
+      "path": "starter/EVIDENCE.md",
+      "target_path": "EVIDENCE.md",
+      "visibility": "student",
+      "description": "Registro delle evidenze Git riproducibili"
+    },
+    {
+      "type": "example",
+      "path": "student/README.md",
+      "target_path": "README.md",
+      "visibility": "student",
+      "description": "Scenario, workflow e checklist studente"
+    },
+    {
+      "type": "teacher_only",
+      "path": "teacher/REFERENCE.md",
+      "visibility": "teacher",
+      "description": "Esempio di riferimento, rubric e criteri di review"
+    }
+  ],
+  "soluzione_attesa": {
+    "tipo": "documentazione-e-evidenze-git",
+    "file": "EVIDENCE.md",
+    "note": "La valutazione richiede sia qualita dei documenti sia evidenza della storia Git. I file Markdown da soli non dimostrano che branch e commit siano stati usati correttamente."
+  },
+  "correzione": {
+    "compila": false,
+    "test": false,
+    "sandbox": false,
+    "ai_feedback": false
+  },
+  "metriche": {
+    "tempo_stimato_minuti": 150,
+    "traccia_tempo_dichiarato": true,
+    "traccia_sessioni_thebitlab": true,
+    "traccia_eventi_didattici": true,
+    "traccia_errori_compilazione": false
+  },
+  "manual_checks": [
+    {
+      "name": "readme-per-pubblico",
+      "criterion": "PROJECT_README.md permette a un nuovo sviluppatore/studente di capire scopo, prova minima, limiti e fonti senza dipendere da spiegazioni orali"
+    },
+    {
+      "name": "adr-decisione",
+      "criterion": "ADR-001 registra il perche della decisione, alternative reali e conseguenze, non una semplice descrizione del codice"
+    },
+    {
+      "name": "storia-git",
+      "criterion": "EVIDENCE.md mostra un branch dedicato e almeno due commit intenzionali con diff coerente"
+    },
+    {
+      "name": "pr-tracciabile",
+      "criterion": "PR_DESCRIPTION collega almeno un RF/RNF a modifica, verifiche, rischi e limiti"
+    },
+    {
+      "name": "review-professionale",
+      "criterion": "REVIEW.md contiene rilievi tecnici specifici, classificati e formulati sul cambiamento"
+    }
+  ],
+  "rubrica": [
+    {
+      "criterio": "README chiaro, riproducibile e orientato al pubblico",
+      "punti": 2
+    },
+    {
+      "criterio": "ADR con contesto, decisione, alternative e conseguenze",
+      "punti": 2
+    },
+    {
+      "criterio": "Branch e commit intenzionali dimostrati dalle evidenze Git",
+      "punti": 2
+    },
+    {
+      "criterio": "PR tracciabile a requisiti, verifiche, rischi e limiti",
+      "punti": 2
+    },
+    {
+      "criterio": "Self-review tecnica, specifica e professionale",
+      "punti": 2
+    }
+  ]
+}
