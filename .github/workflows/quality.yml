@@ -42,3 +42,4 @@ jobs:
           python -m pytest -q
           tests/test_tpsi_quarto_content_pack.py
           tests/test_producer_consumer_activity.py
+          tests/test_requirements_activity.py

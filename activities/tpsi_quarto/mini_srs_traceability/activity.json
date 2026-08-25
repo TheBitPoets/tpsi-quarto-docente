@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0",
+  "id": "tpsi4-activity-c-mini-srs-traceability-001",
+  "titolo": "Mini-SRS e tracciabilita dei requisiti",
+  "tipo": "laboratorio",
+  "student_support_mode": "feedback-metodologico",
+  "difficolta": "C",
+  "argomenti": [
+    "requisiti-software",
+    "stakeholder",
+    "requisiti-funzionali",
+    "requisiti-non-funzionali",
+    "casi-d-uso",
+    "criteri-di-accettazione",
+    "tracciabilita",
+    "moscow"
+  ],
+  "linguaggio": "markdown",
+  "contesto": {
+    "percorso": "quarto-anno",
+    "uda": "uda-13"
+  },
+  "content_ids": [
+    "tpsi4-content-requisiti-software"
+  ],
+  "source_refs": [
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/03_REQUISITI_SOFTWARE.md",
+      "anchor": "la-specifica-dei-requisiti",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/03_REQUISITI_SOFTWARE.md",
+      "anchor": "attori-casi-duso-e-scenari",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/03_REQUISITI_SOFTWARE.md",
+      "anchor": "criteri-di-accettazione",
+      "role": "lesson"
+    }
+  ],
+  "consegna": "Partendo dal brief del sistema MonitorMisure descritto nella guida studente, completa `SRS.md` e `TRACEABILITY.csv`. La mini-SRS deve distinguere bisogni, requisiti, soluzioni e vincoli; identificare stakeholder e attori; definire almeno 4 requisiti funzionali e 3 non funzionali verificabili con ID stabili e priorita MoSCoW; descrivere un caso d'uso con flusso principale e almeno due alternative; associare a ogni requisito almeno un criterio di accettazione o evidenza verificabile; dichiarare almeno due elementi `Won't now`. La matrice di tracciabilita deve collegare requisito, fonte/stakeholder, criterio di accettazione ed evidenza prevista senza inventare funzionalita non richieste dal brief.",
+  "vincoli": [
+    "usa gli ID RF-xx per i requisiti funzionali e RNF-xx per i requisiti non funzionali",
+    "ogni requisito deve essere singolare, chiaro e verificabile",
+    "non trasformare automaticamente una preferenza di implementazione in requisito",
+    "usa priorita Must, Should, Could o Won't now in modo motivato",
+    "il caso d'uso deve indicare attore primario, precondizioni, trigger, flusso principale, alternative e postcondizioni",
+    "ogni RF/RNF deve comparire nella matrice TRACEABILITY.csv",
+    "non inserire dati personali reali, credenziali o nomi di studenti",
+    "non copiare la soluzione docente o testi da fonti non autorizzate"
+  ],
+  "assets": [
+    {
+      "type": "starter",
+      "path": "starter/SRS.md",
+      "target_path": "SRS.md",
+      "visibility": "student",
+      "description": "Template della mini-SRS da completare"
+    },
+    {
+      "type": "starter",
+      "path": "starter/TRACEABILITY.csv",
+      "target_path": "TRACEABILITY.csv",
+      "visibility": "student",
+      "description": "Matrice di tracciabilita requisito-fonte-criterio-evidenza"
+    },
+    {
+      "type": "example",
+      "path": "student/README.md",
+      "target_path": "README.md",
+      "visibility": "student",
+      "description": "Brief, metodo di lavoro, esempi minimi e checklist"
+    },
+    {
+      "type": "teacher_only",
+      "path": "teacher/REFERENCE.md",
+      "visibility": "teacher",
+      "description": "Esempio di riferimento e note di correzione"
+    }
+  ],
+  "soluzione_attesa": {
+    "tipo": "documentazione-requisiti",
+    "file": "SRS.md",
+    "note": "Non esiste una sola formulazione valida: la valutazione riguarda qualita, verificabilita, coerenza e tracciabilita. La matrice TRACEABILITY.csv deve essere coerente con gli ID della SRS."
+  },
+  "correzione": {
+    "compila": false,
+    "test": false,
+    "sandbox": false,
+    "ai_feedback": false
+  },
+  "metriche": {
+    "tempo_stimato_minuti": 120,
+    "traccia_tempo_dichiarato": true,
+    "traccia_sessioni_thebitlab": true,
+    "traccia_eventi_didattici": true,
+    "traccia_errori_compilazione": false
+  },
+  "manual_checks": [
+    {
+      "name": "separazione bisogno-requisito-soluzione",
+      "criterion": "la SRS non confonde sistematicamente obiettivi degli stakeholder, requisiti e scelte implementative"
+    },
+    {
+      "name": "verificabilita",
+      "criterion": "ogni RF/RNF ha una formulazione osservabile e almeno un criterio/evidenza coerente"
+    },
+    {
+      "name": "caso d'uso",
+      "criterion": "il caso d'uso contiene attore, precondizioni, trigger, main flow, almeno due alternative e postcondizioni"
+    },
+    {
+      "name": "tracciabilita",
+      "criterion": "tutti gli ID RF/RNF compaiono una sola volta come righe logiche della matrice e sono collegati a fonte, criterio ed evidenza"
+    },
+    {
+      "name": "confine del rilascio",
+      "criterion": "sono esplicitati almeno due Won't now senza presentarli come requisiti già soddisfatti"
+    }
+  ],
+  "rubrica": [
+    {
+      "criterio": "Stakeholder, attori, contesto e glossario coerenti",
+      "punti": 2
+    },
+    {
+      "criterio": "Requisiti funzionali/non funzionali chiari, singolari e verificabili",
+      "punti": 3
+    },
+    {
+      "criterio": "Caso d'uso e scenari principale/alternativi",
+      "punti": 2
+    },
+    {
+      "criterio": "Criteri di accettazione e matrice di tracciabilita",
+      "punti": 2
+    },
+    {
+      "criterio": "Priorita, Won't now, coerenza e qualita complessiva",
+      "punti": 1
+    }
+  ]
+}

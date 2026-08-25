@@ -2,7 +2,7 @@
   "schema_version": "thebitlab.content-pack.v0",
   "id": "tpsi4-pack-hoepli-v2-original-2026",
   "title": "TPSI quarto anno - processi, progettazione e qualita del software",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "status": "draft",
   "language": "it",
   "audience": {
@@ -129,7 +129,9 @@
         "attori-casi-uso-scenari",
         "documentazione-dei-requisiti"
       ],
-      "activity_ids": []
+      "activity_ids": [
+        "tpsi4-activity-c-mini-srs-traceability-001"
+      ]
     },
     {
       "id": "tpsi4-content-documentazione-versionamento",
