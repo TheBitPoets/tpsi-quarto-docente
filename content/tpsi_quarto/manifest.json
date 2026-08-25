@@ -2,7 +2,7 @@
   "schema_version": "thebitlab.content-pack.v0",
   "id": "tpsi4-pack-hoepli-v2-original-2026",
   "title": "TPSI quarto anno - processi, progettazione e qualita del software",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "status": "draft",
   "language": "it",
   "audience": {
@@ -175,7 +175,9 @@
         "collaborazione-responsabile",
         "sicurezza-e-privacy"
       ],
-      "activity_ids": []
+      "activity_ids": [
+        "tpsi4-activity-d-responsible-capstone-001"
+      ]
     }
   ],
   "course_designs": [

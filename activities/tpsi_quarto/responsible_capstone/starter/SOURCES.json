@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "project": "MonitorMisure-or-approved-equivalent",
+  "sources": [
+    {
+      "source_id": "course-original-content",
+      "title": "Materiale originale del corso TPSI quarto",
+      "provider": "local-course-repository",
+      "uri_or_repository": "TODO",
+      "ref_or_version": "TODO",
+      "license_status": "project-license-to-review",
+      "use_in_project": "TODO",
+      "transformation": "TODO",
+      "redistribution_note": "TODO"
+    },
+    {
+      "source_id": "external-example",
+      "title": "TODO",
+      "provider": "TODO",
+      "uri_or_repository": "TODO",
+      "ref_or_version": "TODO",
+      "license_status": "TODO",
+      "use_in_project": "TODO",
+      "transformation": "TODO",
+      "redistribution_note": "Se i diritti di copia/redistribuzione non sono chiari, conserva solo riferimento e provenienza."
+    }
+  ]
+}

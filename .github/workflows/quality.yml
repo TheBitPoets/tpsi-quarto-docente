@@ -45,3 +45,4 @@ jobs:
           tests/test_requirements_activity.py
           tests/test_docs_git_activity.py
           tests/test_debug_regression_activity.py
+          tests/test_responsible_capstone_activity.py

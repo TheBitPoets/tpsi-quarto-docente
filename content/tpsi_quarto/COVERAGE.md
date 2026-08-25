@@ -6,9 +6,11 @@ Legenda stato:
 
 - **baseline**: teoria, esempi, esercizi e proposta di laboratorio presenti nel modulo;
 - **pilot activity**: almeno una activity assegnabile è già inclusa;
-- **activity da creare**: il contenuto è presente, ma mancano package e test per la dashboard;
+- **activity da creare**: il contenuto è presente, ma manca ancora una activity dedicata a quella specifica voce curricolare;
 - **revisione docente**: è richiesta una verifica didattica o tecnica prima della pubblicazione;
 - **licenza da verificare**: il frammento della fonte tecnica contiene materiale esterno da controllare o sostituire.
+
+> **Nota sulla granularità:** la presenza di almeno una Activity canonica in un modulo non implica che ogni sua voce curricolare abbia già un laboratorio dedicato. Le righe marcate `activity da creare` restano quindi gap reali di approfondimento anche quando il modulo, nel suo complesso, è già assegnabile.
 
 ## Processi sequenziali e paralleli
 
@@ -28,7 +30,7 @@ Legenda stato:
 | La sincronizzazione tra processi | `02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md` → ordine, mutua esclusione e attesa | sincronizzazione e sezioni critiche; variabili di condizione | barriera concettuale; ordine di stampa deterministico | baseline, activity da creare |
 | I semafori | `02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md` → contatore e operazioni atomiche | Semafori | parcheggio con posti limitati; confronto `sem_t`/`Semaphore` | baseline, activity da creare |
 | Applicazione dei semafori | `02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md` → pattern di uso | Semafori; mutex e condition | turnazione, barriera, pool di risorse | baseline, activity da creare |
-| Produttori/consumatori | `02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md` → buffer limitato | mutex, semafori, variabili di condizione | coda circolare C; `BlockingQueue` Java | baseline, activity da creare |
+| Produttori/consumatori | `02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md` → buffer limitato | mutex, semafori, variabili di condizione | `tpsi4-activity-c-producer-consumer-buffer-001`: coda circolare C con mutex/condition | baseline, pilot activity |
 | Lettori/scrittori | `02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md` → politiche e starvation | deadlock con più thread; mutex | registro condiviso con politica esplicita | baseline, activity da creare |
 | Deadlock | `02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md` → condizioni e prevenzione | Mutex Deadlocks; Deadlocks con due o più Thread | laboratorio dei due lock; ordine globale | baseline, activity da creare |
 | Monitor | `02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md` → stato protetto e condition | mutex + variabili di condizione | monitor concettuale C; classe Java sincronizzata | baseline, activity da creare |
@@ -38,36 +40,51 @@ Legenda stato:
 
 | Voce curricolare | Contenuto originale | Fonte tecnica | Attività/laboratorio | Stato |
 | --- | --- | --- | --- | --- |
-| La specifica dei requisiti | `03_REQUISITI_SOFTWARE.md` → requisiti verificabili | documentazione interna del progetto e casi d'uso originali | riscrittura di requisiti vaghi; criteri di accettazione | baseline, activity da creare |
-| Raccolta e analisi dei requisiti | `03_REQUISITI_SOFTWARE.md` → stakeholder, interviste e conflitti | issue e scenari del progetto come esempi | intervista simulata; matrice stakeholder/bisogni | baseline, activity da creare |
-| Attori, casi d'uso e scenari | `03_REQUISITI_SOFTWARE.md` → use case e flussi | diagrammi Mermaid originali | modellazione dashboard docente/lab studente | baseline, activity da creare |
-| Documentazione dei requisiti | `03_REQUISITI_SOFTWARE.md` → SRS leggera e tracciabilità | issue, decisioni e test di accettazione | mini specifica versionata | baseline, activity da creare |
+| La specifica dei requisiti | `03_REQUISITI_SOFTWARE.md` → requisiti verificabili | documentazione interna del progetto e casi d'uso originali | `tpsi4-activity-c-mini-srs-traceability-001`: mini-SRS con RF/RNF verificabili | baseline, pilot activity |
+| Raccolta e analisi dei requisiti | `03_REQUISITI_SOFTWARE.md` → stakeholder, interviste e conflitti | issue e scenari del progetto come esempi | stessa Activity: matrice stakeholder/bisogni e priorità | baseline, pilot collegato |
+| Attori, casi d'uso e scenari | `03_REQUISITI_SOFTWARE.md` → use case e flussi | diagrammi Mermaid originali | stessa Activity: UC con main flow e alternative | baseline, pilot collegato |
+| Documentazione dei requisiti | `03_REQUISITI_SOFTWARE.md` → SRS leggera e tracciabilità | issue, decisioni e test di accettazione | stessa Activity: `SRS.md` + `TRACEABILITY.csv` | baseline, pilot activity |
 
 ## Documentazione del software
 
 | Voce curricolare | Contenuto originale | Fonte tecnica | Attività/laboratorio | Stato |
 | --- | --- | --- | --- | --- |
-| La documentazione del progetto | `04_DOCUMENTAZIONE_VERSIONAMENTO.md` → pubblico, struttura e decisioni | documentazione esistente di 2cornot2c | creare README e ADR per un mini-progetto | baseline, activity da creare |
+| La documentazione del progetto | `04_DOCUMENTAZIONE_VERSIONAMENTO.md` → pubblico, struttura e decisioni | documentazione esistente di 2cornot2c | `tpsi4-activity-c-docs-git-review-001`: README + ADR | baseline, pilot activity |
 | La documentazione del codice | `04_DOCUMENTAZIONE_VERSIONAMENTO.md` → nomi, contratti, commenti e API | esempi originali C/Java | migliorare codice poco leggibile; generare documentazione | baseline, activity da creare |
-| Controllo delle versioni | `04_DOCUMENTAZIONE_VERSIONAMENTO.md` → commit, branch, merge e review | Git e GitHub; workflow del repository | repository di squadra, conflitto guidato, pull request | baseline, activity da creare |
+| Controllo delle versioni | `04_DOCUMENTAZIONE_VERSIONAMENTO.md` → commit, branch, merge e review | Git e GitHub; workflow del repository | stessa Activity: branch, almeno due commit, PR e self-review | baseline, pilot activity |
 
 ## Testing e debugging
 
 | Voce curricolare | Contenuto originale | Fonte tecnica | Attività/laboratorio | Stato |
 | --- | --- | --- | --- | --- |
 | Verifica e validazione del software | `05_TESTING_DEBUGGING.md` → costruire bene/costruire il prodotto giusto | activity, rubriche e criteri di accettazione | derivare test dai requisiti | baseline, activity da creare |
-| Verifica statica e dinamica | `05_TESTING_DEBUGGING.md` → review, warning, sanitizer, test | runner, GCC, test deterministici, sandbox | compilazione rigorosa; test; sanitizers | baseline, activity da creare |
-| Debugging di un programma | `05_TESTING_DEBUGGING.md` → riproduzione, ipotesi, osservazione e fix | output runner e report | bug concorrente, deadlock e memoria | baseline, activity da creare |
+| Verifica statica e dinamica | `05_TESTING_DEBUGGING.md` → review, warning, sanitizer, test | runner, GCC, test deterministici, sandbox | `tpsi4-activity-c-memory-debug-regression-001`: compilazione rigorosa, test e sanitizer | baseline, pilot activity |
+| Debugging di un programma | `05_TESTING_DEBUGGING.md` → riproduzione, ipotesi, osservazione e fix | output runner e report | stessa Activity: bug di confine, causa radice, fix minimo e regressione | baseline, pilot activity |
 
 ## Cittadinanza digitale
 
 | Nucleo | Contenuto originale | Attività | Stato |
 | --- | --- | --- | --- |
-| Licenze e uso corretto delle fonti | `06_CITTADINANZA_DIGITALE.md` | audit di provenienza e licenza | baseline, revisione docente |
-| Collaborazione responsabile | `06_CITTADINANZA_DIGITALE.md` | code review rispettosa e segnalazione vulnerabilità | baseline, activity da creare |
-| Privacy e dati scolastici | `06_CITTADINANZA_DIGITALE.md` | minimizzazione dati e ruoli | baseline, activity da creare |
-| Sicurezza della supply chain | `06_CITTADINANZA_DIGITALE.md` | dipendenze, segreti e artefatti | baseline, activity da creare |
-| Uso responsabile dell'AI | `06_CITTADINANZA_DIGITALE.md` | provenienza, verifica e policy di aiuto | baseline, activity da creare |
+| Licenze e uso corretto delle fonti | `06_CITTADINANZA_DIGITALE.md` | `tpsi4-activity-d-responsible-capstone-001`: manifest fonti, ref/versioni e license-status | baseline, pilot activity, revisione docente |
+| Collaborazione responsabile | `06_CITTADINANZA_DIGITALE.md` | capstone + continuità con review UDA14; segnalazione responsabile da approfondire | baseline, pilot collegato |
+| Privacy e dati scolastici | `06_CITTADINANZA_DIGITALE.md` | capstone: inventario dati, minimizzazione, ruoli e segreti | baseline, pilot activity |
+| Sicurezza della supply chain | `06_CITTADINANZA_DIGITALE.md` | capstone: dipendenze, fonti, versioni, rischi e contromisure | baseline, pilot activity |
+| Uso responsabile dell'AI | `06_CITTADINANZA_DIGITALE.md` | capstone: uso AI dichiarato o assente, verifica umana e limiti dell'automazione | baseline, pilot activity |
+
+## Copertura minima assegnabile per modulo
+
+Questa tabella misura un requisito diverso dalla copertura granulare sopra: verifica che **ogni modulo del Content Pack abbia almeno una Activity canonica assegnabile**. Non elimina i laboratori aggiuntivi ancora indicati come `activity da creare`.
+
+| Modulo | Activity canoniche presenti | Stato sullo stack UDA12–UDA16 |
+| --- | --- | --- |
+| 01 — Processi e concorrenza | `tpsi4-activity-c-fork-pipe-square-001` | presente |
+| 02 — Comunicazione e sincronizzazione | `tpsi4-activity-c-fork-pipe-square-001`; `tpsi4-activity-c-producer-consumer-buffer-001` | presente |
+| 03 — Requisiti software | `tpsi4-activity-c-mini-srs-traceability-001` | presente |
+| 04 — Documentazione e versionamento | `tpsi4-activity-c-docs-git-review-001` | presente |
+| 05 — Testing e debugging | `tpsi4-activity-c-memory-debug-regression-001` | presente |
+| 06 — Cittadinanza digitale | `tpsi4-activity-d-responsible-capstone-001` | presente |
+
+**Esito dello stack corrente:** 6/6 moduli hanno almeno una Activity canonica. Il pacchetto resta `draft`: questo traguardo non sostituisce revisione docente, validazione dei diritti delle fonti, CI eseguibile e collaudo del flusso reale di assegnazione.
 
 ## Controllo della qualità didattica
 
@@ -111,8 +128,9 @@ Nota di licenza: gli esempi presenti nella dispensa che dichiarano una provenien
 | runner Java non implementato | niente grading automatico Java | activity Java con rubrica docente e `test: false` |
 | fonti remote non sincronizzate | repository privato non indicizzato automaticamente | fonte locale nel repository; migrazione futura al provider GitHub |
 | content pack non ancora entità runtime | manifest non letto dalla dashboard | mantenere Markdown e activity come dati autorevoli correnti |
-| collegamenti activity/UDA ancora in evoluzione | parte dei legami può essere manuale | ID stabili e `activity_ids` nel progetto archiviato |
+| collegamenti activity/UDA ancora in evoluzione | parte dei legami può essere manuale | ID stabili e `activity_ids` nel Content Pack; Course Design archiviato resta storico |
 | preview asset incompleta | immagini/diagrammi possono non rendersi | testo alternativo e diagrammi sorgente leggibili |
+| GitHub Actions TPSI4 non esegue i job | impossibile usare la CI hosted come prova del pacchetto | mantenere PR draft; usare validazione controllata equivalente finché il runner non torna disponibile |
 
 ## Stato del primo incremento
 
@@ -125,4 +143,6 @@ Il primo incremento è completo quando sono presenti:
 - documentazione di importazione;
 - PR draft collegata a #625.
 
-La chiusura di #625 richiede invece tutte le activity principali, la revisione docente e il collaudo completo dalla dashboard.
+Questo traguardo storico è stato superato sullo stack corrente: oltre al pilot C/POSIX, ogni modulo 01–06 possiede almeno una Activity canonica assegnabile.
+
+La chiusura di #625 richiede comunque la revisione docente, il controllo delle fonti/licenze, il collaudo completo dalla dashboard e gli altri criteri di accettazione dell'issue. La presenza delle Activity non autorizza da sola la promozione del pacchetto ad `approved`.

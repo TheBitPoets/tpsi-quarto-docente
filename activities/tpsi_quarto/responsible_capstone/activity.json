@@ -1,0 +1,179 @@
+{
+  "schema_version": "1.0",
+  "id": "tpsi4-activity-d-responsible-capstone-001",
+  "titolo": "Capstone: progetto concorrente responsabile e verificabile",
+  "tipo": "laboratorio",
+  "student_support_mode": "feedback-metodologico",
+  "difficolta": "D",
+  "argomenti": [
+    "cittadinanza-digitale",
+    "provenienza",
+    "licenze",
+    "privacy",
+    "segreti",
+    "supply-chain",
+    "accessibilita",
+    "uso-responsabile-ai",
+    "testing",
+    "tracciabilita",
+    "progetto-finale"
+  ],
+  "linguaggio": "markdown",
+  "contesto": {
+    "percorso": "quarto-anno",
+    "uda": "uda-16"
+  },
+  "content_ids": [
+    "tpsi4-content-cittadinanza-digitale"
+  ],
+  "source_refs": [
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md",
+      "anchor": "provenienza",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md",
+      "anchor": "minimizzazione-dei-dati",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md",
+      "anchor": "supply-chain-del-software",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md",
+      "anchor": "uso-responsabile-dellai",
+      "role": "lesson"
+    },
+    {
+      "source_id": "tpsi4-source-originali",
+      "path": "content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md",
+      "anchor": "accessibilita-e-inclusione",
+      "role": "lesson"
+    }
+  ],
+  "consegna": "Prepara il dossier finale di un piccolo progetto concorrente realizzato o revisionato durante il corso (puoi riusare MonitorMisure o un progetto equivalente approvato). Completa `FINAL_REPORT.md`, `SOURCES.json`, `PRIVACY_SECURITY.md` e `ACCESSIBILITY_AI.md`. Il dossier deve collegare bisogno/requisiti, architettura concorrente, documentazione/versionamento, verifiche eseguite, limiti e decisioni responsabili; registrare fonti/licenze/versioni senza incorporare materiale non autorizzato; minimizzare dati personali e segreti; descrivere dipendenze/supply-chain; dichiarare l'eventuale uso di AI con verifiche umane; includere un controllo di accessibilita e almeno una scelta di sostenibilita/uso responsabile delle risorse. Il docente deve poter ricostruire cosa e stato costruito, con quali evidenze e con quali responsabilita residue.",
+  "vincoli": [
+    "usa un progetto o artefatto di cui puoi mostrare legalmente codice/documentazione/evidenze",
+    "SOURCES.json deve registrare almeno source_id, titolo, provider, versione/ref, licenza/status e uso nel progetto",
+    "se la licenza di una fonte non consente o non chiarisce la redistribuzione, conserva riferimento e provenienza senza copiarne il contenuto",
+    "non inserire nomi reali di studenti, credenziali, token, cookie o chiavi API",
+    "PRIVACY_SECURITY.md deve distinguere dato personale, segreto, dato tecnico e dato non necessario",
+    "dichiara dipendenze/strumenti critici e come ne identifichi versione o provenienza",
+    "se hai usato AI, registra obiettivo, provider/modello se noto, input/fonti fornite, cosa hai accettato e come hai verificato; se non l'hai usata dichiaralo",
+    "ACCESSIBILITY_AI.md deve includere controlli di accessibilita del materiale e una valutazione dei limiti dell'automazione",
+    "FINAL_REPORT.md deve citare verifiche reali e distinguere chiaramente test eseguiti da controlli non eseguiti",
+    "non presentare CI verde, AI o un singolo test come prova completa di sicurezza o qualita"
+  ],
+  "assets": [
+    {
+      "type": "starter",
+      "path": "starter/FINAL_REPORT.md",
+      "target_path": "FINAL_REPORT.md",
+      "visibility": "student",
+      "description": "Dossier finale con tracciabilita, architettura, test, limiti e responsabilita"
+    },
+    {
+      "type": "starter",
+      "path": "starter/SOURCES.json",
+      "target_path": "SOURCES.json",
+      "visibility": "student",
+      "description": "Manifest di provenienza, versione, licenza e uso delle fonti"
+    },
+    {
+      "type": "starter",
+      "path": "starter/PRIVACY_SECURITY.md",
+      "target_path": "PRIVACY_SECURITY.md",
+      "visibility": "student",
+      "description": "Data inventory, minimizzazione, ruoli, segreti e supply-chain"
+    },
+    {
+      "type": "starter",
+      "path": "starter/ACCESSIBILITY_AI.md",
+      "target_path": "ACCESSIBILITY_AI.md",
+      "visibility": "student",
+      "description": "Accessibilita, uso AI, verifiche umane e limiti dell'automazione"
+    },
+    {
+      "type": "example",
+      "path": "student/README.md",
+      "target_path": "README.md",
+      "visibility": "student",
+      "description": "Workflow capstone, esempi minimi e checklist"
+    },
+    {
+      "type": "teacher_only",
+      "path": "teacher/REFERENCE.md",
+      "visibility": "teacher",
+      "description": "Criteri di accettazione, esempi e rubric del capstone"
+    }
+  ],
+  "soluzione_attesa": {
+    "tipo": "dossier-progetto-responsabile",
+    "file": "FINAL_REPORT.md",
+    "note": "Non esiste un unico progetto corretto. La valutazione integra evidenza tecnica, tracciabilita, provenienza, privacy/sicurezza, accessibilita, uso responsabile dell'AI e capacita di dichiarare limiti reali."
+  },
+  "correzione": {
+    "compila": false,
+    "test": false,
+    "sandbox": false,
+    "ai_feedback": false
+  },
+  "metriche": {
+    "tempo_stimato_minuti": 240,
+    "traccia_tempo_dichiarato": true,
+    "traccia_sessioni_thebitlab": true,
+    "traccia_eventi_didattici": true,
+    "traccia_errori_compilazione": false
+  },
+  "manual_checks": [
+    {
+      "name": "catena-di-evidenza",
+      "criterion": "il dossier collega bisogno/requisiti, decisioni, implementazione o artefatti, verifiche ed evidenze senza salti logici"
+    },
+    {
+      "name": "provenienza-e-licenze",
+      "criterion": "ogni fonte esterna significativa ha provenienza/versione/licenza-status e non viene redistribuito contenuto non autorizzato"
+    },
+    {
+      "name": "privacy-sicurezza",
+      "criterion": "sono esplicitati minimizzazione, ruoli, segreti, dati non necessari e rischi supply-chain con contromisure proporzionate"
+    },
+    {
+      "name": "ai-e-responsabilita-umana",
+      "criterion": "uso AI dichiarato o esplicitamente assente; eventuali output AI hanno verifica umana e non sono trattati come fonte automatica"
+    },
+    {
+      "name": "accessibilita-e-limiti",
+      "criterion": "sono presenti controlli di accessibilita, limiti non mascherati e almeno una scelta motivata sull'uso delle risorse"
+    }
+  ],
+  "rubrica": [
+    {
+      "criterio": "Coerenza tecnica e tracciabilita del progetto finale",
+      "punti": 2
+    },
+    {
+      "criterio": "Provenienza, licenze e gestione responsabile delle fonti",
+      "punti": 2
+    },
+    {
+      "criterio": "Privacy, segreti, ruoli, sicurezza e supply-chain",
+      "punti": 2
+    },
+    {
+      "criterio": "Verifiche, evidenze, limiti e responsabilita umana/AI",
+      "punti": 2
+    },
+    {
+      "criterio": "Accessibilita, inclusione e uso responsabile delle risorse",
+      "punti": 2
+    }
+  ]
+}
