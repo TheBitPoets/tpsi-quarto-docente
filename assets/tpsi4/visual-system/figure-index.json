@@ -395,6 +395,19 @@
       "output": "assets/tpsi4/01-contesto-salvataggio.svg",
       "status": "composed",
       "book_visual_comparison": "pending-access"
+    },
+    {
+      "id": "01-stack-chiamate-annidate",
+      "title": "Lo stack ricorda le chiamate ancora aperte",
+      "alt": "main chiama acquisisci, che chiama converti. Nel primo momento lo stack contiene dal basso main, acquisisci e converti, la chiamata più recente. Quando converti termina resta attiva acquisisci. Quando anche acquisisci termina resta attiva main.",
+      "caption": "L’ultima chiamata aperta è la prima a terminare: da converti si torna ad acquisisci, poi a main.",
+      "section": "Anatomia di un processo",
+      "components": [],
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "scene": "assets/tpsi4/visual-system/scenes/01-stack-chiamate-annidate.scene.svg",
+      "output": "assets/tpsi4/01-stack-chiamate-annidate.svg",
+      "status": "composed",
+      "book_visual_comparison": "pending-access"
     }
   ]
 }

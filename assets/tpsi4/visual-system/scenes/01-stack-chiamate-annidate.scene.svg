@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-stack-chiamate-annidate.svg"><title id="scene-title">Lo stack ricorda le chiamate ancora aperte</title><desc id="scene-desc">main chiama acquisisci, che chiama converti. Nel primo momento lo stack contiene dal basso main, acquisisci e converti, la chiamata più recente. Quando converti termina resta attiva acquisisci. Quando anche acquisisci termina resta attiva main.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="24" fill="{{canvas}}"/>
+<text x="64" y="85" font-size="48" fill="{{surface}}" font-weight="700">Lo stack ricorda le chiamate ancora aperte</text>
+<text x="64" y="143" font-size="28" fill="{{muted}}" font-weight="400">Ordine delle chiamate: main → acquisisci → converti</text>
+<rect x="64" y="230" width="552" height="650" rx="24" fill="{{surface}}"/>
+<rect x="684" y="230" width="552" height="650" rx="24" fill="{{surface}}"/>
+<rect x="1304" y="230" width="552" height="650" rx="24" fill="{{surface}}"/>
+<text x="94" y="289" font-size="32" fill="{{ink}}" font-weight="700">1. Esegue converti</text>
+<text x="714" y="289" font-size="32" fill="{{ink}}" font-weight="700">2. Riprende acquisisci</text>
+<text x="1334" y="289" font-size="32" fill="{{ink}}" font-weight="700">3. Riprende main</text>
+<text x="94" y="351" font-size="26" fill="{{ink}}" font-weight="400">Chiamata più recente: converti.</text>
+<text x="94" y="393" font-size="26" fill="{{ink}}" font-weight="400">Le altre aspettano il ritorno.</text>
+<text x="714" y="351" font-size="26" fill="{{ink}}" font-weight="400">converti è terminata.</text>
+<text x="714" y="393" font-size="26" fill="{{ink}}" font-weight="400">Il suo frame non è più attivo.</text>
+<text x="1334" y="351" font-size="26" fill="{{ink}}" font-weight="400">Anche acquisisci è terminata.</text>
+<text x="1334" y="393" font-size="26" fill="{{ink}}" font-weight="400">Il suo frame non è più attivo.</text>
+<rect x="94" y="443" width="492" height="102" rx="24" fill="#fef3c7"/>
+<text x="118" y="483" font-size="30" fill="{{ink}}" font-weight="700">Frame di converti</text>
+<text x="118" y="522" font-size="25" fill="{{ink}}" font-weight="400">ATTIVO · cima dello stack</text>
+<rect x="94" y="570" width="492" height="102" rx="24" fill="#ccfbf1"/>
+<text x="118" y="610" font-size="30" fill="{{ink}}" font-weight="700">Frame di acquisisci</text>
+<text x="118" y="649" font-size="25" fill="{{ink}}" font-weight="400">Aspetta il risultato di converti</text>
+<rect x="94" y="697" width="492" height="102" rx="24" fill="#dbeafe"/>
+<text x="118" y="737" font-size="30" fill="{{ink}}" font-weight="700">Frame di main</text>
+<text x="118" y="776" font-size="25" fill="{{ink}}" font-weight="400">Aspetta il ritorno di acquisisci</text>
+<rect x="714" y="570" width="492" height="102" rx="24" fill="#ccfbf1"/>
+<text x="738" y="610" font-size="30" fill="{{ink}}" font-weight="700">Frame di acquisisci</text>
+<text x="738" y="649" font-size="25" fill="{{ink}}" font-weight="400">ATTIVO · cima dello stack</text>
+<rect x="714" y="697" width="492" height="102" rx="24" fill="#dbeafe"/>
+<text x="738" y="737" font-size="30" fill="{{ink}}" font-weight="700">Frame di main</text>
+<text x="738" y="776" font-size="25" fill="{{ink}}" font-weight="400">Aspetta il ritorno di acquisisci</text>
+<rect x="1334" y="697" width="492" height="102" rx="24" fill="#dbeafe"/>
+<text x="1358" y="737" font-size="30" fill="{{ink}}" font-weight="700">Frame di main</text>
+<text x="1358" y="776" font-size="25" fill="{{ink}}" font-weight="400">ATTIVO · cima dello stack</text>
+<path d="M620 514 H676" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<path d="M1240 642 H1296" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<text x="714" y="493" font-size="27" fill="{{ink}}" font-weight="700">Si torna ad acquisisci</text>
+<text x="1334" y="621" font-size="27" fill="{{ink}}" font-weight="700">Si torna a main</text>
+<rect x="64" y="920" width="1792" height="94" rx="24" fill="{{panel}}"/>
+<text x="94" y="977" font-size="28" fill="{{surface}}" font-weight="400">Leggi la pila dal basso verso l’alto: ogni nuova chiamata aggiunge un frame; il ritorno lo rende non più attivo.</text>
+<text x="64" y="1054" font-size="24" fill="{{muted}}" font-weight="400">TPSI 4 · Intel x86-64 · Modello didattico semplificato</text></g></svg>

@@ -85,14 +85,14 @@ Gli scostamenti dal preventivo vanno riportati nel consuntivo e compensati aggio
 - [Content Pack](content/tpsi_quarto/content-pack.json), con fonti e stato dei materiali.
 - [Note docente del laboratorio fork/pipe](activities/tpsi_quarto/fork_pipe_square/teacher/NOTES.md).
 
-La dispensa integrativa `LINUX_PROGRAMMING.md` è una fonte remota del repository `TheBitPoets/2cornot2c`, identificata nel Content Pack; non è un file locale di questo repository. Il percorso la utilizza a partire dalla sezione `Linux Programming`, escludendo la sezione iniziale `Controllo dei processi`.
+La dispensa integrativa [LINUX_PROGRAMMING.md](https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming) è una fonte remota del repository `TheBitPoets/2cornot2c`, identificata nel Content Pack; non è un file locale di questo repository. Il percorso la utilizza a partire dalla sezione `Linux Programming`, escludendo la sezione iniziale `Controllo dei processi`.
 
 ## Immagini e formattazione del corso
 
 - [Audit delle figure e degli oggetti ricorrenti](doc/VISUAL_AUDIT.md).
 - [Visual System e cataloghi dei 27 oggetti](assets/tpsi4/visual-system/README.md).
 - [Guida di formattazione delle dispense](content/tpsi_quarto/STYLE_GUIDE.md).
-- [Registro delle 26 figure](assets/tpsi4/visual-system/figure-index.json).
+- [Registro delle 27 figure](assets/tpsi4/visual-system/figure-index.json).
 
 Le immagini sono composte da simboli SVG riutilizzabili e inserite nei sei moduli con testo alternativo e didascalia. Per rigenerare e verificare gli SVG dalla root del repository:
 

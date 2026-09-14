@@ -25,7 +25,7 @@ I testi, gli esempi, gli esercizi e i laboratori presenti in questa cartella son
 
 ## Relazione con `LINUX_PROGRAMMING.md`
 
-Il pacchetto usa `LINUX_PROGRAMMING.md` come seconda fonte locale. Sono pertinenti le sezioni a partire da:
+Il pacchetto usa [LINUX_PROGRAMMING.md](https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming) del repository `TheBitPoets/2cornot2c` come seconda fonte remota. Il file non è presente in questo repository. Sono pertinenti le sezioni a partire da:
 
 ```text
 ## Linux Programming

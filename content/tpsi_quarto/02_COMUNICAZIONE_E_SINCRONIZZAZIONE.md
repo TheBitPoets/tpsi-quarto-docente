@@ -271,9 +271,9 @@ int main(void) {
 <p align="justify">Collegamenti:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#segnali">Segnali</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#sigaction"><code>sigaction</code></a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#signal-handling">Signal Handling</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#segnali">Segnali</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#sigaction"><code>sigaction</code></a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#signal-handling">Signal Handling</a></li>
 </ul>
 
 <p align="justify">Un gestore di segnale deve rispettare vincoli severi: molte funzioni di libreria non sono sicure in quel contesto. Una strategia comune è impostare un flag di tipo appropriato o scrivere su un descrittore predisposto, lasciando il lavoro complesso al normale flusso del programma.</p>
@@ -301,7 +301,7 @@ scrivi il nuovo valore
 <p align="justify">Collegamento:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#race-conditions">Race Conditions</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#race-conditions">Race Conditions</a></li>
 </ul>
 
 <!-- figure:02-race -->
@@ -351,8 +351,8 @@ unlock
 <p align="justify">Collegamenti:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#mutex">Mutex</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#test-mutex-non-bloccanti">Test Mutex non bloccanti</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#mutex">Mutex</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#test-mutex-non-bloccanti">Test Mutex non bloccanti</a></li>
 </ul>
 
 ### Esempio POSIX originale: contatore protetto
@@ -459,7 +459,7 @@ final class SafeCounter {
 <p align="justify">Collegamento:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#semafori">Semafori</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#semafori">Semafori</a></li>
 </ul>
 
 ### Mutex e semaforo non sono intercambiabili per abitudine
@@ -525,7 +525,7 @@ unlock(mutex)
 <p align="justify">Collegamento:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#variabili-di-condizione">Variabili di condizione</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#variabili-di-condizione">Variabili di condizione</a></li>
 </ul>
 
 <p align="justify">In Java, <code>Condition.await()</code> e <code>Condition.signal()</code> sono associate a un <code>Lock</code>. I metodi <code>wait</code>, <code>notify</code> e <code>notifyAll</code> sono invece associati al monitor intrinseco di un oggetto.</p>
@@ -615,8 +615,8 @@ unlock
 <p align="justify">Collegamenti:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#mutex-deadlocks">Mutex Deadlocks</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#deadlocks-con-due-o-piu-thread">Deadlocks con due o più Thread</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#mutex-deadlocks">Mutex Deadlocks</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#deadlocks-con-due-o-più-thread">Deadlocks con due o più Thread</a></li>
 </ul>
 
 ### Esempio di ordine incoerente
@@ -750,9 +750,9 @@ thread database restituisce risultati
 <p align="justify">Collegamenti:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#cancellazione-del-thread">Cancellazione del thread</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#sezioni-critiche-non-cancellabili">Sezioni critiche non cancellabili</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#gestori-di-pulizia-cleanup-handler">Gestori di pulizia</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#cancellazione-del-thread">Cancellazione del thread</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#sezioni-critiche-non-cancellabili">Sezioni critiche non cancellabili</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#gestori-di-pulizia-cleanup-handler">Gestori di pulizia</a></li>
 </ul>
 
 <p align="justify">È spesso preferibile una terminazione cooperativa:</p>
@@ -934,7 +934,7 @@ thread database restituisce risultati
 
 <ul>
   <li>Riferimento curricolare: indice pubblico del volume 2, usato per la copertura.</li>
-  <li>Fonte tecnica locale: sezioni su segnali, thread, race condition, mutex, semafori, condition e deadlock di <code>LINUX_PROGRAMMING.md</code>.</li>
+  <li>Fonte tecnica remota: sezioni su segnali, thread, race condition, mutex, semafori, condition e deadlock di <a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming">LINUX_PROGRAMMING.md nel repository 2cornot2c</a>.</li>
   <li>Pipe, monitor, protocolli, produttori/consumatori e lettori/scrittori sono spiegati con testo ed esempi originali.</li>
   <li>Gli esempi che verranno estratti dalla dispensa Linux devono conservare la provenienza e superare il controllo di licenza.</li>
   <li>Stato: <code>draft</code>; revisione tecnica e didattica richiesta.</li>

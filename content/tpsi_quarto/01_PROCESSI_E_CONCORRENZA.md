@@ -50,7 +50,7 @@ Svolgere esercizi A-D e avviare il laboratorio fork/pipe.
 
 <p align="justify">
 <strong><span style="font-size: 1.15em;">&#128279;</span> Rimando:</strong>
-Modulo originale e heading pertinenti di LINUX_PROGRAMMING.md, esclusa Controllo dei processi. <a href="#fonti-e-note-di-revisione">Fonti e note della lezione</a>; <a href="COVERAGE.md">matrice di copertura</a>.
+Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming">dispensa Linux di 2cornot2c</a>, esclusa Controllo dei processi. <a href="#fonti-e-note-di-revisione">Fonti e note della lezione</a>; <a href="COVERAGE.md">matrice di copertura</a>.
 </p>
 
 </details>
@@ -149,9 +149,9 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 <p align="justify">Collegamenti alla fonte tecnica:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#processi">Processi</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#process-ids">Process IDs</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#vedere-i-processi-attivi">Vedere i processi attivi</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#processi">Processi</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#process-ids">Process IDs</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#vedere-i-processi-attivi">Vedere i processi attivi</a></li>
 </ul>
 
 <!-- figure:01-programma-processi -->
@@ -202,7 +202,7 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 ### 3. Spazio di indirizzamento: gli indirizzi che il programma vede
 
-<p align="justify">Un indirizzo indica una posizione di memoria. Il processo usa un proprio <strong>spazio di indirizzi virtuali</strong>, suddiviso in blocchi chiamati <strong>pagine virtuali</strong>. La RAM ? organizzata in blocchi corrispondenti, le <strong>pagine fisiche</strong> o <strong>frame</strong>. Per trovare un dato, bisogna collegare la pagina vista dal programma alla sua posizione nella RAM.</p>
+<p align="justify">Un indirizzo indica una posizione di memoria. Il processo usa un proprio <strong>spazio di indirizzi virtuali</strong>, suddiviso in blocchi chiamati <strong>pagine virtuali</strong>. La RAM è organizzata in blocchi corrispondenti, le <strong>pagine fisiche</strong> o <strong>frame</strong>. Per trovare un dato, bisogna collegare la pagina vista dal programma alla sua posizione nella RAM.</p>
 
 <!-- figure:01-indirizzi-virtuali-mmu -->
 <p align="center">
@@ -213,15 +213,15 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 <p align="justify">Segui la figura in quattro passaggi:</p>
 
 <ol>
-  <li><strong>A sinistra, le pagine virtuali:</strong> sono il modo in cui il processo vede organizzata la propria memoria. Lo spazio pu? essere molto grande e solo una parte delle pagine ? presente in RAM.</li>
+  <li><strong>A sinistra, le pagine virtuali:</strong> sono il modo in cui il processo vede organizzata la propria memoria. Lo spazio può essere molto grande e solo una parte delle pagine è presente in RAM.</li>
   <li><strong>Al centro, il kernel e le strutture dati:</strong> il sistema operativo assegna i frame e prepara le tabelle delle pagine. Nella figura la tabella dice, per esempio, che la pagina virtuale V1 si trova nel frame fisico F4. Il kernel tiene anche traccia dei frame liberi e occupati.</li>
-  <li><strong>Sotto, la MMU:</strong> ? la parte hardware della CPU che traduce gli indirizzi usando le corrispondenze preparate dal kernel. Il programma indica una posizione virtuale; la MMU permette di raggiungere quella fisica corretta.</li>
-  <li><strong>A destra, le pagine fisiche:</strong> sono i blocchi effettivamente presenti nella RAM. Cerca gli stessi colori: V1 ? in F4, V2 in F1 e V3 in F6. L'ordine nella RAM pu? essere diverso dall'ordine virtuale.</li>
+  <li><strong>Sotto, la MMU:</strong> è la parte hardware della CPU che traduce gli indirizzi usando le corrispondenze preparate dal kernel. Il programma indica una posizione virtuale; la MMU permette di raggiungere quella fisica corretta.</li>
+  <li><strong>A destra, le pagine fisiche:</strong> sono i blocchi effettivamente presenti nella RAM. Cerca gli stessi colori: V1 è in F4, V2 in F1 e V3 in F6. L'ordine nella RAM può essere diverso dall'ordine virtuale.</li>
 </ol>
 
 <p align="justify"><strong>Mappare una pagina</strong> significa stabilire questa corrispondenza. La tabella contiene indicazioni su dove trovare le pagine; i dati delle pagine sono nei frame fisici. Le tabelle sono anch'esse conservate in RAM: nella figura sono separate per distinguerne la funzione.</p>
 
-<p align="justify">Ogni processo ha le proprie mappature: lo stesso indirizzo virtuale in due processi pu? quindi portare a dati fisici diversi. Per riprendere correttamente un processo, il sistema deve rendere nuovamente utilizzabili le sue corrispondenze.</p>
+<p align="justify">Ogni processo ha le proprie mappature: lo stesso indirizzo virtuale in due processi può quindi portare a dati fisici diversi. Per riprendere correttamente un processo, il sistema deve rendere nuovamente utilizzabili le sue corrispondenze.</p>
 
 <p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Leggi l'immagine:</strong> in quale frame si trova V2? Chi prepara la corrispondenza e chi la usa per tradurre l'indirizzo?</p>
 
@@ -231,16 +231,11 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Lo <strong>stack</strong> è organizzato come una pila: l'ultima chiamata aperta è la prima a concludersi. Nel modello usuale, ogni chiamata dispone di un <strong>record di attivazione</strong>, o <em>stack frame</em>, con informazioni utili alla sua esecuzione e al ritorno. Può contenere variabili locali, valori salvati e informazioni di collegamento; la disposizione concreta dipende dall'architettura, dalle convenzioni di chiamata e dalle ottimizzazioni. Alcuni valori possono restare nei registri.</p>
 
-```text
-main chiama acquisisci, che chiama converti
-
-frame di converti    <- chiamata più recente
-frame di acquisisci
-frame di main
-
-converti termina: si torna ad acquisisci
-acquisisci termina: si torna a main
-```
+<!-- figure:01-stack-chiamate-annidate -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-stack-chiamate-annidate.svg" alt="main chiama acquisisci, che chiama converti. Nel primo momento lo stack contiene dal basso main, acquisisci e converti, la chiamata più recente. Quando converti termina resta attiva acquisisci. Quando anche acquisisci termina resta attiva main." width="960">
+</p>
+<p align="center"><em>L’ultima chiamata aperta è la prima a terminare: da converti si torna ad acquisisci, poi a main.</em></p>
 
 <p align="justify">Anche due chiamate ricorsive della stessa funzione devono conservare separatamente il proprio stato. Quando una funzione termina, i suoi oggetti locali automatici cessano di esistere: restituire l'indirizzo di uno di essi non ne prolunga la durata.</p>
 
@@ -579,10 +574,10 @@ pstree -p
 <p align="justify">Collegamenti:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#creare-un-processo">Creare un processo</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#fork-exec"><code>fork()</code> e <code>exec()</code></a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#aspettare-la-terminazione-di-un-processo">Aspettare la terminazione di un processo</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#processi-zombie">Processi zombie</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#creare-un-processo">Creare un processo</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#fork-exec"><code>fork()</code> e <code>exec()</code></a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#aspettare-la-terminazione-di-un-processo">Aspettare la terminazione di un processo</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#processi-zombie">Processi zombie</a></li>
 </ul>
 
 <!-- figure:01-fork-exec-wait -->
@@ -670,11 +665,11 @@ gcc -Wall -Wextra -Wpedantic -std=c17 process_wait.c -o process_wait
 <p align="justify">Collegamenti alla dispensa:</p>
 
 <ul>
-  <li><a href="../../LINUX_PROGRAMMING.md#i-thread">I Thread</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#creazione-di-un-thread">Creazione di un thread</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#passare-dati-ad-un-thread">Passare dati a un thread</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#attendere-la-terminazione-dei-thread">Attendere la terminazione dei thread</a></li>
-  <li><a href="../../LINUX_PROGRAMMING.md#processi-vs-thread">Processi vs Thread</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#i-thread">I Thread</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#creazione-di-un-thread">Creazione di un thread</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#passare-dati-a-un-thread">Passare dati a un thread</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#attendere-la-terminazione-dei-thread">Attendere la terminazione dei thread</a></li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#processi-vs-thread">Processi vs Thread</a></li>
 </ul>
 
 ## Esempio concettuale POSIX thread
@@ -1011,7 +1006,7 @@ tpsi4-activity-c-fork-pipe-square-001
 
 <ul>
   <li>Riferimento curricolare: indice pubblico del volume 2, usato solo per verificare la copertura.</li>
-  <li>Fonte tecnica locale: <code>LINUX_PROGRAMMING.md</code>, a partire da <code>Linux Programming</code>.</li>
+  <li>Fonte tecnica remota: <a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming">LINUX_PROGRAMMING.md nel repository 2cornot2c</a>, a partire da <code>Linux Programming</code>.</li>
   <li>Identità, autorizzazioni e relazioni: <a href="https://man7.org/linux/man-pages/man2/getpid.2.html">getpid(2)</a>, <a href="https://man7.org/linux/man-pages/man7/credentials.7.html">credentials(7)</a> e <a href="https://man7.org/linux/man-pages/man2/wait.2.html">wait(2)</a>.</li>
   <li>Contesto e chiamate di funzione: manuale GDB, <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Registers.html">Registers</a> e <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Frames.html">Stack Frames</a>.</li>
   <li>Architettura di riferimento: <a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html">Intel 64 and IA-32 Architectures Software Developer's Manuals</a>, volume 1 per registri e chiamate, volume 2 per istruzioni e volume 3 per memoria e interruzioni. Gli schemi selezionano gli elementi utili alla lezione.</li>

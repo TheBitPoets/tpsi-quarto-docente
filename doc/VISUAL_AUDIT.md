@@ -58,11 +58,11 @@ Server, database, lucchetto di sicurezza e badge C/POSIX/Java restano disponibil
 
 ## Piano delle figure e collocazione
 
-Aggiornamento: il registro comprende ora **26 figure**. La figura [Dalle pagine virtuali alle pagine fisiche](../assets/tpsi4/01-indirizzi-virtuali-mmu.svg) ? inserita nella lezione 1, in ?Anatomia di un processo?, nel paragrafo sullo spazio di indirizzamento. Usa pannelli e frecce della grammatica visiva esistente, senza nuovi simboli.
+Aggiornamento: il registro comprende ora **27 figure**. La figura [Dalle pagine virtuali alle pagine fisiche](../assets/tpsi4/01-indirizzi-virtuali-mmu.svg) è inserita nella lezione 1, in “Anatomia di un processo”, nel paragrafo sullo spazio di indirizzamento. Usa pannelli e frecce della grammatica visiva esistente, senza nuovi simboli.
 
 La versione semplificata mette al centro quattro elementi: spazio virtuale diviso in pagine, kernel con tabelle di corrispondenza e gestione dei frame, MMU, RAM suddivisa in frame. Colori e sigle permettono di seguire V1/F4, V2/F1 e V3/F6. Sono stati rimossi dalla figura e dal percorso introduttivo i dettagli su TLB, page fault, indirizzi esadecimali e strutture specifiche di Linux. Riferimenti tecnici restano [Linux Page Tables](https://docs.kernel.org/mm/page_tables.html) e [Physical Memory](https://docs.kernel.org/mm/physical_memory.html).
 
-La figura aggiornata ? stata renderizzata con Chrome headless e ispezionata: etichette, corrispondenze e frecce sono leggibili. Build, sette test del Visual System e cinque test di formattazione superati.
+La figura aggiornata è stata renderizzata con Chrome headless e ispezionata: etichette, corrispondenze e frecce sono leggibili. Build, sette test del Visual System e cinque test di formattazione superati.
 
 Tutte le figure sotto sono composte e inserite. La revisione docente resta aperta, come per le dispense in stato `draft`. Il registro strutturato è [figure-index.json](../assets/tpsi4/visual-system/figure-index.json): conserva sezione, alt, didascalia, componenti e percorsi.
 
@@ -125,6 +125,10 @@ La build deterministica e i sette test del Visual System passano. I controlli so
 
 ## Semplificazione del contesto con figure
 
-Il percorso C/assembly della lezione 1 ? sostituito da tre figure originali: [registri e memoria](../assets/tpsi4/01-registri-memoria.svg), [chiamata e stack](../assets/tpsi4/01-chiamata-stack.svg), [salvataggio e ripresa](../assets/tpsi4/01-contesto-salvataggio.svg). Il testo introduce pochi registri Intel x86-64 e segue il calcolo 20 + 3 senza listati n? comandi di compilazione. Gli altri esempi operativi del modulo rimangono nelle rispettive sezioni.
+Il percorso C/assembly della lezione 1 è sostituito da tre figure originali: [registri e memoria](../assets/tpsi4/01-registri-memoria.svg), [chiamata e stack](../assets/tpsi4/01-chiamata-stack.svg), [salvataggio e ripresa](../assets/tpsi4/01-contesto-salvataggio.svg). Il testo introduce pochi registri Intel x86-64 e segue il calcolo 20 + 3 senza listati né comandi di compilazione. Gli altri esempi operativi del modulo rimangono nelle rispettive sezioni.
 
 Riutilizzato il simbolo CPU; pannelli, frecce e palette appartengono al sistema esistente. Nessun nuovo simbolo necessario. Le scene sono state renderizzate e ispezionate visivamente; la build e i 12 test di grafica e formattazione passano.
+
+## Stack delle chiamate annidate
+
+La figura [main, acquisisci e converti](../assets/tpsi4/01-stack-chiamate-annidate.svg) sostituisce lo schema ASCII nel paragrafo 4 della lezione 1. Tre pannelli mostrano lo stack mentre esegue converti, dopo il ritorno ad acquisisci e dopo il ritorno a main. Colori costanti e diciture sulla cima dello stack distinguono i frame. Nessun nuovo simbolo: composizione con pannelli e frecce esistenti. Rendering ispezionato; build e 12 test superati.

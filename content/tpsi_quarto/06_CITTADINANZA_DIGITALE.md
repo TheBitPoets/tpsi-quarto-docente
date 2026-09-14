@@ -156,7 +156,7 @@ stato
 
 <ul>
   <li>il libro adottato è riferimento curricolare;</li>
-  <li><code>LINUX_PROGRAMMING.md</code> è fonte tecnica locale;</li>
+  <li><a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming">LINUX_PROGRAMMING.md nel repository 2cornot2c</a> è fonte tecnica remota;</li>
   <li>i nuovi moduli sono elaborazione originale;</li>
   <li>il docente è revisore e responsabile della pubblicazione alla classe.</li>
 </ul>
