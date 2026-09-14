@@ -9,47 +9,87 @@ technical_sources:
 transformation: original-course-material
 -->
 
-<!-- visual-orientation -->
-<details>
-<summary>&#128506; <strong>Orientamento della sezione</strong></summary>
-
-<p align="justify"><strong>Contesto:</strong> Costruisce il modello concettuale di processo, thread, risorsa, concorrenza e parallelismo, collegandolo alle sezioni operative della dispensa Linux.</p>
-<p align="justify"><strong>Prerequisiti:</strong> C intermedio, compilazione, memoria, funzioni e puntatori di base.</p>
-<p align="justify"><strong>Obiettivo:</strong> Distinguere programma/processo/thread, descrivere ciclo di vita e risorse, usare fork/exec/wait in esempi controllati e confrontare POSIX e Java.</p>
-<p align="justify"><strong>Prossimo passo:</strong> Svolgere esercizi A-D e avviare il laboratorio fork/pipe.</p>
-
-</details>
-
 ## In questa unità impareremo
 
-Al termine dell'unità lo studente dovrà saper:
+<!-- visual-orientation -->
+<table align="center">
+<tr>
+<td>
+<details>
+<summary>&#129517; <strong>Orientamento della sezione</strong></summary>
 
-- distinguere programma, processo e thread;
-- descrivere lo stato essenziale di un processo;
-- riconoscere risorse private e risorse condivise;
-- distinguere esecuzione sequenziale, concorrente e parallela;
-- leggere una semplice gerarchia padre-figlio;
-- spiegare il ruolo di `fork`, `exec` e `wait` in un sistema POSIX;
-- confrontare processi Linux, thread POSIX e thread Java;
-- descrivere una computazione concorrente attraverso eventi, possibili interleaving e invarianti;
-- individuare i primi rischi dovuti alla condivisione dello stato.
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128506;</span> Contesto:</strong>
+Costruisce il modello concettuale di processo, thread, risorsa, concorrenza e parallelismo, collegandolo alle sezioni operative della dispensa Linux.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128736;</span> Prerequisiti:</strong>
+C intermedio, compilazione, memoria, funzioni e puntatori di base.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#127919;</span> Obiettivi:</strong>
+Distinguere programma/processo/thread, descrivere ciclo di vita e risorse, usare fork/exec/wait in esempi controllati e confrontare POSIX e Java.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128257;</span> Richiamo:</strong>
+Riprendere processo di compilazione, spazio di memoria e gestione degli errori.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128064;</span> Anticipazione:</strong>
+Prepara IPC, race condition, mutex, semafori, condition e problemi classici.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#10145;</span> Prossimo passo:</strong>
+Svolgere esercizi A-D e avviare il laboratorio fork/pipe.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128279;</span> Rimando:</strong>
+Modulo originale e heading pertinenti di LINUX_PROGRAMMING.md, esclusa Controllo dei processi. <a href="#fonti-e-note-di-revisione">Fonti e note della lezione</a>; <a href="COVERAGE.md">matrice di copertura</a>.
+</p>
+
+</details>
+</td>
+</tr>
+</table>
+
+<p align="justify">Al termine dell'unità lo studente dovrà saper:</p>
+
+<ul>
+  <li>distinguere programma, processo e thread;</li>
+  <li>descrivere lo stato essenziale di un processo;</li>
+  <li>riconoscere risorse private e risorse condivise;</li>
+  <li>distinguere esecuzione sequenziale, concorrente e parallela;</li>
+  <li>leggere una semplice gerarchia padre-figlio;</li>
+  <li>spiegare il ruolo di <code>fork</code>, <code>exec</code> e <code>wait</code> in un sistema POSIX;</li>
+  <li>confrontare processi Linux, thread POSIX e thread Java;</li>
+  <li>descrivere una computazione concorrente attraverso eventi, possibili interleaving e invarianti;</li>
+  <li>individuare i primi rischi dovuti alla condivisione dello stato.</li>
+</ul>
 
 ## Prerequisiti
 
-Sono richiesti:
+<p align="justify">Sono richiesti:</p>
 
-- funzioni e passaggio di parametri in C;
-- array, stringhe e strutture;
-- puntatori di base;
-- compilazione ed esecuzione da terminale;
-- valore di ritorno di `main`;
-- concetti essenziali di sistema operativo, memoria e file.
+<ul>
+  <li>funzioni e passaggio di parametri in C;</li>
+  <li>array, stringhe e strutture;</li>
+  <li>puntatori di base;</li>
+  <li>compilazione ed esecuzione da terminale;</li>
+  <li>valore di ritorno di <code>main</code>;</li>
+  <li>concetti essenziali di sistema operativo, memoria e file.</li>
+</ul>
 
-Per la traccia Java sono utili classi, metodi, oggetti e gestione delle eccezioni.
+<p align="justify">Per la traccia Java sono utili classi, metodi, oggetti e gestione delle eccezioni.</p>
 
 ## Problema iniziale: una sola attività o più attività coordinate?
 
-Immaginiamo un'applicazione che deve acquisire dati da un sensore, salvarli e aggiornare una schermata. Una soluzione puramente sequenziale svolge le operazioni una dopo l'altra:
+<p align="justify">Immaginiamo un'applicazione che deve acquisire dati da un sensore, salvarli e aggiornare una schermata. Una soluzione puramente sequenziale svolge le operazioni una dopo l'altra:</p>
 
 ```text
 leggi il sensore
@@ -58,7 +98,7 @@ aggiorna la schermata
 ripeti
 ```
 
-Questa soluzione è semplice, ma un'operazione lenta può bloccare le altre. Se il salvataggio richiede tempo, la lettura del sensore potrebbe avvenire in ritardo. Una soluzione concorrente separa le responsabilità:
+<p align="justify">Questa soluzione è semplice, ma un'operazione lenta può bloccare le altre. Se il salvataggio richiede tempo, la lettura del sensore potrebbe avvenire in ritardo. Una soluzione concorrente separa le responsabilità:</p>
 
 ```text
 attività A: acquisisce i dati
@@ -66,40 +106,52 @@ attività B: salva i dati
 attività C: aggiorna l'interfaccia
 ```
 
-La difficoltà non consiste soltanto nell'avviare più attività. Bisogna decidere:
+<p align="justify">La difficoltà non consiste soltanto nell'avviare più attività. Bisogna decidere:</p>
 
-- quali dati possono essere condivisi;
-- quando una attività deve aspettarne un'altra;
-- come comunicano;
-- cosa accade se una termina o fallisce;
-- quali proprietà devono restare vere in qualunque ordine di esecuzione.
+<ul>
+  <li>quali dati possono essere condivisi;</li>
+  <li>quando una attività deve aspettarne un'altra;</li>
+  <li>come comunicano;</li>
+  <li>cosa accade se una termina o fallisce;</li>
+  <li>quali proprietà devono restare vere in qualunque ordine di esecuzione.</li>
+</ul>
 
-Questi problemi collegano il modello a processi, i thread e la sincronizzazione.
+<p align="justify">Questi problemi collegano il modello a processi, i thread e la sincronizzazione.</p>
 
 ## Dal programma al processo
 
-Un **programma** è una descrizione passiva: un file eseguibile o un insieme di istruzioni memorizzate. Un **processo** è un'esecuzione attiva di quel programma, con uno stato che cambia nel tempo.
+<table align="center">
+<tr><td>
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128214;</span> Definizione:</strong>
+Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o un insieme di istruzioni memorizzate. Un <strong>processo</strong> è un'esecuzione attiva di quel programma, con uno stato che cambia nel tempo.</p>
+</td></tr>
+</table>
 
-Lo stesso programma può essere eseguito in più processi. Se apriamo due terminali e avviamo due volte lo stesso comando, il codice del programma è lo stesso, ma le due esecuzioni hanno identificatori, memoria e risorse proprie.
+<p align="justify">Lo stesso programma può essere eseguito in più processi. Se apriamo due terminali e avviamo due volte lo stesso comando, il codice del programma è lo stesso, ma le due esecuzioni hanno identificatori, memoria e risorse proprie.</p>
 
-Un processo possiede almeno:
+<p align="justify">Un processo possiede almeno:</p>
 
-- un identificatore;
-- un contesto di esecuzione, come contatore di programma e registri;
-- uno spazio di indirizzamento;
-- stack e heap;
-- file e altri oggetti aperti;
-- credenziali e permessi;
-- stato di pianificazione;
-- relazioni con altri processi.
+<ul>
+  <li>un identificatore;</li>
+  <li>un contesto di esecuzione, come contatore di programma e registri;</li>
+  <li>uno spazio di indirizzamento;</li>
+  <li>stack e heap;</li>
+  <li>file e altri oggetti aperti;</li>
+  <li>credenziali e permessi;</li>
+  <li>stato di pianificazione;</li>
+  <li>relazioni con altri processi.</li>
+</ul>
 
-Nel modello Linux un processo è identificato da un **PID**. La relazione con il processo che lo ha creato è rappresentata dal **PPID**.
+<p align="justify">Nel modello Linux un processo è identificato da un <strong>PID</strong>. La relazione con il processo che lo ha creato è rappresentata dal <strong>PPID</strong>.</p>
 
-Collegamenti alla fonte tecnica:
+<p align="justify">Collegamenti alla fonte tecnica:</p>
 
-- [Processi](../../LINUX_PROGRAMMING.md#processi)
-- [Process IDs](../../LINUX_PROGRAMMING.md#process-ids)
-- [Vedere i processi attivi](../../LINUX_PROGRAMMING.md#vedere-i-processi-attivi)
+<ul>
+  <li><a href="../../LINUX_PROGRAMMING.md#processi">Processi</a></li>
+  <li><a href="../../LINUX_PROGRAMMING.md#process-ids">Process IDs</a></li>
+  <li><a href="../../LINUX_PROGRAMMING.md#vedere-i-processi-attivi">Vedere i processi attivi</a></li>
+</ul>
 
 <!-- figure:01-programma-processi -->
 <p align="center">
@@ -109,22 +161,26 @@ Collegamenti alla fonte tecnica:
 
 ## Stato e ciclo di vita di un processo
 
-Per ragionare sul sistema operativo è utile un modello semplificato a stati:
+<p align="justify">Per ragionare sul sistema operativo è utile un modello semplificato a stati:</p>
 
-- **Nuovo**: il sistema sta creando le strutture necessarie.
-- **Pronto**: il processo può essere eseguito, ma aspetta la CPU.
-- **In esecuzione**: sta usando un processore.
-- **In attesa**: non può proseguire finché non avviene un evento, per esempio la disponibilità di dati.
-- **Terminato**: non esegue più istruzioni; alcune informazioni possono restare temporaneamente disponibili al padre.
+<ul>
+  <li><strong>Nuovo</strong>: il sistema sta creando le strutture necessarie.</li>
+  <li><strong>Pronto</strong>: il processo può essere eseguito, ma aspetta la CPU.</li>
+  <li><strong>In esecuzione</strong>: sta usando un processore.</li>
+  <li><strong>In attesa</strong>: non può proseguire finché non avviene un evento, per esempio la disponibilità di dati.</li>
+  <li><strong>Terminato</strong>: non esegue più istruzioni; alcune informazioni possono restare temporaneamente disponibili al padre.</li>
+</ul>
 
-Nel diagramma, il completamento dell'evento riporta il processo in stato pronto; lo scheduler decide quando assegnargli la CPU. Il diagramma non descrive tutti i dettagli di un kernel reale. Serve a capire due idee:
+<p align="justify">Nel diagramma, il completamento dell'evento riporta il processo in stato pronto; lo scheduler decide quando assegnargli la CPU. Il diagramma non descrive tutti i dettagli di un kernel reale. Serve a capire due idee:</p>
 
-1. un processo pronto non è necessariamente in esecuzione;
-2. un processo in attesa non deve consumare continuamente la CPU per controllare se l'evento è avvenuto.
+<ol>
+  <li>un processo pronto non è necessariamente in esecuzione;</li>
+  <li>un processo in attesa non deve consumare continuamente la CPU per controllare se l'evento è avvenuto.</li>
+</ol>
 
 ### Cambio di contesto
 
-Quando il sistema sospende un processo e ne esegue un altro, deve salvare e ripristinare il relativo contesto. Questo lavoro ha un costo. La concorrenza non rende automaticamente un programma più veloce: può migliorare reattività e utilizzo delle risorse, ma introduce anche overhead e complessità.
+<p align="justify">Quando il sistema sospende un processo e ne esegue un altro, deve salvare e ripristinare il relativo contesto. Questo lavoro ha un costo. La concorrenza non rende automaticamente un programma più veloce: può migliorare reattività e utilizzo delle risorse, ma introduce anche overhead e complessità.</p>
 
 <!-- figure:01-stati-processo -->
 <p align="center">
@@ -134,29 +190,64 @@ Quando il sistema sospende un processo e ne esegue un altro, deve salvare e ripr
 
 ## Risorse private e risorse condivise
 
-Una domanda fondamentale è: **quale stato appartiene a una sola attività e quale è visibile a più attività?**
+<p align="justify">Una domanda fondamentale è: <strong>quale stato appartiene a una sola attività e quale è visibile a più attività?</strong></p>
 
-Con processi separati, lo spazio di indirizzamento è normalmente isolato. Dopo una creazione con `fork`, padre e figlio osservano inizialmente valori equivalenti, ma le modifiche ordinarie alla memoria di uno non diventano automaticamente modifiche nella memoria dell'altro.
+<p align="justify">Con processi separati, lo spazio di indirizzamento è normalmente isolato. Dopo una creazione con <code>fork</code>, padre e figlio osservano inizialmente valori equivalenti, ma le modifiche ordinarie alla memoria di uno non diventano automaticamente modifiche nella memoria dell'altro.</p>
 
-Con più thread nello stesso processo, invece, sono tipicamente condivisi:
+<p align="justify">Con più thread nello stesso processo, invece, sono tipicamente condivisi:</p>
 
-- variabili globali;
-- heap;
-- descrittori e oggetti del processo;
-- codice eseguibile.
+<ul>
+  <li>variabili globali;</li>
+  <li>heap;</li>
+  <li>descrittori e oggetti del processo;</li>
+  <li>codice eseguibile.</li>
+</ul>
 
-Ogni thread possiede almeno uno stack e un contesto di esecuzione separati.
+<p align="justify">Ogni thread possiede almeno uno stack e un contesto di esecuzione separati.</p>
 
-| Elemento | Processi distinti | Thread dello stesso processo |
-| --- | --- | --- |
-| spazio di indirizzamento | isolato per impostazione predefinita | condiviso |
-| stack | separato | separato per thread |
-| heap | separato | condiviso |
-| comunicazione | richiede un meccanismo IPC | può usare memoria condivisa |
-| isolamento dei guasti | maggiore | minore |
-| costo di coordinamento | spesso maggiore | spesso minore, ma più delicato |
+<table align="center">
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Processi distinti</th>
+<th>Thread dello stesso processo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spazio di indirizzamento</td>
+<td>isolato per impostazione predefinita</td>
+<td>condiviso</td>
+</tr>
+<tr>
+<td>stack</td>
+<td>separato</td>
+<td>separato per thread</td>
+</tr>
+<tr>
+<td>heap</td>
+<td>separato</td>
+<td>condiviso</td>
+</tr>
+<tr>
+<td>comunicazione</td>
+<td>richiede un meccanismo IPC</td>
+<td>può usare memoria condivisa</td>
+</tr>
+<tr>
+<td>isolamento dei guasti</td>
+<td>maggiore</td>
+<td>minore</td>
+</tr>
+<tr>
+<td>costo di coordinamento</td>
+<td>spesso maggiore</td>
+<td>spesso minore, ma più delicato</td>
+</tr>
+</tbody>
+</table>
 
-L'isolamento riduce alcuni errori, ma rende necessaria una comunicazione esplicita. La condivisione facilita lo scambio di dati, ma può produrre race condition.
+<p align="justify">L'isolamento riduce alcuni errori, ma rende necessaria una comunicazione esplicita. La condivisione facilita lo scambio di dati, ma può produrre race condition.</p>
 
 <!-- figure:01-memoria-thread -->
 <p align="center">
@@ -166,11 +257,11 @@ L'isolamento riduce alcuni errori, ma rende necessaria una comunicazione esplici
 
 ## Sequenziale, concorrente e parallelo
 
-I termini non sono sinonimi.
+<p align="justify">I termini non sono sinonimi.</p>
 
 ### Esecuzione sequenziale
 
-Una sola attività logica avanza alla volta secondo un ordine determinato dal programma.
+<p align="justify">Una sola attività logica avanza alla volta secondo un ordine determinato dal programma.</p>
 
 ```text
 A1 -> A2 -> A3 -> B1 -> B2
@@ -178,28 +269,28 @@ A1 -> A2 -> A3 -> B1 -> B2
 
 ### Esecuzione concorrente
 
-Più attività sono in corso nello stesso intervallo di tempo. Su una sola CPU possono alternarsi:
+<p align="justify">Più attività sono in corso nello stesso intervallo di tempo. Su una sola CPU possono alternarsi:</p>
 
 ```text
 A1 -> B1 -> A2 -> B2 -> A3
 ```
 
-La concorrenza riguarda la struttura e la possibilità di avanzamento indipendente.
+<p align="justify">La concorrenza riguarda la struttura e la possibilità di avanzamento indipendente.</p>
 
 ### Esecuzione parallela
 
-Due o più attività eseguono realmente istruzioni nello stesso istante su unità di calcolo diverse.
+<p align="justify">Due o più attività eseguono realmente istruzioni nello stesso istante su unità di calcolo diverse.</p>
 
 ```text
 CPU 1: A1 -> A2 -> A3
 CPU 2: B1 -> B2 -> B3
 ```
 
-Il parallelismo può aumentare le prestazioni, ma soltanto se il lavoro può essere suddiviso e il costo di comunicazione e sincronizzazione non annulla il beneficio.
+<p align="justify">Il parallelismo può aumentare le prestazioni, ma soltanto se il lavoro può essere suddiviso e il costo di comunicazione e sincronizzazione non annulla il beneficio.</p>
 
 ### Domanda di controllo
 
-Un programma con due thread su un computer a singolo core può essere concorrente? Sì. Può alternare i thread anche se non li esegue simultaneamente.
+<p align="justify">Un programma con due thread su un computer a singolo core può essere concorrente? Sì. Può alternare i thread anche se non li esegue simultaneamente.</p>
 
 <!-- figure:01-concorrenza-parallelismo -->
 <p align="center">
@@ -209,48 +300,52 @@ Un programma con due thread su un computer a singolo core può essere concorrent
 
 ## Gerarchia dei processi in Linux
 
-I processi formano relazioni di creazione. Un processo può creare un figlio; il figlio può crearne altri. Per osservare PID, PPID e comando:
+<p align="justify">I processi formano relazioni di creazione. Un processo può creare un figlio; il figlio può crearne altri. Per osservare PID, PPID e comando:</p>
 
 ```bash
 ps -e -o pid,ppid,state,command
 ```
 
-Per una vista ad albero, quando disponibile:
+<p align="justify">Per una vista ad albero, quando disponibile:</p>
 
 ```bash
 pstree -p
 ```
 
-L'albero non implica che il padre controlli ogni istruzione del figlio. Indica una relazione utile per creazione, attesa, ereditarietà di alcune risorse e raccolta dello stato di terminazione.
+<p align="justify">L'albero non implica che il padre controlli ogni istruzione del figlio. Indica una relazione utile per creazione, attesa, ereditarietà di alcune risorse e raccolta dello stato di terminazione.</p>
 
 ## Creazione di processi: `fork`, `exec` e `wait`
 
-In ambiente POSIX tre operazioni hanno ruoli distinti.
+<p align="justify">In ambiente POSIX tre operazioni hanno ruoli distinti.</p>
 
 ### `fork`
 
-`fork()` crea un nuovo processo. Dopo la chiamata esistono due flussi che proseguono dall'istruzione successiva:
+<p align="justify"><code>fork()</code> crea un nuovo processo. Dopo la chiamata esistono due flussi che proseguono dall'istruzione successiva:</p>
 
-- nel padre, il valore di ritorno è il PID del figlio;
-- nel figlio, il valore di ritorno è `0`;
-- in caso di errore, il padre riceve `-1` e il figlio non viene creato.
+<ul>
+  <li>nel padre, il valore di ritorno è il PID del figlio;</li>
+  <li>nel figlio, il valore di ritorno è <code>0</code>;</li>
+  <li>in caso di errore, il padre riceve <code>-1</code> e il figlio non viene creato.</li>
+</ul>
 
-La distinzione deve essere controllata esplicitamente.
+<p align="justify">La distinzione deve essere controllata esplicitamente.</p>
 
 ### `exec`
 
-La famiglia `exec` sostituisce il programma eseguito dal processo corrente. Se la chiamata riesce, il codice successivo alla `exec` non viene eseguito, perché il processo sta eseguendo un nuovo programma.
+<p align="justify">La famiglia <code>exec</code> sostituisce il programma eseguito dal processo corrente. Se la chiamata riesce, il codice successivo alla <code>exec</code> non viene eseguito, perché il processo sta eseguendo un nuovo programma.</p>
 
 ### `wait` e `waitpid`
 
-Il padre usa `wait` o `waitpid` per attendere o raccogliere lo stato di un figlio. Se il figlio termina e il padre non ne raccoglie lo stato, resta temporaneamente un record chiamato comunemente **zombie**.
+<p align="justify">Il padre usa <code>wait</code> o <code>waitpid</code> per attendere o raccogliere lo stato di un figlio. Se il figlio termina e il padre non ne raccoglie lo stato, resta temporaneamente un record chiamato comunemente <strong>zombie</strong>.</p>
 
-Collegamenti:
+<p align="justify">Collegamenti:</p>
 
-- [Creare un processo](../../LINUX_PROGRAMMING.md#creare-un-processo)
-- [`fork()` e `exec()`](../../LINUX_PROGRAMMING.md#fork-exec)
-- [Aspettare la terminazione di un processo](../../LINUX_PROGRAMMING.md#aspettare-la-terminazione-di-un-processo)
-- [Processi zombie](../../LINUX_PROGRAMMING.md#processi-zombie)
+<ul>
+  <li><a href="../../LINUX_PROGRAMMING.md#creare-un-processo">Creare un processo</a></li>
+  <li><a href="../../LINUX_PROGRAMMING.md#fork-exec"><code>fork()</code> e <code>exec()</code></a></li>
+  <li><a href="../../LINUX_PROGRAMMING.md#aspettare-la-terminazione-di-un-processo">Aspettare la terminazione di un processo</a></li>
+  <li><a href="../../LINUX_PROGRAMMING.md#processi-zombie">Processi zombie</a></li>
+</ul>
 
 <!-- figure:01-fork-exec-wait -->
 <p align="center">
@@ -297,14 +392,16 @@ int main(void) {
 }
 ```
 
-Osservazioni:
+<p align="justify">Osservazioni:</p>
 
-- il ramo figlio termina con codice `7`;
-- il padre non interpreta direttamente `status` come codice di uscita;
-- le macro `WIFEXITED` e `WEXITSTATUS` verificano e decodificano lo stato;
-- l'ordine delle prime stampe può cambiare in esempi più complessi, ma il padre stampa il risultato dopo `waitpid`.
+<ul>
+  <li>il ramo figlio termina con codice <code>7</code>;</li>
+  <li>il padre non interpreta direttamente <code>status</code> come codice di uscita;</li>
+  <li>le macro <code>WIFEXITED</code> e <code>WEXITSTATUS</code> verificano e decodificano lo stato;</li>
+  <li>l'ordine delle prime stampe può cambiare in esempi più complessi, ma il padre stampa il risultato dopo <code>waitpid</code>.</li>
+</ul>
 
-Compilazione:
+<p align="justify">Compilazione:</p>
 
 ```bash
 gcc -Wall -Wextra -Wpedantic -std=c17 process_wait.c -o process_wait
@@ -312,33 +409,39 @@ gcc -Wall -Wextra -Wpedantic -std=c17 process_wait.c -o process_wait
 
 ## Da processo a thread
 
-Un thread è un flusso di esecuzione all'interno di un processo. Più thread possono lavorare sugli stessi oggetti in memoria.
+<p align="justify">Un thread è un flusso di esecuzione all'interno di un processo. Più thread possono lavorare sugli stessi oggetti in memoria.</p>
 
-Usare thread può essere conveniente quando:
+<p align="justify">Usare thread può essere conveniente quando:</p>
 
-- le attività condividono molti dati;
-- si desidera mantenere reattiva un'applicazione;
-- il lavoro può essere suddiviso;
-- il costo della comunicazione tra processi sarebbe eccessivo.
+<ul>
+  <li>le attività condividono molti dati;</li>
+  <li>si desidera mantenere reattiva un'applicazione;</li>
+  <li>il lavoro può essere suddiviso;</li>
+  <li>il costo della comunicazione tra processi sarebbe eccessivo.</li>
+</ul>
 
-Usare processi può essere preferibile quando:
+<p align="justify">Usare processi può essere preferibile quando:</p>
 
-- serve isolamento;
-- i componenti hanno cicli di vita indipendenti;
-- un guasto non deve corrompere tutto lo stato;
-- si vogliono applicare permessi e limiti distinti.
+<ul>
+  <li>serve isolamento;</li>
+  <li>i componenti hanno cicli di vita indipendenti;</li>
+  <li>un guasto non deve corrompere tutto lo stato;</li>
+  <li>si vogliono applicare permessi e limiti distinti.</li>
+</ul>
 
-Collegamenti alla dispensa:
+<p align="justify">Collegamenti alla dispensa:</p>
 
-- [I Thread](../../LINUX_PROGRAMMING.md#i-thread)
-- [Creazione di un thread](../../LINUX_PROGRAMMING.md#creazione-di-un-thread)
-- [Passare dati a un thread](../../LINUX_PROGRAMMING.md#passare-dati-ad-un-thread)
-- [Attendere la terminazione dei thread](../../LINUX_PROGRAMMING.md#attendere-la-terminazione-dei-thread)
-- [Processi vs Thread](../../LINUX_PROGRAMMING.md#processi-vs-thread)
+<ul>
+  <li><a href="../../LINUX_PROGRAMMING.md#i-thread">I Thread</a></li>
+  <li><a href="../../LINUX_PROGRAMMING.md#creazione-di-un-thread">Creazione di un thread</a></li>
+  <li><a href="../../LINUX_PROGRAMMING.md#passare-dati-ad-un-thread">Passare dati a un thread</a></li>
+  <li><a href="../../LINUX_PROGRAMMING.md#attendere-la-terminazione-dei-thread">Attendere la terminazione dei thread</a></li>
+  <li><a href="../../LINUX_PROGRAMMING.md#processi-vs-thread">Processi vs Thread</a></li>
+</ul>
 
 ## Esempio concettuale POSIX thread
 
-Il frammento seguente mostra la forma essenziale. La sincronizzazione verrà approfondita nel modulo successivo.
+<p align="justify">Il frammento seguente mostra la forma essenziale. La sincronizzazione verrà approfondita nel modulo successivo.</p>
 
 ```c
 #include <pthread.h>
@@ -383,13 +486,13 @@ int main(void) {
 }
 ```
 
-Compilazione manuale:
+<p align="justify">Compilazione manuale:</p>
 
 ```bash
 gcc -Wall -Wextra -Wpedantic -std=c17 -pthread sum_threads.c -o sum_threads
 ```
 
-Ogni thread scrive in un campo diverso. Il `join` garantisce che i risultati siano pronti prima della somma finale.
+<p align="justify">Ogni thread scrive in un campo diverso. Il <code>join</code> garantisce che i risultati siano pronti prima della somma finale.</p>
 
 ## Confronto Java: `Runnable` e `join`
 
@@ -436,24 +539,57 @@ public final class ParallelSum {
 }
 ```
 
-Confronto:
+<p align="justify">Confronto:</p>
 
-| Concetto | POSIX C | Java |
-| --- | --- | --- |
-| funzione eseguita | funzione `void *(*)(void *)` | `Runnable.run()` |
-| handle | `pthread_t` | oggetto `Thread` |
-| avvio | `pthread_create` | `start` |
-| attesa | `pthread_join` | `join` |
-| passaggio dati | struttura e puntatore | campi dell'oggetto |
-| errore | codice di ritorno | eccezioni e stato |
+<table align="center">
+<thead>
+<tr>
+<th>Concetto</th>
+<th>POSIX C</th>
+<th>Java</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>funzione eseguita</td>
+<td>funzione <code>void *(*)(void *)</code></td>
+<td><code>Runnable.run()</code></td>
+</tr>
+<tr>
+<td>handle</td>
+<td><code>pthread_t</code></td>
+<td>oggetto <code>Thread</code></td>
+</tr>
+<tr>
+<td>avvio</td>
+<td><code>pthread_create</code></td>
+<td><code>start</code></td>
+</tr>
+<tr>
+<td>attesa</td>
+<td><code>pthread_join</code></td>
+<td><code>join</code></td>
+</tr>
+<tr>
+<td>passaggio dati</td>
+<td>struttura e puntatore</td>
+<td>campi dell'oggetto</td>
+</tr>
+<tr>
+<td>errore</td>
+<td>codice di ritorno</td>
+<td>eccezioni e stato</td>
+</tr>
+</tbody>
+</table>
 
-Il runner automatico Java della piattaforma è ancora pianificato. Questo esempio è quindi materiale di studio o laboratorio con correzione docente.
+<p align="justify">Il runner automatico Java della piattaforma è ancora pianificato. Questo esempio è quindi materiale di studio o laboratorio con correzione docente.</p>
 
 ## Descrivere la concorrenza con eventi e tracce
 
-Un programma concorrente non è descritto completamente da una sola sequenza globale. È utile individuare gli **eventi** importanti.
+<p align="justify">Un programma concorrente non è descritto completamente da una sola sequenza globale. È utile individuare gli <strong>eventi</strong> importanti.</p>
 
-Esempio con due attività:
+<p align="justify">Esempio con due attività:</p>
 
 ```text
 A1: legge x
@@ -465,155 +601,177 @@ B2: incrementa x
 B3: scrive x
 ```
 
-All'interno di A vale l'ordine `A1 < A2 < A3`. All'interno di B vale `B1 < B2 < B3`. Fra eventi di thread diversi possono esistere molti interleaving.
+<p align="justify">All'interno di A vale l'ordine <code>A1 &lt; A2 &lt; A3</code>. All'interno di B vale <code>B1 &lt; B2 &lt; B3</code>. Fra eventi di thread diversi possono esistere molti interleaving.</p>
 
-Se `x` vale inizialmente `0`, entrambi possono leggere `0` e poi scrivere `1`. Due incrementi logici producono un solo incremento osservabile. Questo è un esempio di race condition.
+<p align="justify">Se <code>x</code> vale inizialmente <code>0</code>, entrambi possono leggere <code>0</code> e poi scrivere <code>1</code>. Due incrementi logici producono un solo incremento osservabile. Questo è un esempio di race condition.</p>
 
 ### Proprietà di sicurezza e di progresso
 
-- Una proprietà di **safety** afferma che qualcosa di scorretto non deve accadere. Esempio: il saldo non deve diventare negativo.
-- Una proprietà di **liveness** afferma che qualcosa di desiderato deve prima o poi accadere. Esempio: una richiesta accettata deve essere elaborata.
+<ul>
+  <li>Una proprietà di <strong>safety</strong> afferma che qualcosa di scorretto non deve accadere. Esempio: il saldo non deve diventare negativo.</li>
+  <li>Una proprietà di <strong>liveness</strong> afferma che qualcosa di desiderato deve prima o poi accadere. Esempio: una richiesta accettata deve essere elaborata.</li>
+</ul>
 
 ### Invariante
 
-Un invariante è una proprietà che deve restare vera nei punti significativi dell'esecuzione. Per un buffer limitato di capacità `N`:
+<p align="justify">Un invariante è una proprietà che deve restare vera nei punti significativi dell'esecuzione. Per un buffer limitato di capacità <code>N</code>:</p>
 
 ```text
 0 <= elementi_presenti <= N
 ```
 
-La progettazione della sincronizzazione serve anche a preservare invarianti in tutti gli interleaving consentiti.
+<p align="justify">La progettazione della sincronizzazione serve anche a preservare invarianti in tutti gli interleaving consentiti.</p>
 
 ## Errori frequenti
 
 ### Confondere `fork` con una normale funzione
 
-Dopo una `fork` riuscita esistono due processi. Se entrambi eseguono codice non previsto, possono duplicare stampe, file o altre operazioni.
+<p align="justify">Dopo una <code>fork</code> riuscita esistono due processi. Se entrambi eseguono codice non previsto, possono duplicare stampe, file o altre operazioni.</p>
 
 ### Dimenticare il ramo di errore
 
-`fork`, `waitpid` e le funzioni thread restituiscono errori. Ignorarli produce programmi che sembrano funzionare soltanto nelle condizioni migliori.
+<p align="justify"><code>fork</code>, <code>waitpid</code> e le funzioni thread restituiscono errori. Ignorarli produce programmi che sembrano funzionare soltanto nelle condizioni migliori.</p>
 
 ### Usare `sleep` come sincronizzazione
 
-Un ritardo non dimostra che un'altra attività abbia completato il lavoro. La macchina o il carico possono cambiare. È necessario un meccanismo di sincronizzazione esplicito.
+<p align="justify">Un ritardo non dimostra che un'altra attività abbia completato il lavoro. La macchina o il carico possono cambiare. È necessario un meccanismo di sincronizzazione esplicito.</p>
 
 ### Chiamare `run()` invece di `start()` in Java
 
-Invocare direttamente `run()` esegue il metodo nel thread corrente. `start()` crea il nuovo flusso e poi provoca l'esecuzione di `run()`.
+<p align="justify">Invocare direttamente <code>run()</code> esegue il metodo nel thread corrente. <code>start()</code> crea il nuovo flusso e poi provoca l'esecuzione di <code>run()</code>.</p>
 
 ### Condividere una variabile senza contratto
 
-La condivisione non è sbagliata in sé. È sbagliato non stabilire chi può leggere o scrivere, quando e con quale sincronizzazione.
+<p align="justify">La condivisione non è sbagliata in sé. È sbagliato non stabilire chi può leggere o scrivere, quando e con quale sincronizzazione.</p>
 
 ### Credere che un output osservato sia l'unico possibile
 
-Una singola esecuzione non esplora tutti gli interleaving. Un bug concorrente può comparire raramente.
+<p align="justify">Una singola esecuzione non esplora tutti gli interleaving. Un bug concorrente può comparire raramente.</p>
 
 ## Esercizi graduati
 
 ### Livello A — osserva
 
-1. Avvia `sleep 30` in background e usa `ps` per individuarne PID e PPID.
-2. Esegui due volte lo stesso programma e verifica che i PID siano diversi.
-3. Compila l'esempio `process_wait.c` e annota quali righe appartengono al padre e quali al figlio.
-4. Disegna lo schema delle risorse private e condivise per due processi e per due thread.
+<ol>
+  <li>Avvia <code>sleep 30</code> in background e usa <code>ps</code> per individuarne PID e PPID.</li>
+  <li>Esegui due volte lo stesso programma e verifica che i PID siano diversi.</li>
+  <li>Compila l'esempio <code>process_wait.c</code> e annota quali righe appartengono al padre e quali al figlio.</li>
+  <li>Disegna lo schema delle risorse private e condivise per due processi e per due thread.</li>
+</ol>
 
 ### Livello B — modifica
 
-1. Modifica l'esempio padre-figlio affinché il figlio restituisca un codice letto da input.
-2. Crea due figli e attendili con due chiamate a `waitpid`.
-3. Nel programma POSIX thread, dividi l'intervallo in quattro parti.
-4. Nell'esempio Java, assegna nomi significativi ai thread e stampali con `Thread.currentThread().getName()`.
+<ol>
+  <li>Modifica l'esempio padre-figlio affinché il figlio restituisca un codice letto da input.</li>
+  <li>Crea due figli e attendili con due chiamate a <code>waitpid</code>.</li>
+  <li>Nel programma POSIX thread, dividi l'intervallo in quattro parti.</li>
+  <li>Nell'esempio Java, assegna nomi significativi ai thread e stampali con <code>Thread.currentThread().getName()</code>.</li>
+</ol>
 
 ### Livello C — scrivi
 
-1. Scrivi un programma che crea un figlio; il figlio stampa i numeri pari e il padre i numeri dispari. Spiega perché l'ordine globale non è deterministico.
-2. Scrivi una funzione che costruisce una tabella con PID, PPID e ruolo del processo.
-3. Implementa una somma parallela con un numero di segmenti scelto da riga di comando.
-4. Realizza in Java due `Runnable`: uno conta le vocali e uno le consonanti della stessa stringa immutabile.
+<ol>
+  <li>Scrivi un programma che crea un figlio; il figlio stampa i numeri pari e il padre i numeri dispari. Spiega perché l'ordine globale non è deterministico.</li>
+  <li>Scrivi una funzione che costruisce una tabella con PID, PPID e ruolo del processo.</li>
+  <li>Implementa una somma parallela con un numero di segmenti scelto da riga di comando.</li>
+  <li>Realizza in Java due <code>Runnable</code>: uno conta le vocali e uno le consonanti della stessa stringa immutabile.</li>
+</ol>
 
 ### Livello D — esegui il debug
 
-1. Correggi un programma che non distingue il valore di ritorno di `fork`.
-2. Individua perché una `printf` eseguita prima di `fork` può apparire più volte quando l'output è bufferizzato e non ancora scaricato.
-3. Correggi un programma Java che invoca `run()` e poi sostiene di usare due thread.
-4. Analizza una somma concorrente che usa un unico contatore condiviso senza sincronizzazione.
+<ol>
+  <li>Correggi un programma che non distingue il valore di ritorno di <code>fork</code>.</li>
+  <li>Individua perché una <code>printf</code> eseguita prima di <code>fork</code> può apparire più volte quando l'output è bufferizzato e non ancora scaricato.</li>
+  <li>Correggi un programma Java che invoca <code>run()</code> e poi sostiene di usare due thread.</li>
+  <li>Analizza una somma concorrente che usa un unico contatore condiviso senza sincronizzazione.</li>
+</ol>
 
 ### Livello E — mini-progetto
 
-Costruisci un piccolo orchestratore che avvia tre programmi distinti, raccoglie il loro stato di uscita e produce un riepilogo. Definisci prima:
+<p align="justify">Costruisci un piccolo orchestratore che avvia tre programmi distinti, raccoglie il loro stato di uscita e produce un riepilogo. Definisci prima:</p>
 
-- formato dei comandi;
-- gestione degli errori;
-- timeout previsto;
-- significato dei codici di uscita;
-- eventi da registrare.
+<ul>
+  <li>formato dei comandi;</li>
+  <li>gestione degli errori;</li>
+  <li>timeout previsto;</li>
+  <li>significato dei codici di uscita;</li>
+  <li>eventi da registrare.</li>
+</ul>
 
 ### Livello F — progetto integrato
 
-Progetta un sistema di elaborazione di file composto da:
+<p align="justify">Progetta un sistema di elaborazione di file composto da:</p>
 
-- processo coordinatore;
-- processi worker;
-- protocollo di assegnazione dei file;
-- gestione del worker terminato in errore;
-- log strutturato;
-- test dei casi limite.
+<ul>
+  <li>processo coordinatore;</li>
+  <li>processi worker;</li>
+  <li>protocollo di assegnazione dei file;</li>
+  <li>gestione del worker terminato in errore;</li>
+  <li>log strutturato;</li>
+  <li>test dei casi limite.</li>
+</ul>
 
-In questa fase è sufficiente produrre requisiti, diagramma e prototipo minimo. La comunicazione completa verrà sviluppata nel modulo successivo.
+<p align="justify">In questa fase è sufficiente produrre requisiti, diagramma e prototipo minimo. La comunicazione completa verrà sviluppata nel modulo successivo.</p>
 
 ## Laboratorio assegnabile: calcolo con `fork` e pipe
 
-Activity collegata:
+<p align="justify">Activity collegata:</p>
 
 ```text
 tpsi4-activity-c-fork-pipe-square-001
 ```
 
-Obiettivo: il processo padre legge un intero, il figlio ne calcola il quadrato e invia il risultato al padre attraverso una pipe. Il padre attende il figlio e stampa soltanto il risultato ricevuto.
+<p align="justify">Obiettivo: il processo padre legge un intero, il figlio ne calcola il quadrato e invia il risultato al padre attraverso una pipe. Il padre attende il figlio e stampa soltanto il risultato ricevuto.</p>
 
-Il laboratorio verifica:
+<p align="justify">Il laboratorio verifica:</p>
 
-- distinzione padre/figlio;
-- chiusura delle estremità non usate della pipe;
-- lettura e scrittura con controllo degli errori;
-- uso di `waitpid`;
-- output deterministico compatibile con il grader C esistente.
+<ul>
+  <li>distinzione padre/figlio;</li>
+  <li>chiusura delle estremità non usate della pipe;</li>
+  <li>lettura e scrittura con controllo degli errori;</li>
+  <li>uso di <code>waitpid</code>;</li>
+  <li>output deterministico compatibile con il grader C esistente.</li>
+</ul>
 
 ## Verifica rapida
 
-1. Qual è la differenza tra programma e processo?
-2. Un processo pronto sta necessariamente usando la CPU?
-3. Perché due processi non condividono automaticamente le normali variabili?
-4. Che cosa restituisce `fork()` nel figlio?
-5. Che cosa accade al processo quando una `exec` riesce?
-6. Perché il padre dovrebbe eseguire `wait` o `waitpid`?
-7. Qual è la differenza tra concorrenza e parallelismo?
-8. Quali aree sono normalmente condivise da thread dello stesso processo?
-9. Che cosa rappresenta un interleaving?
-10. Fornisci un esempio di proprietà di safety e uno di liveness.
+<ol>
+  <li>Qual è la differenza tra programma e processo?</li>
+  <li>Un processo pronto sta necessariamente usando la CPU?</li>
+  <li>Perché due processi non condividono automaticamente le normali variabili?</li>
+  <li>Che cosa restituisce <code>fork()</code> nel figlio?</li>
+  <li>Che cosa accade al processo quando una <code>exec</code> riesce?</li>
+  <li>Perché il padre dovrebbe eseguire <code>wait</code> o <code>waitpid</code>?</li>
+  <li>Qual è la differenza tra concorrenza e parallelismo?</li>
+  <li>Quali aree sono normalmente condivise da thread dello stesso processo?</li>
+  <li>Che cosa rappresenta un interleaving?</li>
+  <li>Fornisci un esempio di proprietà di safety e uno di liveness.</li>
+</ol>
 
 ## Sintesi inclusiva
 
-- Un programma è un file; un processo è quel programma mentre viene eseguito.
-- Ogni processo ha un PID e può avere un processo padre.
-- Il sistema operativo alterna processi pronti e gestisce quelli in attesa.
-- Processi distinti hanno memoria separata; i thread dello stesso processo condividono più stato.
-- Concorrente significa che più attività avanzano nello stesso intervallo; parallelo significa che eseguono nello stesso istante.
-- `fork` crea un figlio, `exec` sostituisce il programma, `wait` raccoglie la terminazione.
-- I thread sono più leggeri, ma la memoria condivisa richiede regole precise.
-- L'ordine tra attività concorrenti può cambiare.
-- Una soluzione corretta deve funzionare per tutti gli ordini consentiti, non soltanto per quello osservato una volta.
+<ul>
+  <li>Un programma è un file; un processo è quel programma mentre viene eseguito.</li>
+  <li>Ogni processo ha un PID e può avere un processo padre.</li>
+  <li>Il sistema operativo alterna processi pronti e gestisce quelli in attesa.</li>
+  <li>Processi distinti hanno memoria separata; i thread dello stesso processo condividono più stato.</li>
+  <li>Concorrente significa che più attività avanzano nello stesso intervallo; parallelo significa che eseguono nello stesso istante.</li>
+  <li><code>fork</code> crea un figlio, <code>exec</code> sostituisce il programma, <code>wait</code> raccoglie la terminazione.</li>
+  <li>I thread sono più leggeri, ma la memoria condivisa richiede regole precise.</li>
+  <li>L'ordine tra attività concorrenti può cambiare.</li>
+  <li>Una soluzione corretta deve funzionare per tutti gli ordini consentiti, non soltanto per quello osservato una volta.</li>
+</ul>
 
 ## Collegamento al modulo successivo
 
-Questo modulo introduce le attività concorrenti e il loro stato. Il modulo [Comunicazione e sincronizzazione](02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md) affronta come scambiare dati, proteggere invarianti e risolvere i problemi classici di coordinamento.
+<p align="justify">Questo modulo introduce le attività concorrenti e il loro stato. Il modulo <a href="02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md">Comunicazione e sincronizzazione</a> affronta come scambiare dati, proteggere invarianti e risolvere i problemi classici di coordinamento.</p>
 
 ## Fonti e note di revisione
 
-- Riferimento curricolare: indice pubblico del volume 2, usato solo per verificare la copertura.
-- Fonte tecnica locale: `LINUX_PROGRAMMING.md`, a partire da `Linux Programming`.
-- Tutti gli esempi di questo modulo sono formulati ex novo per il pacchetto.
-- Gli esempi della fonte Linux con intestazioni di copyright esterne non devono essere duplicati nelle activity senza averne verificato la licenza.
-- Stato: `draft`; revisione docente richiesta prima della pubblicazione agli studenti.
+<ul>
+  <li>Riferimento curricolare: indice pubblico del volume 2, usato solo per verificare la copertura.</li>
+  <li>Fonte tecnica locale: <code>LINUX_PROGRAMMING.md</code>, a partire da <code>Linux Programming</code>.</li>
+  <li>Tutti gli esempi di questo modulo sono formulati ex novo per il pacchetto.</li>
+  <li>Gli esempi della fonte Linux con intestazioni di copyright esterne non devono essere duplicati nelle activity senza averne verificato la licenza.</li>
+  <li>Stato: <code>draft</code>; revisione docente richiesta prima della pubblicazione agli studenti.</li>
+</ul>

@@ -7,92 +7,146 @@ curriculum_reference: tpsi4-curriculum-hoepli-volume-2
 transformation: original-course-material
 -->
 
-<!-- visual-orientation -->
-<details>
-<summary>&#128506; <strong>Orientamento della sezione</strong></summary>
-
-<p align="justify"><strong>Contesto:</strong> Collega requisiti, verifica, validazione, test statici/dinamici, sanitizer, debugger, regressioni, runner e CI.</p>
-<p align="justify"><strong>Prerequisiti:</strong> Requisiti, documentazione, programmi C e concorrenza.</p>
-<p align="justify"><strong>Obiettivo:</strong> Progettare casi di test, interpretare report, riprodurre e correggere difetti con un metodo basato su evidenze.</p>
-<p align="justify"><strong>Prossimo passo:</strong> Eseguire l&#x27;activity end-to-end, aggiungere una regressione e documentare il risultato.</p>
-
-</details>
-
 ## In questa unità impareremo
 
-Al termine dell'unità lo studente dovrà saper:
+<!-- visual-orientation -->
+<table align="center">
+<tr>
+<td>
+<details>
+<summary>&#129517; <strong>Orientamento della sezione</strong></summary>
 
-- distinguere verifica e validazione;
-- collegare test e criteri di accettazione ai requisiti;
-- distinguere tecniche statiche e dinamiche;
-- progettare casi di test con classi di equivalenza e valori limite;
-- riconoscere test unitari, di integrazione, di sistema e di accettazione;
-- interpretare warning, errori di compilazione e report del runner;
-- usare strumenti di analisi e debugging con un metodo riproducibile;
-- costruire test deterministici per programmi C semplici;
-- spiegare perché il software concorrente richiede strategie aggiuntive;
-- separare test pubblici, nascosti e soluzione docente;
-- integrare controlli automatici in Git e CI senza confondere automazione e qualità.
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128506;</span> Contesto:</strong>
+Collega requisiti, verifica, validazione, test statici/dinamici, sanitizer, debugger, regressioni, runner e CI.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128736;</span> Prerequisiti:</strong>
+Requisiti, documentazione, programmi C e concorrenza.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#127919;</span> Obiettivi:</strong>
+Progettare casi di test, interpretare report, riprodurre e correggere difetti con un metodo basato su evidenze.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128257;</span> Richiamo:</strong>
+Riprendere criteri di accettazione, invarianti e contratti delle activity.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128064;</span> Anticipazione:</strong>
+Prepara il collaudo del progetto finale e la riflessione su dati, licenze, sicurezza e AI.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#10145;</span> Prossimo passo:</strong>
+Eseguire l&#x27;activity end-to-end, aggiungere una regressione e documentare il risultato.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128279;</span> Rimando:</strong>
+Modulo originale; validator, runner e report della piattaforma. <a href="#fonti-e-note-di-revisione">Fonti e note della lezione</a>; <a href="COVERAGE.md">matrice di copertura</a>.
+</p>
+
+</details>
+</td>
+</tr>
+</table>
+
+<p align="justify">Al termine dell'unità lo studente dovrà saper:</p>
+
+<ul>
+  <li>distinguere verifica e validazione;</li>
+  <li>collegare test e criteri di accettazione ai requisiti;</li>
+  <li>distinguere tecniche statiche e dinamiche;</li>
+  <li>progettare casi di test con classi di equivalenza e valori limite;</li>
+  <li>riconoscere test unitari, di integrazione, di sistema e di accettazione;</li>
+  <li>interpretare warning, errori di compilazione e report del runner;</li>
+  <li>usare strumenti di analisi e debugging con un metodo riproducibile;</li>
+  <li>costruire test deterministici per programmi C semplici;</li>
+  <li>spiegare perché il software concorrente richiede strategie aggiuntive;</li>
+  <li>separare test pubblici, nascosti e soluzione docente;</li>
+  <li>integrare controlli automatici in Git e CI senza confondere automazione e qualità.</li>
+</ul>
 
 ## Prerequisiti
 
-Sono richiesti:
+<p align="justify">Sono richiesti:</p>
 
-- requisiti e criteri di accettazione;
-- compilazione C e avvio di programmi;
-- funzioni, strutture dati e gestione di file;
-- processi, thread e sincronizzazione;
-- Git, commit e pull request.
+<ul>
+  <li>requisiti e criteri di accettazione;</li>
+  <li>compilazione C e avvio di programmi;</li>
+  <li>funzioni, strutture dati e gestione di file;</li>
+  <li>processi, thread e sincronizzazione;</li>
+  <li>Git, commit e pull request.</li>
+</ul>
 
 ## Problema iniziale: «Sul mio computer funziona»
 
-Questa frase descrive un'osservazione, non una dimostrazione.
+<p align="justify">Questa frase descrive un'osservazione, non una dimostrazione.</p>
 
-Per valutare il software servono almeno:
+<p align="justify">Per valutare il software servono almeno:</p>
 
-- specifica del comportamento atteso;
-- ambiente e versione degli strumenti;
-- input eseguiti;
-- output osservati;
-- casi limite;
-- condizioni di errore;
-- possibilità di ripetere la prova;
-- criterio che stabilisce successo o fallimento.
+<ul>
+  <li>specifica del comportamento atteso;</li>
+  <li>ambiente e versione degli strumenti;</li>
+  <li>input eseguiti;</li>
+  <li>output osservati;</li>
+  <li>casi limite;</li>
+  <li>condizioni di errore;</li>
+  <li>possibilità di ripetere la prova;</li>
+  <li>criterio che stabilisce successo o fallimento.</li>
+</ul>
 
-Un programma può produrre il risultato giusto per l'input provato e restare errato per molti altri input.
+<p align="justify">Un programma può produrre il risultato giusto per l'input provato e restare errato per molti altri input.</p>
 
 ## Verifica e validazione
 
-Una distinzione utile è:
+<table align="center">
+<tr><td>
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128214;</span> Definizione:</strong>
+Una distinzione utile è:</p>
 
-- **verifica**: stiamo costruendo il prodotto in modo conforme alla specifica?
-- **validazione**: stiamo costruendo il prodotto che risponde davvero al bisogno?
+<ul>
+  <li><strong>verifica</strong>: stiamo costruendo il prodotto in modo conforme alla specifica?</li>
+  <li><strong>validazione</strong>: stiamo costruendo il prodotto che risponde davvero al bisogno?</li>
+</ul>
+</td></tr>
+</table>
 
 ### Esempio
 
-Requisito:
+<p align="justify">Requisito:</p>
 
 ```text
 Il sistema deve impedire allo studente di ricevere i test nascosti.
 ```
 
-Verifica:
+<p align="justify">Verifica:</p>
 
-- il filtro degli asset esclude `hidden_test`;
-- i test automatici controllano lo scaffold;
-- la review verifica i percorsi di distribuzione.
+<ul>
+  <li>il filtro degli asset esclude <code>hidden_test</code>;</li>
+  <li>i test automatici controllano lo scaffold;</li>
+  <li>la review verifica i percorsi di distribuzione.</li>
+</ul>
 
-Validazione:
+<p align="justify">Validazione:</p>
 
-- il flusso reale consente al docente di preparare una prova senza esporre la soluzione;
-- lo studente riceve comunque informazioni sufficienti per lavorare;
-- la politica è comprensibile e utilizzabile.
+<ul>
+  <li>il flusso reale consente al docente di preparare una prova senza esporre la soluzione;</li>
+  <li>lo studente riceve comunque informazioni sufficienti per lavorare;</li>
+  <li>la politica è comprensibile e utilizzabile.</li>
+</ul>
 
-Un prodotto può essere verificato rispetto a una specifica sbagliata e quindi non essere validato rispetto al bisogno.
+<p align="justify">Un prodotto può essere verificato rispetto a una specifica sbagliata e quindi non essere validato rispetto al bisogno.</p>
 
 ## Piano di verifica
 
-Prima di eseguire test è utile definire:
+<p align="justify">Prima di eseguire test è utile definire:</p>
 
 ```text
 oggetto della prova
@@ -107,41 +161,45 @@ responsabile
 rischi e limiti
 ```
 
-L'**oracolo** determina il risultato atteso. Può essere:
+<p align="justify">L'<strong>oracolo</strong> determina il risultato atteso. Può essere:</p>
 
-- una formula;
-- una specifica;
-- una implementazione indipendente;
-- un confronto con dati noti;
-- una proprietà o invariante;
-- una decisione docente.
+<ul>
+  <li>una formula;</li>
+  <li>una specifica;</li>
+  <li>una implementazione indipendente;</li>
+  <li>un confronto con dati noti;</li>
+  <li>una proprietà o invariante;</li>
+  <li>una decisione docente.</li>
+</ul>
 
 ## Verifica statica
 
-La verifica statica analizza artefatti senza eseguire il programma nel normale scenario operativo.
+<p align="justify">La verifica statica analizza artefatti senza eseguire il programma nel normale scenario operativo.</p>
 
-Comprende:
+<p align="justify">Comprende:</p>
 
-- lettura e revisione;
-- controllo dei requisiti;
-- analisi di diagrammi;
-- compilazione e warning;
-- lint;
-- analisi statica;
-- type checking;
-- controllo di formati e schemi;
-- ricerca di segreti o dipendenze vulnerabili;
-- verifica di link e documentazione.
+<ul>
+  <li>lettura e revisione;</li>
+  <li>controllo dei requisiti;</li>
+  <li>analisi di diagrammi;</li>
+  <li>compilazione e warning;</li>
+  <li>lint;</li>
+  <li>analisi statica;</li>
+  <li>type checking;</li>
+  <li>controllo di formati e schemi;</li>
+  <li>ricerca di segreti o dipendenze vulnerabili;</li>
+  <li>verifica di link e documentazione.</li>
+</ul>
 
 ### Warning del compilatore
 
-Per C:
+<p align="justify">Per C:</p>
 
 ```bash
 gcc -Wall -Wextra -Wpedantic -std=c17 main.c -o main
 ```
 
-I warning non sono tutti errori, ma vanno compresi. Disabilitarli per ottenere una build verde può nascondere conversioni, variabili non usate o comportamenti dubbi.
+<p align="justify">I warning non sono tutti errori, ma vanno compresi. Disabilitarli per ottenere una build verde può nascondere conversioni, variabili non usate o comportamenti dubbi.</p>
 
 ### Validazione di schema
 
@@ -149,20 +207,22 @@ I warning non sono tutti errori, ma vanno compresi. Disabilitarli per ottenere u
 python scripts/validate_activity.py activities/tpsi_quarto
 ```
 
-La validazione controlla forma e campi essenziali. Non dimostra che la consegna sia didatticamente corretta o che la soluzione soddisfi i test.
+<p align="justify">La validazione controlla forma e campi essenziali. Non dimostra che la consegna sia didatticamente corretta o che la soluzione soddisfi i test.</p>
 
 ### Code review
 
-La review statica può cercare:
+<p align="justify">La review statica può cercare:</p>
 
-- precondizioni non documentate;
-- percorsi di errore incompleti;
-- risorse non rilasciate;
-- lock acquisiti in ordine incoerente;
-- dati sensibili nei log;
-- differenze fra requisiti, codice e test;
-- codice duplicato;
-- nomi o contratti ambigui.
+<ul>
+  <li>precondizioni non documentate;</li>
+  <li>percorsi di errore incompleti;</li>
+  <li>risorse non rilasciate;</li>
+  <li>lock acquisiti in ordine incoerente;</li>
+  <li>dati sensibili nei log;</li>
+  <li>differenze fra requisiti, codice e test;</li>
+  <li>codice duplicato;</li>
+  <li>nomi o contratti ambigui.</li>
+</ul>
 
 <!-- figure:05-statica-dinamica -->
 <p align="center">
@@ -172,74 +232,78 @@ La review statica può cercare:
 
 ## Verifica dinamica
 
-La verifica dinamica esegue il programma o una sua parte.
+<p align="justify">La verifica dinamica esegue il programma o una sua parte.</p>
 
-Comprende:
+<p align="justify">Comprende:</p>
 
-- test automatici;
-- prove manuali;
-- profiling;
-- sanitizer;
-- fuzzing;
-- test di carico;
-- test di sicurezza;
-- collaudo su ambienti reali;
-- osservazione di log e metriche.
+<ul>
+  <li>test automatici;</li>
+  <li>prove manuali;</li>
+  <li>profiling;</li>
+  <li>sanitizer;</li>
+  <li>fuzzing;</li>
+  <li>test di carico;</li>
+  <li>test di sicurezza;</li>
+  <li>collaudo su ambienti reali;</li>
+  <li>osservazione di log e metriche.</li>
+</ul>
 
-Un test dinamico esplora soltanto gli scenari eseguiti. L'assenza di fallimenti non dimostra l'assenza di difetti.
+<p align="justify">Un test dinamico esplora soltanto gli scenari eseguiti. L'assenza di fallimenti non dimostra l'assenza di difetti.</p>
 
 ## Livelli di test
 
 ### Test unitario
 
-Verifica una piccola unità con dipendenze controllate.
+<p align="justify">Verifica una piccola unità con dipendenze controllate.</p>
 
-Esempio: funzione che valida un identificatore o normalizza un output.
+<p align="justify">Esempio: funzione che valida un identificatore o normalizza un output.</p>
 
 ### Test di integrazione
 
-Verifica collaborazione tra componenti.
+<p align="justify">Verifica collaborazione tra componenti.</p>
 
-Esempio: servizio activity + storage + generazione scaffold.
+<p align="justify">Esempio: servizio activity + storage + generazione scaffold.</p>
 
 ### Test di sistema
 
-Verifica il prodotto completo in un ambiente rappresentativo.
+<p align="justify">Verifica il prodotto completo in un ambiente rappresentativo.</p>
 
-Esempio: docente crea activity, la assegna, lo studente esegue il runner e il report appare nella dashboard.
+<p align="justify">Esempio: docente crea activity, la assegna, lo studente esegue il runner e il report appare nella dashboard.</p>
 
 ### Test di accettazione
 
-Verifica requisiti e bisogni concordati con gli stakeholder.
+<p align="justify">Verifica requisiti e bisogni concordati con gli stakeholder.</p>
 
-Esempio: il docente riesce a collegare più fonti alla stessa UDA conservando la provenienza.
+<p align="justify">Esempio: il docente riesce a collegare più fonti alla stessa UDA conservando la provenienza.</p>
 
-I livelli non sono separati rigidamente, ma aiutano a scegliere scopo e costo della prova.
+<p align="justify">I livelli non sono separati rigidamente, ma aiutano a scegliere scopo e costo della prova.</p>
 
 ## Progettare casi di test
 
 ### Classi di equivalenza
 
-Gli input vengono raggruppati quando si prevede un comportamento equivalente.
+<p align="justify">Gli input vengono raggruppati quando si prevede un comportamento equivalente.</p>
 
-Esempio: funzione che accetta un voto da 0 a 10.
+<p align="justify">Esempio: funzione che accetta un voto da 0 a 10.</p>
 
-- valori validi: `0..10`;
-- sotto il minimo;
-- sopra il massimo;
-- formato non numerico.
+<ul>
+  <li>valori validi: <code>0..10</code>;</li>
+  <li>sotto il minimo;</li>
+  <li>sopra il massimo;</li>
+  <li>formato non numerico.</li>
+</ul>
 
-Non serve provare ogni intero possibile, ma ogni classe significativa.
+<p align="justify">Non serve provare ogni intero possibile, ma ogni classe significativa.</p>
 
 ### Valori limite
 
-Molti errori compaiono vicino ai confini:
+<p align="justify">Molti errori compaiono vicino ai confini:</p>
 
 ```text
 -1, 0, 1, 9, 10, 11
 ```
 
-Per un buffer di capacità `N`:
+<p align="justify">Per un buffer di capacità <code>N</code>:</p>
 
 ```text
 0, 1, N-1, N, N+1
@@ -247,30 +311,60 @@ Per un buffer di capacità `N`:
 
 ### Tabella decisionale
 
-Utile quando più condizioni influenzano l'esito.
+<p align="justify">Utile quando più condizioni influenzano l'esito.</p>
 
-| autenticato | ruolo docente | activity valida | esito |
-| --- | --- | --- | --- |
-| no | — | — | rifiuto |
-| sì | no | — | rifiuto |
-| sì | sì | no | errore di validazione |
-| sì | sì | sì | salvataggio |
+<table align="center">
+<thead>
+<tr>
+<th>autenticato</th>
+<th>ruolo docente</th>
+<th>activity valida</th>
+<th>esito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no</td>
+<td>—</td>
+<td>—</td>
+<td>rifiuto</td>
+</tr>
+<tr>
+<td>sì</td>
+<td>no</td>
+<td>—</td>
+<td>rifiuto</td>
+</tr>
+<tr>
+<td>sì</td>
+<td>sì</td>
+<td>no</td>
+<td>errore di validazione</td>
+</tr>
+<tr>
+<td>sì</td>
+<td>sì</td>
+<td>sì</td>
+<td>salvataggio</td>
+</tr>
+</tbody>
+</table>
 
 ### Transizioni di stato
 
-Per oggetti con ciclo di vita:
+<p align="justify">Per oggetti con ciclo di vita:</p>
 
 ```text
 draft -> reviewed -> approved -> assigned -> closed
 ```
 
-I test devono coprire transizioni valide e tentativi non ammessi.
+<p align="justify">I test devono coprire transizioni valide e tentativi non ammessi.</p>
 
 ### Test basati su proprietà
 
-Invece di elencare soltanto esempi, si verifica una proprietà generale.
+<p align="justify">Invece di elencare soltanto esempi, si verifica una proprietà generale.</p>
 
-Esempio per una funzione di ordinamento:
+<p align="justify">Esempio per una funzione di ordinamento:</p>
 
 ```text
 l'output è ordinato
@@ -280,9 +374,9 @@ ordinare due volte non cambia il risultato
 
 ## Test deterministici stdin/stdout
 
-Il runner C corrente può compilare un file e confrontare output normalizzato.
+<p align="justify">Il runner C corrente può compilare un file e confrontare output normalizzato.</p>
 
-Activity semplificata:
+<p align="justify">Activity semplificata:</p>
 
 ```json
 {
@@ -297,55 +391,61 @@ Activity semplificata:
 }
 ```
 
-Per rendere il test stabile:
+<p align="justify">Per rendere il test stabile:</p>
 
-- non stampare PID o timestamp se non sono normalizzati;
-- evitare messaggi di debug su stdout;
-- definire formato, spazi e newline;
-- usare stderr per diagnostica;
-- applicare un timeout;
-- non dipendere dall'ordine non deterministico dei thread.
+<ul>
+  <li>non stampare PID o timestamp se non sono normalizzati;</li>
+  <li>evitare messaggi di debug su stdout;</li>
+  <li>definire formato, spazi e newline;</li>
+  <li>usare stderr per diagnostica;</li>
+  <li>applicare un timeout;</li>
+  <li>non dipendere dall'ordine non deterministico dei thread.</li>
+</ul>
 
 ## Test pubblici e test nascosti
 
 ### Test pubblico
 
-Aiuta lo studente a comprendere il contratto e verificare progressi.
+<p align="justify">Aiuta lo studente a comprendere il contratto e verificare progressi.</p>
 
 ### Test nascosto
 
-Controlla casi aggiuntivi senza fornire direttamente la soluzione. Non deve però introdurre requisiti assenti dalla consegna.
+<p align="justify">Controlla casi aggiuntivi senza fornire direttamente la soluzione. Non deve però introdurre requisiti assenti dalla consegna.</p>
 
-Una buona prova combina:
+<p align="justify">Una buona prova combina:</p>
 
-- esempi chiari nella consegna;
-- test pubblici rappresentativi;
-- test nascosti coerenti;
-- rubrica per aspetti non facilmente automatizzabili;
-- feedback che non riveli il codice della soluzione.
+<ul>
+  <li>esempi chiari nella consegna;</li>
+  <li>test pubblici rappresentativi;</li>
+  <li>test nascosti coerenti;</li>
+  <li>rubrica per aspetti non facilmente automatizzabili;</li>
+  <li>feedback che non riveli il codice della soluzione.</li>
+</ul>
 
-Nascondere tutti i criteri rende la prova arbitraria. Rendere pubblica la soluzione annulla l'attività. Serve equilibrio.
+<p align="justify">Nascondere tutti i criteri rende la prova arbitraria. Rendere pubblica la soluzione annulla l'attività. Serve equilibrio.</p>
 
 ## Test di errori e casi negativi
 
-Non basta provare input corretti.
+<p align="justify">Non basta provare input corretti.</p>
 
-Per un programma con pipe:
+<p align="justify">Per un programma con pipe:</p>
 
-- `fork` fallisce;
-- `pipe` fallisce;
-- lettura termina prima del messaggio completo;
-- il figlio esce con errore;
-- l'input non è valido;
-- il risultato supera il tipo scelto;
-- un descrittore non viene chiuso;
-- il processo non termina entro il timeout.
+<ul>
+  <li><code>fork</code> fallisce;</li>
+  <li><code>pipe</code> fallisce;</li>
+  <li>lettura termina prima del messaggio completo;</li>
+  <li>il figlio esce con errore;</li>
+  <li>l'input non è valido;</li>
+  <li>il risultato supera il tipo scelto;</li>
+  <li>un descrittore non viene chiuso;</li>
+  <li>il processo non termina entro il timeout.</li>
+</ul>
 
-Alcuni errori sono difficili da provocare in modo portabile. Si possono isolare le dipendenze o introdurre adapter controllabili nei test.
+<p align="justify">Alcuni errori sono difficili da provocare in modo portabile. Si possono isolare le dipendenze o introdurre adapter controllabili nei test.</p>
 
 ## Sanitizer
 
-Gli sanitizer aggiungono controlli runtime.
+<p align="justify">Gli sanitizer aggiungono controlli runtime.</p>
 
 ### AddressSanitizer e UndefinedBehaviorSanitizer
 
@@ -356,42 +456,46 @@ gcc -Wall -Wextra -Wpedantic -std=c17 \
 ./main_asan
 ```
 
-Possono individuare:
+<p align="justify">Possono individuare:</p>
 
-- accessi fuori limite;
-- use-after-free;
-- alcuni leak;
-- overflow o operazioni indefinite controllate da UBSan;
-- errori di puntatori.
+<ul>
+  <li>accessi fuori limite;</li>
+  <li>use-after-free;</li>
+  <li>alcuni leak;</li>
+  <li>overflow o operazioni indefinite controllate da UBSan;</li>
+  <li>errori di puntatori.</li>
+</ul>
 
-Non sostituiscono i test: osservano problemi soltanto nei percorsi eseguiti.
+<p align="justify">Non sostituiscono i test: osservano problemi soltanto nei percorsi eseguiti.</p>
 
 ### ThreadSanitizer
 
-Per alcuni programmi thread e toolchain:
+<p align="justify">Per alcuni programmi thread e toolchain:</p>
 
 ```bash
 gcc -Wall -Wextra -std=c17 -pthread \
   -fsanitize=thread main.c -o main_tsan
 ```
 
-Può rilevare data race, ma non dimostra assenza di deadlock o correttezza del protocollo. Compatibilità e costo vanno verificati nell'ambiente.
+<p align="justify">Può rilevare data race, ma non dimostra assenza di deadlock o correttezza del protocollo. Compatibilità e costo vanno verificati nell'ambiente.</p>
 
 ## Debugging come ciclo di ipotesi
 
-Il debugging efficace è un processo scientifico:
+<p align="justify">Il debugging efficace è un processo scientifico:</p>
 
-1. riproduci il difetto;
-2. riduci il caso;
-3. raccogli evidenze;
-4. formula una ipotesi;
-5. progetta una prova che distingue ipotesi diverse;
-6. applica la correzione minima;
-7. aggiungi una regressione;
-8. esegui controlli più ampi;
-9. documenta causa e impatto.
+<ol>
+  <li>riproduci il difetto;</li>
+  <li>riduci il caso;</li>
+  <li>raccogli evidenze;</li>
+  <li>formula una ipotesi;</li>
+  <li>progetta una prova che distingue ipotesi diverse;</li>
+  <li>applica la correzione minima;</li>
+  <li>aggiungi una regressione;</li>
+  <li>esegui controlli più ampi;</li>
+  <li>documenta causa e impatto.</li>
+</ol>
 
-Modificare codice casualmente finché il problema scompare non identifica la causa.
+<p align="justify">Modificare codice casualmente finché il problema scompare non identifica la causa.</p>
 
 <!-- figure:05-debug -->
 <p align="center">
@@ -401,7 +505,7 @@ Modificare codice casualmente finché il problema scompare non identifica la cau
 
 ## Riproducibilità
 
-Un bug report utile contiene:
+<p align="justify">Un bug report utile contiene:</p>
 
 ```text
 versione o commit
@@ -415,25 +519,27 @@ log essenziali
 passi minimi
 ```
 
-Per problemi concorrenti aggiungere:
+<p align="justify">Per problemi concorrenti aggiungere:</p>
 
-- numero di thread/processi;
-- carico;
-- timeout;
-- sequenza di eventi disponibile;
-- eventuale seed;
-- dump o stack dei thread.
+<ul>
+  <li>numero di thread/processi;</li>
+  <li>carico;</li>
+  <li>timeout;</li>
+  <li>sequenza di eventi disponibile;</li>
+  <li>eventuale seed;</li>
+  <li>dump o stack dei thread.</li>
+</ul>
 
 ## Debugger
 
-Con GDB:
+<p align="justify">Con GDB:</p>
 
 ```bash
 gcc -g -O0 -Wall -Wextra main.c -o main
 gdb ./main
 ```
 
-Comandi essenziali:
+<p align="justify">Comandi essenziali:</p>
 
 ```text
 break main
@@ -447,30 +553,32 @@ info threads
 thread <id>
 ```
 
-Compilare con simboli e ottimizzazione bassa semplifica l'osservazione, ma il bug può dipendere dall'ottimizzazione. In tal caso bisogna confrontare configurazioni senza assumere che il debugger riproduca sempre lo stesso comportamento.
+<p align="justify">Compilare con simboli e ottimizzazione bassa semplifica l'osservazione, ma il bug può dipendere dall'ottimizzazione. In tal caso bisogna confrontare configurazioni senza assumere che il debugger riproduca sempre lo stesso comportamento.</p>
 
 ## Logging
 
-Un log utile è:
+<p align="justify">Un log utile è:</p>
 
-- strutturato;
-- dotato di livello;
-- correlabile;
-- privo di segreti;
-- limitato;
-- coerente con il ciclo di vita.
+<ul>
+  <li>strutturato;</li>
+  <li>dotato di livello;</li>
+  <li>correlabile;</li>
+  <li>privo di segreti;</li>
+  <li>limitato;</li>
+  <li>coerente con il ciclo di vita.</li>
+</ul>
 
-Per concorrenza, includere un ID di operazione o richiesta è spesso più utile del solo thread ID.
+<p align="justify">Per concorrenza, includere un ID di operazione o richiesta è spesso più utile del solo thread ID.</p>
 
 ```text
 ts=... level=INFO request=42 worker=2 event=received
 ```
 
-Il logging può alterare il timing e far sparire un bug concorrente. È un effetto da considerare.
+<p align="justify">Il logging può alterare il timing e far sparire un bug concorrente. È un effetto da considerare.</p>
 
 ## Debugging di processi
 
-Strumenti e domande:
+<p align="justify">Strumenti e domande:</p>
 
 ```bash
 ps -e -o pid,ppid,state,command
@@ -478,51 +586,57 @@ pstree -p
 strace -f ./programma
 ```
 
-- Il figlio viene creato?
-- Quale ramo esegue?
-- Chi mantiene aperta una pipe?
-- Il padre esegue `waitpid`?
-- Quale codice di uscita viene raccolto?
-- Una `exec` fallisce e il processo continua nel ramo sbagliato?
+<ul>
+  <li>Il figlio viene creato?</li>
+  <li>Quale ramo esegue?</li>
+  <li>Chi mantiene aperta una pipe?</li>
+  <li>Il padre esegue <code>waitpid</code>?</li>
+  <li>Quale codice di uscita viene raccolto?</li>
+  <li>Una <code>exec</code> fallisce e il processo continua nel ramo sbagliato?</li>
+</ul>
 
 ## Debugging di thread
 
-Domande:
+<p align="justify">Domande:</p>
 
-- Quale stato è condiviso?
-- Quale lock lo protegge?
-- Tutti i percorsi rilasciano il lock?
-- La condizione viene verificata in `while`?
-- L'ordine dei lock è coerente?
-- Un thread può terminare mentre possiede risorse?
-- Esiste starvation?
-- L'arresto è cooperativo?
+<ul>
+  <li>Quale stato è condiviso?</li>
+  <li>Quale lock lo protegge?</li>
+  <li>Tutti i percorsi rilasciano il lock?</li>
+  <li>La condizione viene verificata in <code>while</code>?</li>
+  <li>L'ordine dei lock è coerente?</li>
+  <li>Un thread può terminare mentre possiede risorse?</li>
+  <li>Esiste starvation?</li>
+  <li>L'arresto è cooperativo?</li>
+</ul>
 
-Un test che esegue il programma una sola volta è debole. Si possono usare ripetizioni, carico variabile, scheduler stress e sanitizer, senza confonderli con una prova matematica.
+<p align="justify">Un test che esegue il programma una sola volta è debole. Si possono usare ripetizioni, carico variabile, scheduler stress e sanitizer, senza confonderli con una prova matematica.</p>
 
 ## Debugging Java
 
-Strumenti e concetti:
+<p align="justify">Strumenti e concetti:</p>
 
-- stack trace;
-- breakpoint e debugger IDE;
-- `jstack` o thread dump;
-- nomi dei thread;
-- eccezioni non gestite;
-- stato `BLOCKED`, `WAITING`, `TIMED_WAITING`;
-- `InterruptedException`;
-- lock e condition;
-- future non completate.
+<ul>
+  <li>stack trace;</li>
+  <li>breakpoint e debugger IDE;</li>
+  <li><code>jstack</code> o thread dump;</li>
+  <li>nomi dei thread;</li>
+  <li>eccezioni non gestite;</li>
+  <li>stato <code>BLOCKED</code>, <code>WAITING</code>, <code>TIMED_WAITING</code>;</li>
+  <li><code>InterruptedException</code>;</li>
+  <li>lock e condition;</li>
+  <li>future non completate.</li>
+</ul>
 
-Un'interruzione non equivale alla terminazione forzata. Il codice deve decidere come reagire e ripristinare lo stato di interruzione quando appropriato.
+<p align="justify">Un'interruzione non equivale alla terminazione forzata. Il codice deve decidere come reagire e ripristinare lo stato di interruzione quando appropriato.</p>
 
 ## Regression test
 
-Ogni bug corretto dovrebbe produrre, quando possibile, un test che falliva prima e passa dopo.
+<p align="justify">Ogni bug corretto dovrebbe produrre, quando possibile, un test che falliva prima e passa dopo.</p>
 
-Il test deve rappresentare la causa, non soltanto l'esempio accidentale.
+<p align="justify">Il test deve rappresentare la causa, non soltanto l'esempio accidentale.</p>
 
-Esempio:
+<p align="justify">Esempio:</p>
 
 ```text
 Bug: output Windows CRLF confrontato con LF fallisce.
@@ -531,51 +645,57 @@ Regressione: il normalizzatore deve trattare CRLF e LF come equivalenti.
 
 ## Continuous Integration
 
-La CI esegue controlli su eventi come push o pull request.
+<p align="justify">La CI esegue controlli su eventi come push o pull request.</p>
 
-Può includere:
+<p align="justify">Può includere:</p>
 
-- validazione JSON;
-- test unitari;
-- test di integrazione;
-- compilazione C;
-- build Docker;
-- lint;
-- controlli di sicurezza;
-- generazione documentale.
+<ul>
+  <li>validazione JSON;</li>
+  <li>test unitari;</li>
+  <li>test di integrazione;</li>
+  <li>compilazione C;</li>
+  <li>build Docker;</li>
+  <li>lint;</li>
+  <li>controlli di sicurezza;</li>
+  <li>generazione documentale.</li>
+</ul>
 
-Una pipeline verde significa che i controlli configurati sono passati. Non dimostra che tutti i requisiti siano coperti.
+<p align="justify">Una pipeline verde significa che i controlli configurati sono passati. Non dimostra che tutti i requisiti siano coperti.</p>
 
 ### Controlli rapidi e controlli costosi
 
-È utile separare:
+<p align="justify">È utile separare:</p>
 
-- controlli rapidi a ogni commit/PR;
-- test più costosi o dipendenti dall'ambiente;
-- prove manuali guidate;
-- collaudi su hardware reale.
+<ul>
+  <li>controlli rapidi a ogni commit/PR;</li>
+  <li>test più costosi o dipendenti dall'ambiente;</li>
+  <li>prove manuali guidate;</li>
+  <li>collaudi su hardware reale.</li>
+</ul>
 
 ## Testing della piattaforma multi-fonte
 
-Casi importanti:
+<p align="justify">Casi importanti:</p>
 
-- source ID duplicato;
-- path con `..`;
-- symlink che esce dalla root;
-- file assente;
-- file troppo grande;
-- ref remota non sicura;
-- fonte remota dichiarata `ready` senza adapter;
-- heading spostato;
-- digest cambiato durante la lettura;
-- item che punta a fonte o riga obsolete;
-- contenuti da due snapshot diversi combinati nella stessa operazione.
+<ul>
+  <li>source ID duplicato;</li>
+  <li>path con <code>..</code>;</li>
+  <li>symlink che esce dalla root;</li>
+  <li>file assente;</li>
+  <li>file troppo grande;</li>
+  <li>ref remota non sicura;</li>
+  <li>fonte remota dichiarata <code>ready</code> senza adapter;</li>
+  <li>heading spostato;</li>
+  <li>digest cambiato durante la lettura;</li>
+  <li>item che punta a fonte o riga obsolete;</li>
+  <li>contenuti da due snapshot diversi combinati nella stessa operazione.</li>
+</ul>
 
-Questi test proteggono provenienza e confini, non soltanto l'interfaccia.
+<p align="justify">Questi test proteggono provenienza e confini, non soltanto l'interfaccia.</p>
 
 ## Testing delle activity
 
-Controlli strutturali:
+<p align="justify">Controlli strutturali:</p>
 
 ```text
 schema_version
@@ -587,7 +707,7 @@ rubrica valida
 metriche valide
 ```
 
-Controlli semantici:
+<p align="justify">Controlli semantici:</p>
 
 ```text
 consegna coerente con test
@@ -603,134 +723,152 @@ modalità di aiuto applicabile
 
 ### Scrivere test dopo aver visto soltanto l'implementazione
 
-I test rischiano di confermare il codice invece di verificare il requisito.
+<p align="justify">I test rischiano di confermare il codice invece di verificare il requisito.</p>
 
 ### Usare un solo input
 
-Non copre classi, confini e casi negativi.
+<p align="justify">Non copre classi, confini e casi negativi.</p>
 
 ### Test dipendenti dal tempo
 
-`sleep(1)` non garantisce che un evento sia avvenuto. Usare sincronizzazione o polling con deadline controllata.
+<p align="justify"><code>sleep(1)</code> non garantisce che un evento sia avvenuto. Usare sincronizzazione o polling con deadline controllata.</p>
 
 ### Condividere test nascosti nello scaffold
 
-Annulla il confine docente/studente.
+<p align="justify">Annulla il confine docente/studente.</p>
 
 ### Ignorare l'ambiente
 
-Una prova dipendente da Linux, versione del compilatore o locale deve dichiararlo.
+<p align="justify">Una prova dipendente da Linux, versione del compilatore o locale deve dichiararlo.</p>
 
 ### Correggere senza regressione
 
-Il difetto può tornare.
+<p align="justify">Il difetto può tornare.</p>
 
 ### Debug tramite stampe casuali
 
-Le stampe possono cambiare timing e aumentano rumore. Formulare prima un'ipotesi.
+<p align="justify">Le stampe possono cambiare timing e aumentano rumore. Formulare prima un'ipotesi.</p>
 
 ### Test concorrenti non isolati
 
-Un processo o container rimasto attivo può influenzare prove successive.
+<p align="justify">Un processo o container rimasto attivo può influenzare prove successive.</p>
 
 ### Confondere copertura e qualità
 
-Una percentuale alta di righe eseguite non garantisce buoni oracoli o casi significativi.
+<p align="justify">Una percentuale alta di righe eseguite non garantisce buoni oracoli o casi significativi.</p>
 
 ## Esercizi graduati
 
 ### Livello A — riconosci
 
-1. Classifica dieci attività come verifica statica o dinamica.
-2. Distingui test unitario, integrazione, sistema e accettazione.
-3. Individua valori limite per cinque funzioni.
-4. Leggi un warning C e spiega il rischio.
+<ol>
+  <li>Classifica dieci attività come verifica statica o dinamica.</li>
+  <li>Distingui test unitario, integrazione, sistema e accettazione.</li>
+  <li>Individua valori limite per cinque funzioni.</li>
+  <li>Leggi un warning C e spiega il rischio.</li>
+</ol>
 
 ### Livello B — completa
 
-1. Aggiungi tre casi limite a una activity con un solo test.
-2. Scrivi una regressione per un bug descritto.
-3. Migliora un bug report incompleto.
-4. Separa stdout diagnostico e output contrattuale.
+<ol>
+  <li>Aggiungi tre casi limite a una activity con un solo test.</li>
+  <li>Scrivi una regressione per un bug descritto.</li>
+  <li>Migliora un bug report incompleto.</li>
+  <li>Separa stdout diagnostico e output contrattuale.</li>
+</ol>
 
 ### Livello C — progetta
 
-1. Deriva casi di test da requisiti di una coda limitata.
-2. Crea una tabella decisionale per ruoli e permessi.
-3. Scrivi test stdin/stdout per un programma C.
-4. Definisci una checklist semantica per activity e asset.
+<ol>
+  <li>Deriva casi di test da requisiti di una coda limitata.</li>
+  <li>Crea una tabella decisionale per ruoli e permessi.</li>
+  <li>Scrivi test stdin/stdout per un programma C.</li>
+  <li>Definisci una checklist semantica per activity e asset.</li>
+</ol>
 
 ### Livello D — debug
 
-1. Individua un use-after-free con AddressSanitizer.
-2. Analizza un deadlock usando thread dump o debugger.
-3. Trova perché il padre non osserva EOF su una pipe.
-4. Correggi un test intermittente che usa `sleep`.
+<ol>
+  <li>Individua un use-after-free con AddressSanitizer.</li>
+  <li>Analizza un deadlock usando thread dump o debugger.</li>
+  <li>Trova perché il padre non osserva EOF su una pipe.</li>
+  <li>Correggi un test intermittente che usa <code>sleep</code>.</li>
+</ol>
 
 ### Livello E — mini-progetto
 
-Costruisci una suite per un programma C che comprende:
+<p align="justify">Costruisci una suite per un programma C che comprende:</p>
 
-- test normali;
-- valori limite;
-- input non valido;
-- timeout;
-- sanitizer;
-- script di esecuzione;
-- report leggibile;
-- regressione per un difetto reale.
+<ul>
+  <li>test normali;</li>
+  <li>valori limite;</li>
+  <li>input non valido;</li>
+  <li>timeout;</li>
+  <li>sanitizer;</li>
+  <li>script di esecuzione;</li>
+  <li>report leggibile;</li>
+  <li>regressione per un difetto reale.</li>
+</ul>
 
 ### Livello F — progetto integrato
 
-Progetta la strategia di qualità di un modulo 2cornot2c:
+<p align="justify">Progetta la strategia di qualità di un modulo 2cornot2c:</p>
 
-- requisiti e rischi;
-- test unitari/integrati/end-to-end;
-- fonti di test;
-- ambienti Linux e Windows;
-- Docker;
-- controlli di sicurezza;
-- prova manuale docente/studente;
-- criteri di rilascio;
-- rollback.
+<ul>
+  <li>requisiti e rischi;</li>
+  <li>test unitari/integrati/end-to-end;</li>
+  <li>fonti di test;</li>
+  <li>ambienti Linux e Windows;</li>
+  <li>Docker;</li>
+  <li>controlli di sicurezza;</li>
+  <li>prova manuale docente/studente;</li>
+  <li>criteri di rilascio;</li>
+  <li>rollback.</li>
+</ul>
 
 ## Laboratorio 1 — activity C end-to-end
 
-Usa `tpsi4-activity-c-fork-pipe-square-001`.
+<p align="justify">Usa <code>tpsi4-activity-c-fork-pipe-square-001</code>.</p>
 
-Passi:
+<p align="justify">Passi:</p>
 
-1. valida `activity.json`;
-2. genera lo scaffold;
-3. compila lo starter dopo il completamento;
-4. esegui i test normali e limite;
-5. prova un errore intenzionale;
-6. verifica il report;
-7. confronta con la soluzione docente senza distribuirla allo studente;
-8. aggiungi un caso di regressione.
+<ol>
+  <li>valida <code>activity.json</code>;</li>
+  <li>genera lo scaffold;</li>
+  <li>compila lo starter dopo il completamento;</li>
+  <li>esegui i test normali e limite;</li>
+  <li>prova un errore intenzionale;</li>
+  <li>verifica il report;</li>
+  <li>confronta con la soluzione docente senza distribuirla allo studente;</li>
+  <li>aggiungi un caso di regressione.</li>
+</ol>
 
 ## Laboratorio 2 — bug concorrente
 
-Prepara due versioni di un contatore:
+<p align="justify">Prepara due versioni di un contatore:</p>
 
-- non sincronizzata;
-- sincronizzata.
+<ul>
+  <li>non sincronizzata;</li>
+  <li>sincronizzata.</li>
+</ul>
 
-Esegui molte ripetizioni e osserva che l'assenza di fallimento in una corsa non dimostra correttezza. Usa, se disponibile, ThreadSanitizer e confronta il tipo di evidenza fornita.
+<p align="justify">Esegui molte ripetizioni e osserva che l'assenza di fallimento in una corsa non dimostra correttezza. Usa, se disponibile, ThreadSanitizer e confronta il tipo di evidenza fornita.</p>
 
 ## Laboratorio 3 — debugging con GDB
 
-Parti da un programma con:
+<p align="justify">Parti da un programma con:</p>
 
-- accesso fuori limite;
-- valore non inizializzato;
-- ramo di errore incompleto.
+<ul>
+  <li>accesso fuori limite;</li>
+  <li>valore non inizializzato;</li>
+  <li>ramo di errore incompleto.</li>
+</ul>
 
-Riproduci, crea breakpoint, osserva stack e variabili, correggi e aggiungi test.
+<p align="justify">Riproduci, crea breakpoint, osserva stack e variabili, correggi e aggiungi test.</p>
 
 ## Laboratorio 4 — CI del pacchetto didattico
 
-Configura o simula una pipeline che esegue:
+<p align="justify">Configura o simula una pipeline che esegue:</p>
 
 ```text
 validazione manifest JSON
@@ -741,41 +879,47 @@ compilazione esempio C
 smoke test del runner
 ```
 
-Spiega quali controlli restano manuali e perché.
+<p align="justify">Spiega quali controlli restano manuali e perché.</p>
 
 ## Verifica rapida
 
-1. Qual è la differenza tra verifica e validazione?
-2. Che cos'è un oracolo del test?
-3. Fornisci due esempi di verifica statica.
-4. Qual è la differenza fra test unitario e di sistema?
-5. Perché i valori limite sono importanti?
-6. Che cosa distingue un test pubblico da uno nascosto?
-7. Quali problemi può rilevare AddressSanitizer?
-8. Quali passaggi compongono il ciclo di debugging?
-9. Perché il logging può cambiare un bug concorrente?
-10. Che cosa significa una pipeline CI verde?
+<ol>
+  <li>Qual è la differenza tra verifica e validazione?</li>
+  <li>Che cos'è un oracolo del test?</li>
+  <li>Fornisci due esempi di verifica statica.</li>
+  <li>Qual è la differenza fra test unitario e di sistema?</li>
+  <li>Perché i valori limite sono importanti?</li>
+  <li>Che cosa distingue un test pubblico da uno nascosto?</li>
+  <li>Quali problemi può rilevare AddressSanitizer?</li>
+  <li>Quali passaggi compongono il ciclo di debugging?</li>
+  <li>Perché il logging può cambiare un bug concorrente?</li>
+  <li>Che cosa significa una pipeline CI verde?</li>
+</ol>
 
 ## Sintesi inclusiva
 
-- Verificare significa controllare la conformità; validare significa controllare l'utilità rispetto al bisogno.
-- I test derivano dai requisiti e hanno un risultato atteso.
-- La verifica statica non richiede la normale esecuzione del programma.
-- La verifica dinamica esegue codice e scenari.
-- I valori limite rivelano molti errori.
-- I test pubblici aiutano lo studente; quelli nascosti coprono casi aggiuntivi senza introdurre regole segrete.
-- Sanitizer e debugger producono evidenze, ma non sostituiscono una buona suite.
-- Il debugging usa riproduzione, ipotesi, prova, correzione e regressione.
-- Il software concorrente richiede ripetizioni, osservabilità e strumenti specifici.
-- La CI automatizza controlli noti; non garantisce da sola la qualità totale.
+<ul>
+  <li>Verificare significa controllare la conformità; validare significa controllare l'utilità rispetto al bisogno.</li>
+  <li>I test derivano dai requisiti e hanno un risultato atteso.</li>
+  <li>La verifica statica non richiede la normale esecuzione del programma.</li>
+  <li>La verifica dinamica esegue codice e scenari.</li>
+  <li>I valori limite rivelano molti errori.</li>
+  <li>I test pubblici aiutano lo studente; quelli nascosti coprono casi aggiuntivi senza introdurre regole segrete.</li>
+  <li>Sanitizer e debugger producono evidenze, ma non sostituiscono una buona suite.</li>
+  <li>Il debugging usa riproduzione, ipotesi, prova, correzione e regressione.</li>
+  <li>Il software concorrente richiede ripetizioni, osservabilità e strumenti specifici.</li>
+  <li>La CI automatizza controlli noti; non garantisce da sola la qualità totale.</li>
+</ul>
 
 ## Collegamento al modulo successivo
 
-Qualità e tecnologia hanno conseguenze sociali, legali e organizzative. Il modulo [Cittadinanza digitale](06_CITTADINANZA_DIGITALE.md) affronta licenze, privacy, sicurezza, collaborazione e uso responsabile dell'AI.
+<p align="justify">Qualità e tecnologia hanno conseguenze sociali, legali e organizzative. Il modulo <a href="06_CITTADINANZA_DIGITALE.md">Cittadinanza digitale</a> affronta licenze, privacy, sicurezza, collaborazione e uso responsabile dell'AI.</p>
 
 ## Fonti e note di revisione
 
-- Riferimento curricolare: indice pubblico del volume 2.
-- Esempi tecnici collegati ai runner, ai contratti e alle pratiche presenti nel repository, riformulati a scopo didattico.
-- Testi, esercizi e snippet sono originali.
-- Stato: `draft`; eseguire i comandi nell'ambiente didattico prima della pubblicazione.
+<ul>
+  <li>Riferimento curricolare: indice pubblico del volume 2.</li>
+  <li>Esempi tecnici collegati ai runner, ai contratti e alle pratiche presenti nel repository, riformulati a scopo didattico.</li>
+  <li>Testi, esercizi e snippet sono originali.</li>
+  <li>Stato: <code>draft</code>; eseguire i comandi nell'ambiente didattico prima della pubblicazione.</li>
+</ul>

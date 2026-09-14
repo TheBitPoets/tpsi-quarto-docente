@@ -7,83 +7,133 @@ curriculum_reference: tpsi4-curriculum-hoepli-volume-2
 transformation: original-course-material
 -->
 
-<!-- visual-orientation -->
-<details>
-<summary>&#128506; <strong>Orientamento della sezione</strong></summary>
-
-<p align="justify"><strong>Contesto:</strong> Integra licenze, provenienza, privacy, segreti, supply chain, accessibilita, valutazione e uso responsabile dell&#x27;AI nel progetto finale.</p>
-<p align="justify"><strong>Prerequisiti:</strong> Tutti i moduli precedenti e un progetto di gruppo in corso.</p>
-<p align="justify"><strong>Obiettivo:</strong> Applicare responsabilita tecnica e digitale a fonti, dati, repository, review, dipendenze, AI e valutazione.</p>
-<p align="justify"><strong>Prossimo passo:</strong> Completare un progetto concorrente documentato, testato e accompagnato da manifest di fonti e policy.</p>
-
-</details>
-
 ## In questa unità impareremo
 
-Al termine dell'unità lo studente dovrà saper:
+<!-- visual-orientation -->
+<table align="center">
+<tr>
+<td>
+<details>
+<summary>&#129517; <strong>Orientamento della sezione</strong></summary>
 
-- distinguere accesso a una risorsa e diritto di copiarla o redistribuirla;
-- registrare autore, fonte, licenza, versione e trasformazioni;
-- applicare minimizzazione, separazione dei ruoli e protezione dei dati scolastici;
-- riconoscere segreti, dati personali e informazioni che non devono entrare nei repository;
-- collaborare con issue, review e segnalazioni rispettose;
-- usare strumenti AI dichiarando limiti, verifiche e responsabilità umana;
-- ragionare su sicurezza della supply chain, dipendenze e artefatti;
-- progettare contenuti accessibili e inclusivi;
-- valutare l'impatto di automazione e metriche sugli studenti.
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128506;</span> Contesto:</strong>
+Integra licenze, provenienza, privacy, segreti, supply chain, accessibilita, valutazione e uso responsabile dell&#x27;AI nel progetto finale.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128736;</span> Prerequisiti:</strong>
+Tutti i moduli precedenti e un progetto di gruppo in corso.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#127919;</span> Obiettivi:</strong>
+Applicare responsabilita tecnica e digitale a fonti, dati, repository, review, dipendenze, AI e valutazione.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128257;</span> Richiamo:</strong>
+Riprendere provenienza, ruoli, test, documentazione e policy di aiuto.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128064;</span> Anticipazione:</strong>
+Conclude con demo, relazione, evidenze e valutazione del progetto integrato.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#10145;</span> Prossimo passo:</strong>
+Completare un progetto concorrente documentato, testato e accompagnato da manifest di fonti e policy.
+</p>
+
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128279;</span> Rimando:</strong>
+Modulo originale; manifest del pacchetto e policy della piattaforma. <a href="#fonti-e-note-di-revisione">Fonti e note della lezione</a>; <a href="COVERAGE.md">matrice di copertura</a>.
+</p>
+
+</details>
+</td>
+</tr>
+</table>
+
+<p align="justify">Al termine dell'unità lo studente dovrà saper:</p>
+
+<ul>
+  <li>distinguere accesso a una risorsa e diritto di copiarla o redistribuirla;</li>
+  <li>registrare autore, fonte, licenza, versione e trasformazioni;</li>
+  <li>applicare minimizzazione, separazione dei ruoli e protezione dei dati scolastici;</li>
+  <li>riconoscere segreti, dati personali e informazioni che non devono entrare nei repository;</li>
+  <li>collaborare con issue, review e segnalazioni rispettose;</li>
+  <li>usare strumenti AI dichiarando limiti, verifiche e responsabilità umana;</li>
+  <li>ragionare su sicurezza della supply chain, dipendenze e artefatti;</li>
+  <li>progettare contenuti accessibili e inclusivi;</li>
+  <li>valutare l'impatto di automazione e metriche sugli studenti.</li>
+</ul>
 
 ## Prerequisiti
 
-Sono utili:
+<p align="justify">Sono utili:</p>
 
-- fonti, repository e controllo di versione;
-- ruoli docente/studente/amministratore;
-- activity, test e report;
-- concetti di autenticazione, autorizzazione e log;
-- capacità di distinguere fatti, ipotesi e decisioni.
+<ul>
+  <li>fonti, repository e controllo di versione;</li>
+  <li>ruoli docente/studente/amministratore;</li>
+  <li>activity, test e report;</li>
+  <li>concetti di autenticazione, autorizzazione e log;</li>
+  <li>capacità di distinguere fatti, ipotesi e decisioni.</li>
+</ul>
 
 ## Problema iniziale: posso copiare tutto se il repository è privato?
 
-No. La privacy del repository controlla chi può accedere tramite la piattaforma, ma non modifica automaticamente copyright, licenze o condizioni d'uso della fonte.
+<p align="justify">No. La privacy del repository controlla chi può accedere tramite la piattaforma, ma non modifica automaticamente copyright, licenze o condizioni d'uso della fonte.</p>
 
-Bisogna distinguere:
+<p align="justify">Bisogna distinguere:</p>
 
-- **possesso o accesso**: posso leggere la risorsa;
-- **uso personale**: posso usarla entro certi limiti;
-- **riproduzione**: posso crearne copie;
-- **modifica**: posso produrre opere derivate;
-- **redistribuzione**: posso consegnarla ad altri;
-- **pubblicazione**: posso renderla disponibile a un pubblico;
-- **uso commerciale**: posso incorporarla in un prodotto o servizio a pagamento.
+<ul>
+  <li><strong>possesso o accesso</strong>: posso leggere la risorsa;</li>
+  <li><strong>uso personale</strong>: posso usarla entro certi limiti;</li>
+  <li><strong>riproduzione</strong>: posso crearne copie;</li>
+  <li><strong>modifica</strong>: posso produrre opere derivate;</li>
+  <li><strong>redistribuzione</strong>: posso consegnarla ad altri;</li>
+  <li><strong>pubblicazione</strong>: posso renderla disponibile a un pubblico;</li>
+  <li><strong>uso commerciale</strong>: posso incorporarla in un prodotto o servizio a pagamento.</li>
+</ul>
 
-Le autorizzazioni possono essere diverse per ciascuna azione. In caso di dubbio si conserva soltanto il riferimento e si produce materiale originale.
+<p align="justify">Le autorizzazioni possono essere diverse per ciascuna azione. In caso di dubbio si conserva soltanto il riferimento e si produce materiale originale.</p>
 
-Questa unità offre criteri didattici e tecnici; non sostituisce una consulenza legale o le condizioni specifiche della licenza.
+<p align="justify">Questa unità offre criteri didattici e tecnici; non sostituisce una consulenza legale o le condizioni specifiche della licenza.</p>
 
 ## Copyright, licenza e pubblico dominio
 
-Il copyright protegge automaticamente molte opere creative. Una licenza concede alcuni diritti secondo condizioni definite.
+<p align="justify">Il copyright protegge automaticamente molte opere creative. Una licenza concede alcuni diritti secondo condizioni definite.</p>
 
-Domande da porre prima di importare una risorsa:
+<p align="justify">Domande da porre prima di importare una risorsa:</p>
 
-1. Chi è l'autore o titolare?
-2. Qual è la licenza?
-3. La licenza copre copia, modifica e redistribuzione?
-4. Richiede attribuzione?
-5. Impone di condividere con la stessa licenza?
-6. Limita uso commerciale o opere derivate?
-7. La risorsa contiene elementi con licenze diverse?
-8. La piattaforma di accesso aggiunge condizioni contrattuali?
-9. La versione è identificabile?
-10. Possiamo rimuovere o aggiornare la risorsa se cambia lo stato?
+<ol>
+  <li>Chi è l'autore o titolare?</li>
+  <li>Qual è la licenza?</li>
+  <li>La licenza copre copia, modifica e redistribuzione?</li>
+  <li>Richiede attribuzione?</li>
+  <li>Impone di condividere con la stessa licenza?</li>
+  <li>Limita uso commerciale o opere derivate?</li>
+  <li>La risorsa contiene elementi con licenze diverse?</li>
+  <li>La piattaforma di accesso aggiunge condizioni contrattuali?</li>
+  <li>La versione è identificabile?</li>
+  <li>Possiamo rimuovere o aggiornare la risorsa se cambia lo stato?</li>
+</ol>
 
-L'assenza di una licenza esplicita non significa libertà di riuso.
+<p align="justify">L'assenza di una licenza esplicita non significa libertà di riuso.</p>
 
 ## Provenienza
 
-La provenienza descrive da dove deriva un'informazione e come è stata trasformata.
+<table align="center">
+<tr><td>
+<p align="justify">
+<strong><span style="font-size: 1.15em;">&#128214;</span> Definizione:</strong>
+La provenienza descrive da dove deriva un'informazione e come è stata trasformata.</p>
+</td></tr>
+</table>
 
-Campi utili:
+<p align="justify">Campi utili:</p>
 
 ```text
 source_id
@@ -102,14 +152,16 @@ stato
 
 ### Quattro ruoli distinti
 
-Nel pacchetto TPSI:
+<p align="justify">Nel pacchetto TPSI:</p>
 
-- il libro adottato è riferimento curricolare;
-- `LINUX_PROGRAMMING.md` è fonte tecnica locale;
-- i nuovi moduli sono elaborazione originale;
-- il docente è revisore e responsabile della pubblicazione alla classe.
+<ul>
+  <li>il libro adottato è riferimento curricolare;</li>
+  <li><code>LINUX_PROGRAMMING.md</code> è fonte tecnica locale;</li>
+  <li>i nuovi moduli sono elaborazione originale;</li>
+  <li>il docente è revisore e responsabile della pubblicazione alla classe.</li>
+</ul>
 
-Dichiarare questa distinzione evita di attribuire al libro un testo che non contiene e di presentare un contenuto AI come fonte primaria.
+<p align="justify">Dichiarare questa distinzione evita di attribuire al libro un testo che non contiene e di presentare un contenuto AI come fonte primaria.</p>
 
 <!-- figure:06-provenienza -->
 <p align="center">
@@ -119,38 +171,42 @@ Dichiarare questa distinzione evita di attribuire al libro un testo che non cont
 
 ## Citare non significa copiare integralmente
 
-Una citazione breve e pertinente può servire a commentare o discutere. Una raccolta sistematica di estratti che ricostruisce l'opera può diventare una riproduzione sostanziale.
+<p align="justify">Una citazione breve e pertinente può servire a commentare o discutere. Una raccolta sistematica di estratti che ricostruisce l'opera può diventare una riproduzione sostanziale.</p>
 
-Strategia sicura per il corso:
+<p align="justify">Strategia sicura per il corso:</p>
 
-- salvare il riferimento bibliografico;
-- indicare capitolo o pagina per il docente;
-- scrivere la spiegazione con parole e struttura proprie;
-- creare esempi e tracce nuove;
-- collegare eventuali risorse ufficiali senza incorporarle quando la licenza non è chiara;
-- conservare nel manifest il tipo di relazione con la fonte.
+<ul>
+  <li>salvare il riferimento bibliografico;</li>
+  <li>indicare capitolo o pagina per il docente;</li>
+  <li>scrivere la spiegazione con parole e struttura proprie;</li>
+  <li>creare esempi e tracce nuove;</li>
+  <li>collegare eventuali risorse ufficiali senza incorporarle quando la licenza non è chiara;</li>
+  <li>conservare nel manifest il tipo di relazione con la fonte.</li>
+</ul>
 
 ## Dati personali nella scuola
 
-Un dato personale può identificare direttamente o indirettamente una persona. In un contesto scolastico possono essere coinvolti:
+<p align="justify">Un dato personale può identificare direttamente o indirettamente una persona. In un contesto scolastico possono essere coinvolti:</p>
 
-- nome e account;
-- email;
-- classe;
-- risultati;
-- tentativi;
-- errori;
-- richieste di aiuto;
-- tempi di lavoro;
-- feedback;
-- bisogni educativi;
-- indirizzi IP o identificatori tecnici.
+<ul>
+  <li>nome e account;</li>
+  <li>email;</li>
+  <li>classe;</li>
+  <li>risultati;</li>
+  <li>tentativi;</li>
+  <li>errori;</li>
+  <li>richieste di aiuto;</li>
+  <li>tempi di lavoro;</li>
+  <li>feedback;</li>
+  <li>bisogni educativi;</li>
+  <li>indirizzi IP o identificatori tecnici.</li>
+</ul>
 
-Non tutti i dati hanno lo stesso livello di sensibilità, ma devono essere raccolti con uno scopo definito.
+<p align="justify">Non tutti i dati hanno lo stesso livello di sensibilità, ma devono essere raccolti con uno scopo definito.</p>
 
 ## Minimizzazione dei dati
 
-Principio pratico:
+<p align="justify">Principio pratico:</p>
 
 ```text
 raccogli soltanto ciò che serve
@@ -158,35 +214,74 @@ per il tempo necessario
 con accesso limitato
 ```
 
-Domande:
+<p align="justify">Domande:</p>
 
-- Serve davvero il nome completo o basta un ID?
-- Il prompt di aiuto deve contenere dati personali?
-- Quanto tempo conserviamo i report?
-- Chi può vedere i dettagli dei test?
-- I log contengono file o token?
-- I dati possono essere aggregati o pseudonimizzati?
+<ul>
+  <li>Serve davvero il nome completo o basta un ID?</li>
+  <li>Il prompt di aiuto deve contenere dati personali?</li>
+  <li>Quanto tempo conserviamo i report?</li>
+  <li>Chi può vedere i dettagli dei test?</li>
+  <li>I log contengono file o token?</li>
+  <li>I dati possono essere aggregati o pseudonimizzati?</li>
+</ul>
 
-Una funzionalità tecnicamente possibile non è automaticamente necessaria.
+<p align="justify">Una funzionalità tecnicamente possibile non è automaticamente necessaria.</p>
 
 ## Ruoli e autorizzazioni
 
-Autenticazione e autorizzazione sono diverse:
+<p align="justify">Autenticazione e autorizzazione sono diverse:</p>
 
-- autenticazione: chi sei?
-- autorizzazione: che cosa puoi fare?
+<ul>
+  <li>autenticazione: chi sei?</li>
+  <li>autorizzazione: che cosa puoi fare?</li>
+</ul>
 
-Esempio di matrice:
+<p align="justify">Esempio di matrice:</p>
 
-| Operazione | Studente | Docente | Amministratore |
-| --- | --- | --- | --- |
-| leggere propria consegna | sì | sì | secondo ruolo |
-| leggere soluzione docente | no | sì | secondo necessità |
-| modificare activity | no | sì | secondo policy |
-| vedere risultati di altri studenti | no | classe assegnata | secondo policy |
-| configurare provider | no | limitato | sì |
+<table align="center">
+<thead>
+<tr>
+<th>Operazione</th>
+<th>Studente</th>
+<th>Docente</th>
+<th>Amministratore</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>leggere propria consegna</td>
+<td>sì</td>
+<td>sì</td>
+<td>secondo ruolo</td>
+</tr>
+<tr>
+<td>leggere soluzione docente</td>
+<td>no</td>
+<td>sì</td>
+<td>secondo necessità</td>
+</tr>
+<tr>
+<td>modificare activity</td>
+<td>no</td>
+<td>sì</td>
+<td>secondo policy</td>
+</tr>
+<tr>
+<td>vedere risultati di altri studenti</td>
+<td>no</td>
+<td>classe assegnata</td>
+<td>secondo policy</td>
+</tr>
+<tr>
+<td>configurare provider</td>
+<td>no</td>
+<td>limitato</td>
+<td>sì</td>
+</tr>
+</tbody>
+</table>
 
-La UI nascosta non è un controllo di autorizzazione. Il server deve applicare la regola.
+<p align="justify">La UI nascosta non è un controllo di autorizzazione. Il server deve applicare la regola.</p>
 
 <!-- figure:06-accessi -->
 <p align="center">
@@ -196,74 +291,86 @@ La UI nascosta non è un controllo di autorizzazione. Il server deve applicare l
 
 ## Segreti
 
-Sono segreti:
+<p align="justify">Sono segreti:</p>
 
-- password;
-- token API;
-- chiavi private;
-- cookie di sessione;
-- codici temporanei;
-- credenziali cloud;
-- stringhe di connessione sensibili.
+<ul>
+  <li>password;</li>
+  <li>token API;</li>
+  <li>chiavi private;</li>
+  <li>cookie di sessione;</li>
+  <li>codici temporanei;</li>
+  <li>credenziali cloud;</li>
+  <li>stringhe di connessione sensibili.</li>
+</ul>
 
-Non devono comparire in:
+<p align="justify">Non devono comparire in:</p>
 
-- repository;
-- issue;
-- screenshot;
-- log;
-- prompt inviati senza necessità;
-- file di esempio realistici;
-- report pubblici.
+<ul>
+  <li>repository;</li>
+  <li>issue;</li>
+  <li>screenshot;</li>
+  <li>log;</li>
+  <li>prompt inviati senza necessità;</li>
+  <li>file di esempio realistici;</li>
+  <li>report pubblici.</li>
+</ul>
 
-Se un segreto viene pubblicato, cancellarlo dall'ultimo commit non basta. Va revocato o ruotato e può essere necessario rimuoverlo dalla storia.
+<p align="justify">Se un segreto viene pubblicato, cancellarlo dall'ultimo commit non basta. Va revocato o ruotato e può essere necessario rimuoverlo dalla storia.</p>
 
 ## Supply chain del software
 
-Un progetto dipende da:
+<p align="justify">Un progetto dipende da:</p>
 
-- librerie;
-- immagini container;
-- compilatori;
-- action CI;
-- plugin;
-- repository;
-- pacchetti di sistema;
-- modelli e provider AI.
+<ul>
+  <li>librerie;</li>
+  <li>immagini container;</li>
+  <li>compilatori;</li>
+  <li>action CI;</li>
+  <li>plugin;</li>
+  <li>repository;</li>
+  <li>pacchetti di sistema;</li>
+  <li>modelli e provider AI.</li>
+</ul>
 
-Rischi:
+<p align="justify">Rischi:</p>
 
-- dipendenza compromessa;
-- versione non riproducibile;
-- pacchetto con nome simile;
-- script di installazione non verificato;
-- action referenziata da un tag modificabile;
-- artefatto diverso da quello testato;
-- licenza incompatibile.
+<ul>
+  <li>dipendenza compromessa;</li>
+  <li>versione non riproducibile;</li>
+  <li>pacchetto con nome simile;</li>
+  <li>script di installazione non verificato;</li>
+  <li>action referenziata da un tag modificabile;</li>
+  <li>artefatto diverso da quello testato;</li>
+  <li>licenza incompatibile.</li>
+</ul>
 
-Contromisure:
+<p align="justify">Contromisure:</p>
 
-- versioni e digest;
-- fonti ufficiali;
-- aggiornamenti intenzionali;
-- revisione delle dipendenze;
-- privilegi minimi;
-- separazione fra build non fidata e pubblicazione;
-- prova dell'artefatto che verrà distribuito;
-- possibilità di rollback.
+<ul>
+  <li>versioni e digest;</li>
+  <li>fonti ufficiali;</li>
+  <li>aggiornamenti intenzionali;</li>
+  <li>revisione delle dipendenze;</li>
+  <li>privilegi minimi;</li>
+  <li>separazione fra build non fidata e pubblicazione;</li>
+  <li>prova dell'artefatto che verrà distribuito;</li>
+  <li>possibilità di rollback.</li>
+</ul>
 
 ## Responsabilità nella code review
 
-La review protegge utenti e progetto. Deve essere:
+<p align="justify">La review protegge utenti e progetto. Deve essere:</p>
 
-- specifica;
-- basata su evidenze;
-- rispettosa;
-- proporzionata al rischio;
-- tracciabile;
-- aperta alla discussione.
+<ul>
+  <li>specifica;</li>
+  <li>basata su evidenze;</li>
+  <li>rispettosa;</li>
+  <li>proporzionata al rischio;</li>
+  <li>tracciabile;</li>
+  <li>aperta alla discussione.</li>
+</ul>
 
-Esempio:
+<p align="justify">Esempio:</p>
 
 ```text
 Il test nascosto viene copiato perché visibility non è controllata in questo
@@ -271,44 +378,50 @@ ramo. Questo può esporre la soluzione agli studenti. Propongo una regressione
 sullo scaffold prima del merge.
 ```
 
-La persona non coincide con il difetto. Correggere il codice non richiede umiliare l'autore.
+<p align="justify">La persona non coincide con il difetto. Correggere il codice non richiede umiliare l'autore.</p>
 
 ## Segnalazione responsabile delle vulnerabilità
 
-Quando si individua una vulnerabilità:
+<p align="justify">Quando si individua una vulnerabilità:</p>
 
-- non pubblicare dettagli sfruttabili senza necessità;
-- raccogliere evidenze minime;
-- contattare il canale previsto;
-- non accedere a dati altrui per dimostrare il problema;
-- descrivere impatto e condizioni;
-- collaborare alla verifica della correzione;
-- rispettare leggi e policy.
+<ul>
+  <li>non pubblicare dettagli sfruttabili senza necessità;</li>
+  <li>raccogliere evidenze minime;</li>
+  <li>contattare il canale previsto;</li>
+  <li>non accedere a dati altrui per dimostrare il problema;</li>
+  <li>descrivere impatto e condizioni;</li>
+  <li>collaborare alla verifica della correzione;</li>
+  <li>rispettare leggi e policy.</li>
+</ul>
 
-In un laboratorio scolastico, le prove devono usare dati e ambienti predisposti.
+<p align="justify">In un laboratorio scolastico, le prove devono usare dati e ambienti predisposti.</p>
 
 ## Uso responsabile dell'AI
 
-Un modello AI può aiutare a:
+<p align="justify">Un modello AI può aiutare a:</p>
 
-- proporre esercizi;
-- spiegare un errore;
-- generare una bozza;
-- confrontare soluzioni;
-- creare test da revisionare;
-- adattare il linguaggio.
+<ul>
+  <li>proporre esercizi;</li>
+  <li>spiegare un errore;</li>
+  <li>generare una bozza;</li>
+  <li>confrontare soluzioni;</li>
+  <li>creare test da revisionare;</li>
+  <li>adattare il linguaggio.</li>
+</ul>
 
-Non deve essere trattato come:
+<p align="justify">Non deve essere trattato come:</p>
 
-- fonte automatica di fatti;
-- giudice infallibile;
-- sostituto della revisione docente;
-- autorizzazione a copiare contenuti protetti;
-- luogo in cui inviare segreti o dati personali senza base e protezioni.
+<ul>
+  <li>fonte automatica di fatti;</li>
+  <li>giudice infallibile;</li>
+  <li>sostituto della revisione docente;</li>
+  <li>autorizzazione a copiare contenuti protetti;</li>
+  <li>luogo in cui inviare segreti o dati personali senza base e protezioni.</li>
+</ul>
 
 ## Provenienza delle trasformazioni AI
 
-Registrare almeno:
+<p align="justify">Registrare almeno:</p>
 
 ```text
 provider/modello
@@ -321,275 +434,344 @@ test eseguiti
 stato di approvazione
 ```
 
-Il docente deve poter distinguere:
+<p align="justify">Il docente deve poter distinguere:</p>
 
-- contenuto originale verificato;
-- bozza AI non approvata;
-- estratto da fonte;
-- soluzione docente;
-- feedback automatico.
+<ul>
+  <li>contenuto originale verificato;</li>
+  <li>bozza AI non approvata;</li>
+  <li>estratto da fonte;</li>
+  <li>soluzione docente;</li>
+  <li>feedback automatico.</li>
+</ul>
 
 ## Policy di aiuto allo studente
 
-Possibili modalità:
+<p align="justify">Possibili modalità:</p>
 
-- senza aiuto;
-- sola teoria/dispense;
-- feedback tecnico su compilazione e test;
-- suggerimento graduato;
-- AI assisted entro budget e con registrazione;
-- studio guidato.
+<ul>
+  <li>senza aiuto;</li>
+  <li>sola teoria/dispense;</li>
+  <li>feedback tecnico su compilazione e test;</li>
+  <li>suggerimento graduato;</li>
+  <li>AI assisted entro budget e con registrazione;</li>
+  <li>studio guidato.</li>
+</ul>
 
-La policy deve essere visibile prima dell'attività. Un aiuto autorizzato non deve diventare una penalizzazione nascosta.
+<p align="justify">La policy deve essere visibile prima dell'attività. Un aiuto autorizzato non deve diventare una penalizzazione nascosta.</p>
 
 ## Valutazione e automazione
 
-Un punteggio automatico misura ciò che il test osserva. Può non misurare:
+<p align="justify">Un punteggio automatico misura ciò che il test osserva. Può non misurare:</p>
 
-- comprensione;
-- qualità della progettazione;
-- collaborazione;
-- chiarezza;
-- originalità;
-- correttezza in scenari non coperti.
+<ul>
+  <li>comprensione;</li>
+  <li>qualità della progettazione;</li>
+  <li>collaborazione;</li>
+  <li>chiarezza;</li>
+  <li>originalità;</li>
+  <li>correttezza in scenari non coperti.</li>
+</ul>
 
-La rubrica integra i test. Il docente mantiene responsabilità e possibilità di revisione.
+<p align="justify">La rubrica integra i test. Il docente mantiene responsabilità e possibilità di revisione.</p>
 
-Attenzione alle metriche:
+<p align="justify">Attenzione alle metriche:</p>
 
-- tempo online non equivale a impegno;
-- numero di tentativi non equivale a incompetenza;
-- richieste di aiuto non equivalgono a scorrettezza;
-- velocità non equivale a comprensione.
+<ul>
+  <li>tempo online non equivale a impegno;</li>
+  <li>numero di tentativi non equivale a incompetenza;</li>
+  <li>richieste di aiuto non equivalgono a scorrettezza;</li>
+  <li>velocità non equivale a comprensione.</li>
+</ul>
 
 ## Accessibilità e inclusione
 
-Un contenuto accessibile dovrebbe:
+<p align="justify">Un contenuto accessibile dovrebbe:</p>
 
-- usare heading gerarchici;
-- avere testo alternativo per immagini;
-- non affidarsi soltanto al colore;
-- usare linguaggio chiaro;
-- offrire sintesi e mappe;
-- rendere copiabili comandi e codice;
-- dichiarare prerequisiti;
-- evitare animazioni o tempi non necessari;
-- funzionare da tastiera;
-- mantenere contrasto e dimensioni leggibili.
+<ul>
+  <li>usare heading gerarchici;</li>
+  <li>avere testo alternativo per immagini;</li>
+  <li>non affidarsi soltanto al colore;</li>
+  <li>usare linguaggio chiaro;</li>
+  <li>offrire sintesi e mappe;</li>
+  <li>rendere copiabili comandi e codice;</li>
+  <li>dichiarare prerequisiti;</li>
+  <li>evitare animazioni o tempi non necessari;</li>
+  <li>funzionare da tastiera;</li>
+  <li>mantenere contrasto e dimensioni leggibili.</li>
+</ul>
 
-L'adattamento non consiste nel ridurre sempre gli obiettivi. Può offrire modalità diverse per raggiungerli e dimostrarli.
+<p align="justify">L'adattamento non consiste nel ridurre sempre gli obiettivi. Può offrire modalità diverse per raggiungerli e dimostrarli.</p>
 
 ## Affidabilità delle informazioni
 
-Prima di usare una fonte tecnica:
+<p align="justify">Prima di usare una fonte tecnica:</p>
 
-1. identifica autore e organizzazione;
-2. controlla data e versione;
-3. preferisci documentazione ufficiale o fonte primaria;
-4. confronta affermazioni importanti;
-5. separa fatti, opinioni e inferenze;
-6. verifica esempi nel contesto reale;
-7. registra ciò che resta incerto.
+<ol>
+  <li>identifica autore e organizzazione;</li>
+  <li>controlla data e versione;</li>
+  <li>preferisci documentazione ufficiale o fonte primaria;</li>
+  <li>confronta affermazioni importanti;</li>
+  <li>separa fatti, opinioni e inferenze;</li>
+  <li>verifica esempi nel contesto reale;</li>
+  <li>registra ciò che resta incerto.</li>
+</ol>
 
-Un articolo popolare può essere utile per orientarsi, ma una specifica o documentazione ufficiale è più adatta per un contratto preciso.
+<p align="justify">Un articolo popolare può essere utile per orientarsi, ma una specifica o documentazione ufficiale è più adatta per un contratto preciso.</p>
 
 ## Impatto ambientale e uso delle risorse
 
-Anche il software usa energia, hardware, rete e storage.
+<p align="justify">Anche il software usa energia, hardware, rete e storage.</p>
 
-Scelte da valutare:
+<p align="justify">Scelte da valutare:</p>
 
-- ricostruzioni CI inutili;
-- immagini container enormi;
-- dati conservati senza scopo;
-- modelli AI sproporzionati al compito;
-- dispositivi sostituiti prematuramente;
-- ambienti di laboratorio sempre accesi;
-- duplicazione di artefatti.
+<ul>
+  <li>ricostruzioni CI inutili;</li>
+  <li>immagini container enormi;</li>
+  <li>dati conservati senza scopo;</li>
+  <li>modelli AI sproporzionati al compito;</li>
+  <li>dispositivi sostituiti prematuramente;</li>
+  <li>ambienti di laboratorio sempre accesi;</li>
+  <li>duplicazione di artefatti.</li>
+</ul>
 
-Ottimizzare non significa sacrificare sicurezza o accessibilità. Significa misurare e ridurre sprechi senza spostare il costo sugli utenti.
+<p align="justify">Ottimizzare non significa sacrificare sicurezza o accessibilità. Significa misurare e ridurre sprechi senza spostare il costo sugli utenti.</p>
 
 ## Errori frequenti
 
 ### «È online, quindi è libero»
 
-La disponibilità pubblica non equivale a licenza di copia.
+<p align="justify">La disponibilità pubblica non equivale a licenza di copia.</p>
 
 ### «È per la scuola, quindi posso redistribuire tutto»
 
-Le eccezioni e licenze hanno limiti. Va verificato il caso concreto.
+<p align="justify">Le eccezioni e licenze hanno limiti. Va verificato il caso concreto.</p>
 
 ### «Tolgo il nome e il dato non è più personale»
 
-Altri campi possono rendere la persona identificabile.
+<p align="justify">Altri campi possono rendere la persona identificabile.</p>
 
 ### «Il token è in un repository privato»
 
-Resta un segreto condiviso, copiabile, loggabile e potenzialmente esposto.
+<p align="justify">Resta un segreto condiviso, copiabile, loggabile e potenzialmente esposto.</p>
 
 ### «La CI è verde, quindi è sicuro»
 
-Sono passati soltanto i controlli configurati.
+<p align="justify">Sono passati soltanto i controlli configurati.</p>
 
 ### «Lo ha detto l'AI»
 
-Serve una fonte o una verifica indipendente.
+<p align="justify">Serve una fonte o una verifica indipendente.</p>
 
 ### «Più dati migliorano sempre la didattica»
 
-Dati inutili aumentano rischio e possono produrre interpretazioni scorrette.
+<p align="justify">Dati inutili aumentano rischio e possono produrre interpretazioni scorrette.</p>
 
 ### «Accessibilità significa materiale più facile»
 
-Significa rimuovere barriere e offrire modalità adeguate, non necessariamente ridurre la competenza attesa.
+<p align="justify">Significa rimuovere barriere e offrire modalità adeguate, non necessariamente ridurre la competenza attesa.</p>
 
 ## Esercizi graduati
 
 ### Livello A — riconosci
 
-1. Classifica dieci elementi come dato personale, segreto, dato pubblico o informazione da verificare.
-2. Individua licenza e autore di tre risorse open source.
-3. Trova dati sensibili in un log simulato.
-4. Distingui autenticazione e autorizzazione.
+<ol>
+  <li>Classifica dieci elementi come dato personale, segreto, dato pubblico o informazione da verificare.</li>
+  <li>Individua licenza e autore di tre risorse open source.</li>
+  <li>Trova dati sensibili in un log simulato.</li>
+  <li>Distingui autenticazione e autorizzazione.</li>
+</ol>
 
 ### Livello B — correggi
 
-1. Riscrivi un esempio che contiene una chiave API reale.
-2. Aggiungi provenienza a una lezione senza fonti.
-3. Migliora una activity che non dichiara la policy di aiuto.
-4. Rendi accessibile una pagina che usa soltanto colori e immagini senza testo alternativo.
+<ol>
+  <li>Riscrivi un esempio che contiene una chiave API reale.</li>
+  <li>Aggiungi provenienza a una lezione senza fonti.</li>
+  <li>Migliora una activity che non dichiara la policy di aiuto.</li>
+  <li>Rendi accessibile una pagina che usa soltanto colori e immagini senza testo alternativo.</li>
+</ol>
 
 ### Livello C — progetta
 
-1. Costruisci una matrice ruoli/permessi per dashboard docente e studente.
-2. Definisci una retention policy per report e richieste di aiuto.
-3. Crea un manifest di fonti con licenza, versione e stato.
-4. Progetta un flusso di segnalazione responsabile per una vulnerabilità.
+<ol>
+  <li>Costruisci una matrice ruoli/permessi per dashboard docente e studente.</li>
+  <li>Definisci una retention policy per report e richieste di aiuto.</li>
+  <li>Crea un manifest di fonti con licenza, versione e stato.</li>
+  <li>Progetta un flusso di segnalazione responsabile per una vulnerabilità.</li>
+</ol>
 
 ### Livello D — analizza
 
-1. Valuta rischi di una dipendenza non fissata a versione.
-2. Analizza un prompt che contiene dati scolastici e proponi minimizzazione.
-3. Individua bias possibili in una metrica di valutazione automatica.
-4. Verifica se una copia di materiali editoriali può essere sostituita da contenuto originale e locator.
+<ol>
+  <li>Valuta rischi di una dipendenza non fissata a versione.</li>
+  <li>Analizza un prompt che contiene dati scolastici e proponi minimizzazione.</li>
+  <li>Individua bias possibili in una metrica di valutazione automatica.</li>
+  <li>Verifica se una copia di materiali editoriali può essere sostituita da contenuto originale e locator.</li>
+</ol>
 
 ### Livello E — mini-progetto
 
-Esegui un audit di un piccolo repository:
+<p align="justify">Esegui un audit di un piccolo repository:</p>
 
-- fonti e licenze;
-- segreti;
-- dati personali;
-- dipendenze;
-- permessi;
-- accessibilità;
-- policy AI;
-- retention;
-- rischi e azioni prioritarie.
+<ul>
+  <li>fonti e licenze;</li>
+  <li>segreti;</li>
+  <li>dati personali;</li>
+  <li>dipendenze;</li>
+  <li>permessi;</li>
+  <li>accessibilità;</li>
+  <li>policy AI;</li>
+  <li>retention;</li>
+  <li>rischi e azioni prioritarie.</li>
+</ul>
 
 ### Livello F — progetto integrato
 
-Progetta la governance di un knowledge hub didattico federato:
+<p align="justify">Progetta la governance di un knowledge hub didattico federato:</p>
 
-- ruoli;
-- provider;
-- provenienza;
-- versioni;
-- licenze;
-- revisione;
-- rimozione;
-- privacy;
-- audit;
-- uso AI;
-- pubblicazione e rollback.
+<ul>
+  <li>ruoli;</li>
+  <li>provider;</li>
+  <li>provenienza;</li>
+  <li>versioni;</li>
+  <li>licenze;</li>
+  <li>revisione;</li>
+  <li>rimozione;</li>
+  <li>privacy;</li>
+  <li>audit;</li>
+  <li>uso AI;</li>
+  <li>pubblicazione e rollback.</li>
+</ul>
 
 ## Laboratorio 1 — audit di provenienza
 
-Scegli una lezione e costruisci una tabella:
+<p align="justify">Scegli una lezione e costruisci una tabella:</p>
 
-| Blocco | Fonte | Tipo di relazione | Licenza | Trasformazione | Stato |
-| --- | --- | --- | --- | --- | --- |
-| definizione | documentazione ufficiale | sintesi | verificata | parafrasi | reviewed |
-| esempio | originale | nuova creazione | progetto | nessuna | draft |
-| immagine | sito esterno | collegamento | da verificare | nessuna | blocked |
+<table align="center">
+<thead>
+<tr>
+<th>Blocco</th>
+<th>Fonte</th>
+<th>Tipo di relazione</th>
+<th>Licenza</th>
+<th>Trasformazione</th>
+<th>Stato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>definizione</td>
+<td>documentazione ufficiale</td>
+<td>sintesi</td>
+<td>verificata</td>
+<td>parafrasi</td>
+<td>reviewed</td>
+</tr>
+<tr>
+<td>esempio</td>
+<td>originale</td>
+<td>nuova creazione</td>
+<td>progetto</td>
+<td>nessuna</td>
+<td>draft</td>
+</tr>
+<tr>
+<td>immagine</td>
+<td>sito esterno</td>
+<td>collegamento</td>
+<td>da verificare</td>
+<td>nessuna</td>
+<td>blocked</td>
+</tr>
+</tbody>
+</table>
 
-Sostituisci o blocca ogni elemento privo di base chiara.
+<p align="justify">Sostituisci o blocca ogni elemento privo di base chiara.</p>
 
 ## Laboratorio 2 — repository senza segreti
 
-In un repository di prova:
+<p align="justify">In un repository di prova:</p>
 
-1. configura file `.env.example` senza valori reali;
-2. ignora `.env`;
-3. usa secret del sistema CI;
-4. simula un segreto pubblicato;
-5. descrivi revoca, rotazione e pulizia della storia;
-6. aggiungi un controllo automatico.
+<ol>
+  <li>configura file <code>.env.example</code> senza valori reali;</li>
+  <li>ignora <code>.env</code>;</li>
+  <li>usa secret del sistema CI;</li>
+  <li>simula un segreto pubblicato;</li>
+  <li>descrivi revoca, rotazione e pulizia della storia;</li>
+  <li>aggiungi un controllo automatico.</li>
+</ol>
 
-Non usare credenziali reali.
+<p align="justify">Non usare credenziali reali.</p>
 
 ## Laboratorio 3 — policy AI per una verifica
 
-Definisci:
+<p align="justify">Definisci:</p>
 
-- aiuti ammessi;
-- aiuti vietati;
-- dati che non devono essere inviati;
-- budget;
-- tracciamento;
-- feedback visibile;
-- responsabilità docente;
-- procedura in caso di errore del provider.
+<ul>
+  <li>aiuti ammessi;</li>
+  <li>aiuti vietati;</li>
+  <li>dati che non devono essere inviati;</li>
+  <li>budget;</li>
+  <li>tracciamento;</li>
+  <li>feedback visibile;</li>
+  <li>responsabilità docente;</li>
+  <li>procedura in caso di errore del provider.</li>
+</ul>
 
-Applica la policy a una activity e verifica che studente e docente vedano informazioni coerenti.
+<p align="justify">Applica la policy a una activity e verifica che studente e docente vedano informazioni coerenti.</p>
 
 ## Laboratorio 4 — accessibilità del contenuto
 
-Valuta un modulo Markdown con una checklist:
+<p align="justify">Valuta un modulo Markdown con una checklist:</p>
 
-- heading;
-- link descrittivi;
-- alternative testuali;
-- tabelle leggibili;
-- codice copiabile;
-- sintesi;
-- prerequisiti;
-- contrasto nella preview;
-- navigazione da tastiera;
-- linguaggio.
+<ul>
+  <li>heading;</li>
+  <li>link descrittivi;</li>
+  <li>alternative testuali;</li>
+  <li>tabelle leggibili;</li>
+  <li>codice copiabile;</li>
+  <li>sintesi;</li>
+  <li>prerequisiti;</li>
+  <li>contrasto nella preview;</li>
+  <li>navigazione da tastiera;</li>
+  <li>linguaggio.</li>
+</ul>
 
-Proponi modifiche senza alterare gli obiettivi disciplinari.
+<p align="justify">Proponi modifiche senza alterare gli obiettivi disciplinari.</p>
 
 ## Verifica rapida
 
-1. Perché un repository privato non risolve automaticamente il copyright?
-2. Quali informazioni descrivono la provenienza?
-3. Qual è la differenza tra autenticazione e autorizzazione?
-4. Che cosa significa minimizzazione dei dati?
-5. Perché un token non deve entrare nei log?
-6. Che cos'è la supply chain del software?
-7. Come si formula una review rispettosa e utile?
-8. Perché l'AI non è una fonte primaria?
-9. Quali limiti ha una valutazione automatica?
-10. Quali caratteristiche rendono accessibile un contenuto?
+<ol>
+  <li>Perché un repository privato non risolve automaticamente il copyright?</li>
+  <li>Quali informazioni descrivono la provenienza?</li>
+  <li>Qual è la differenza tra autenticazione e autorizzazione?</li>
+  <li>Che cosa significa minimizzazione dei dati?</li>
+  <li>Perché un token non deve entrare nei log?</li>
+  <li>Che cos'è la supply chain del software?</li>
+  <li>Come si formula una review rispettosa e utile?</li>
+  <li>Perché l'AI non è una fonte primaria?</li>
+  <li>Quali limiti ha una valutazione automatica?</li>
+  <li>Quali caratteristiche rendono accessibile un contenuto?</li>
+</ol>
 
 ## Sintesi inclusiva
 
-- Avere accesso a una risorsa non significa poterla copiare o distribuire.
-- La licenza stabilisce gli usi concessi.
-- La provenienza collega contenuto, autore, versione, licenza e trasformazioni.
-- Raccogliere meno dati riduce rischi.
-- Autenticare significa riconoscere l'utente; autorizzare significa controllare le operazioni.
-- Password e token non devono comparire in repository o log.
-- Dipendenze e action fanno parte della sicurezza del progetto.
-- La review riguarda il cambiamento, non il valore della persona.
-- L'AI produce bozze da verificare e non sostituisce fonti e responsabilità.
-- Test e metriche non descrivono tutta la competenza di uno studente.
-- Accessibilità significa rimuovere barriere mantenendo obiettivi chiari.
+<ul>
+  <li>Avere accesso a una risorsa non significa poterla copiare o distribuire.</li>
+  <li>La licenza stabilisce gli usi concessi.</li>
+  <li>La provenienza collega contenuto, autore, versione, licenza e trasformazioni.</li>
+  <li>Raccogliere meno dati riduce rischi.</li>
+  <li>Autenticare significa riconoscere l'utente; autorizzare significa controllare le operazioni.</li>
+  <li>Password e token non devono comparire in repository o log.</li>
+  <li>Dipendenze e action fanno parte della sicurezza del progetto.</li>
+  <li>La review riguarda il cambiamento, non il valore della persona.</li>
+  <li>L'AI produce bozze da verificare e non sostituisce fonti e responsabilità.</li>
+  <li>Test e metriche non descrivono tutta la competenza di uno studente.</li>
+  <li>Accessibilità significa rimuovere barriere mantenendo obiettivi chiari.</li>
+</ul>
 
 ## Progetto finale suggerito
 
-Integra i moduli del percorso in un progetto di gruppo:
+<p align="justify">Integra i moduli del percorso in un progetto di gruppo:</p>
 
 ```text
 sistema concorrente o servizio locale
@@ -601,7 +783,7 @@ sistema concorrente o servizio locale
 + demo e relazione finale
 ```
 
-Il progetto viene valutato su correttezza, processo, evidenze, chiarezza, responsabilità e capacità di motivare le scelte.
+<p align="justify">Il progetto viene valutato su correttezza, processo, evidenze, chiarezza, responsabilità e capacità di motivare le scelte.</p>
 
 <!-- figure:06-progetto -->
 <p align="center">
@@ -611,7 +793,9 @@ Il progetto viene valutato su correttezza, processo, evidenze, chiarezza, respon
 
 ## Fonti e note di revisione
 
-- Riferimento curricolare: schede di cittadinanza digitale previste dall'indice pubblico del volume 2.
-- Norme e licenze concrete devono essere verificate su fonti ufficiali aggiornate prima di una decisione operativa.
-- Scenari, esercizi e testi sono originali.
-- Stato: `draft`; revisione docente e, per aspetti legali o privacy reali, verifica con i referenti competenti.
+<ul>
+  <li>Riferimento curricolare: schede di cittadinanza digitale previste dall'indice pubblico del volume 2.</li>
+  <li>Norme e licenze concrete devono essere verificate su fonti ufficiali aggiornate prima di una decisione operativa.</li>
+  <li>Scenari, esercizi e testi sono originali.</li>
+  <li>Stato: <code>draft</code>; revisione docente e, per aspetti legali o privacy reali, verifica con i referenti competenti.</li>
+</ul>
