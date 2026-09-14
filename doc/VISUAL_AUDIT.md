@@ -139,4 +139,4 @@ Su richiesta del docente, il percorso per immagini include ora una funzione C di
 
 ## Posizione di RSP nella chiamata
 
-La figura `01-chiamata-stack` mostra ora tre viste delle stesse celle da 8 byte, con indirizzi minori in alto. Le frecce di RSP puntano alla cella 0x1000 prima della chiamata, alla cella 0x0FF0 dopo il salvataggio del ritorno e la riserva locale, poi di nuovo a 0x1000. Il testo esplicita il passaggio intermedio a 0x0FF8. Indirizzi e riserva locale sono illustrativi e distinti dalla funzione minima senza spazio locale. Rendering ispezionato; build e 12 test superati.
+La figura `01-chiamata-stack` accompagna la funzione C `somma`, chiamata da `main`: tre variabili int con a = 2, b = 3 e c = 5. Mostra 12 byte locali e 8 byte per l'indirizzo di ritorno illustrativo 0x401025. Le frecce di RSP indicano 0x1000 prima della chiamata, 0x0FEC durante somma e 0x1000 dopo il ritorno. Il testo esplicita il passaggio intermedio a 0x0FF8 e distingue gli indirizzi delle celle dal loro contenuto. La disposizione resta didattica, non un layout garantito dal compilatore. Rendering ispezionato; build e 12 test superati.

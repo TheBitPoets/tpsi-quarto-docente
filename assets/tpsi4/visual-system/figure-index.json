@@ -372,9 +372,9 @@
     },
     {
       "id": "01-chiamata-stack",
-      "title": "Lo stack cresce: RSP indica la cima corrente",
-      "alt": "Tre viste dello stesso stack con indirizzi minori in alto e celle da 8 byte. Prima della chiamata RSP punta a 0x1000. La chiamata salva il ritorno a 0x0FF8 e la funzione riserva 8 byte a 0x0FF0, dove punta RSP. Dopo aver rilasciato lo spazio locale e completato il ritorno RSP punta di nuovo a 0x1000.",
-      "caption": "La crescita avviene verso indirizzi minori: RSP passa da 0x1000 a 0x0FF8 con la chiamata e a 0x0FF0 riservando spazio locale. Al ritorno torna a 0x1000.",
+      "title": "main chiama somma: spazio per a, b, c e ritorno",
+      "alt": "Tre viste dello stesso stack. Prima della chiamata RSP vale 0x1000. Durante somma, a vale 2 a 0x0FF4, b vale 3 a 0x0FF0 e c vale 5 a 0x0FEC; RSP punta a c. L'indirizzo di ritorno 0x401025 occupa 8 byte da 0x0FF8. Dopo il ritorno RSP torna a 0x1000 e main riceve 5.",
+      "caption": "La chiamata salva 8 byte per il ritorno; nel modello somma riserva altri 12 byte per tre int. RSP scende da 0x1000 a 0x0FEC e torna a 0x1000 quando la funzione termina.",
       "section": "Anatomia di un processo",
       "components": [],
       "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",

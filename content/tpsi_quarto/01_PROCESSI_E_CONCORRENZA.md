@@ -313,17 +313,42 @@ f:
 
 #### Secondo passo: una funzione deve sapere dove tornare
 
-<p align="justify">L'attività principale chiede a una funzione di calcolare il nuovo valore. Durante la chiamata bisogna conservare il punto da cui continuare quando il calcolo finisce. Lo stack sostiene questa organizzazione: la chiamata aggiunge le informazioni necessarie e il ritorno rende nuovamente attiva la chiamata precedente.</p>
+<p align="justify">Ora <code>main</code> chiama una funzione con tre variabili locali. <code>somma</code> assegna 2 ad <code>a</code>, 3 a <code>b</code>, calcola 5 in <code>c</code> e restituisce quel valore al chiamante.</p>
+
+```c
+int somma(void)
+{
+    int a = 2;
+    int b = 3;
+    int c = a + b;
+    return c;
+}
+
+int main(void)
+{
+    int risultato = somma();
+    return risultato;
+}
+```
+
+<p align="justify">Per vedere lo stack, immaginiamo che il compilatore metta le tre variabili in memoria: nel nostro riferimento Linux x86-64 ogni <code>int</code> occupa <strong>4 byte</strong>, quindi servono <strong>12 byte</strong>. La chiamata salva anche un <strong>indirizzo di ritorno di 8 byte</strong>: indica dove <code>main</code> deve proseguire dopo <code>somma</code>.</p>
 
 <!-- figure:01-chiamata-stack -->
 <p align="center">
-  <img src="../../assets/tpsi4/01-chiamata-stack.svg" alt="Tre viste dello stesso stack con indirizzi minori in alto e celle da 8 byte. Prima della chiamata RSP punta a 0x1000. La chiamata salva il ritorno a 0x0FF8 e la funzione riserva 8 byte a 0x0FF0, dove punta RSP. Dopo aver rilasciato lo spazio locale e completato il ritorno RSP punta di nuovo a 0x1000." width="960">
+  <img src="../../assets/tpsi4/01-chiamata-stack.svg" alt="Tre viste dello stesso stack. Prima della chiamata RSP vale 0x1000. Durante somma, a vale 2 a 0x0FF4, b vale 3 a 0x0FF0 e c vale 5 a 0x0FEC; RSP punta a c. L&#x27;indirizzo di ritorno 0x401025 occupa 8 byte da 0x0FF8. Dopo il ritorno RSP torna a 0x1000 e main riceve 5." width="960">
 </p>
-<p align="center"><em>La crescita avviene verso indirizzi minori: RSP passa da 0x1000 a 0x0FF8 con la chiamata e a 0x0FF0 riservando spazio locale. Al ritorno torna a 0x1000.</em></p>
+<p align="center"><em>La chiamata salva 8 byte per il ritorno; nel modello somma riserva altri 12 byte per tre int. RSP scende da 0x1000 a 0x0FEC e torna a 0x1000 quando la funzione termina.</em></p>
 
-<p align="justify">I tre pannelli mostrano le stesse posizioni di memoria: <strong>gli indirizzi minori sono in alto</strong>. Prima della chiamata <strong>RSP vale 0x1000</strong>. La chiamata salva un indirizzo di ritorno di 8 byte e porta RSP a <strong>0x0FF8</strong>; nell'esempio, la funzione riserva poi altri 8 byte per uso locale e RSP diventa <strong>0x0FF0</strong>. La freccia del pannello centrale punta proprio a questa nuova cima.</p>
+<p align="justify">Leggi il pannello centrale dopo il calcolo di <code>c</code>, prima del ritorno. Le celle mostrano i valori effettivi: <strong>a = 2, b = 3, c = 5</strong>. Il numero <strong>0x401025</strong> è invece un indirizzo illustrativo del codice di <code>main</code>: è il punto di ritorno, non il risultato della somma. L'indirizzo a sinistra, <strong>0x0FF8</strong>, indica dove quel punto di ritorno è conservato nello stack.</p>
 
-<p align="justify">Per tornare al chiamante si percorre il cammino inverso: si rilasciano gli 8 byte locali, tornando a <strong>0x0FF8</strong>, poi si recupera l'indirizzo di ritorno e RSP torna a <strong>0x1000</strong>. <strong>Quando lo stack cresce, RSP diminuisce; quando lo stack si riduce, RSP aumenta.</strong> Le celle grigie non sono più parte attiva della chiamata terminata: il loro contenuto non deve essere cancellato per poterle riutilizzare. Gli indirizzi e gli 8 byte locali sono una scelta illustrativa; la funzione minima precedente non richiede quello spazio locale.</p>
+<ol>
+  <li><strong>Prima della chiamata:</strong> RSP vale <code>0x1000</code> e indica la cima dello stack di <code>main</code>.</li>
+  <li><strong>La chiamata salva il ritorno:</strong> RSP diminuisce di 8 byte e diventa <code>0x0FF8</code>.</li>
+  <li><strong>somma riserva le variabili:</strong> nel modello RSP diminuisce di altri 12 byte e diventa <code>0x0FEC</code>. La cima è ora la cella di <code>c</code>; sopra di essa, nel disegno, ci sono indirizzi ancora minori.</li>
+  <li><strong>La funzione termina:</strong> il valore 5 viene predisposto nel registro di risultato (la parte a 32 bit di RAX). Si rilasciano i 12 byte locali e si recupera l'indirizzo di ritorno; RSP torna a <code>0x1000</code>. <code>main</code> riprende e assegna il valore ricevuto a <code>risultato</code>.</li>
+</ol>
+
+<p align="justify"><strong>Quando lo stack cresce, RSP diminuisce; quando si riduce, RSP aumenta.</strong> Le celle grigie non sono più attive: possono essere riutilizzate senza cancellare prima i vecchi byte. La figura mostra una possibile organizzazione semplificata; il compilatore può cambiare ordine, riservare spazio aggiuntivo o tenere le variabili nei registri. Il precedente esempio con il puntatore non richiedeva questo spazio per tre variabili locali.</p>
 
 <p align="justify">In questo passaggio il processo e il thread rimangono gli stessi. Una chiamata di funzione cambia il punto del programma in esecuzione. Il <a href="#cambio-di-contesto">cambio di contesto</a>, invece, permette di sospendere un'attività e farne avanzare un'altra.</p>
 
