@@ -63,6 +63,7 @@ Modulo originale e heading pertinenti di LINUX_PROGRAMMING.md, esclusa Controllo
 <ul>
   <li>distinguere programma, processo e thread;</li>
   <li>descrivere lo stato essenziale di un processo;</li>
+  <li>spiegare che cosa sono gli otto elementi associati a un processo, come sono organizzati e perché servono;</li>
   <li>riconoscere risorse private e risorse condivise;</li>
   <li>distinguere esecuzione sequenziale, concorrente e parallela;</li>
   <li>leggere una semplice gerarchia padre-figlio;</li>
@@ -130,17 +131,17 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Lo stesso programma può essere eseguito in più processi. Se apriamo due terminali e avviamo due volte lo stesso comando, il codice del programma è lo stesso, ma le due esecuzioni hanno identificatori, memoria e risorse proprie.</p>
 
-<p align="justify">Un processo possiede almeno:</p>
+<p align="justify">Per gestire un'esecuzione, il sistema operativo deve poter rispondere a otto domande. Gli elementi elencati qui sono una mappa del percorso: li costruiremo uno alla volta nella sezione <a href="#anatomia-di-un-processo">Anatomia di un processo</a>.</p>
 
 <ul>
-  <li>un identificatore;</li>
-  <li>un contesto di esecuzione, come contatore di programma e registri;</li>
-  <li>uno spazio di indirizzamento;</li>
-  <li>stack e heap;</li>
-  <li>file e altri oggetti aperti;</li>
-  <li>credenziali e permessi;</li>
-  <li>stato di pianificazione;</li>
-  <li>relazioni con altri processi.</li>
+  <li><strong>Quale esecuzione?</strong> Un identificatore.</li>
+  <li><strong>Da dove riprendere il lavoro?</strong> Un contesto di esecuzione.</li>
+  <li><strong>Quali indirizzi di memoria può usare?</strong> Uno spazio di indirizzamento.</li>
+  <li><strong>Dove conservare chiamate e dati dinamici?</strong> Stack e heap.</li>
+  <li><strong>Quali risorse ha aperto?</strong> File e altri oggetti aperti.</li>
+  <li><strong>Per conto di chi agisce e che cosa può fare?</strong> Credenziali e controlli dei permessi.</li>
+  <li><strong>Può avanzare e quando riceverà la CPU?</strong> Stato di pianificazione.</li>
+  <li><strong>Chi lo ha creato e con chi è collegato?</strong> Relazioni con altri processi.</li>
 </ul>
 
 <p align="justify">Nel modello Linux un processo è identificato da un <strong>PID</strong>. La relazione con il processo che lo ha creato è rappresentata dal <strong>PPID</strong>.</p>
@@ -158,6 +159,155 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
   <img src="../../assets/tpsi4/01-programma-processi.svg" alt="Lo stesso eseguibile avvia due processi con PID diversi e spazi di memoria distinti." width="960">
 </p>
 <p align="center"><em>Lo stesso eseguibile avvia due processi con PID diversi e spazi di memoria distinti.</em></p>
+
+## Anatomia di un processo
+
+<p align="justify">Seguiamo una sola esecuzione dell'applicazione iniziale: legge campioni da un sensore, calcola una media e salva i risultati in <code>misure.txt</code>. Mentre aspetta un campione, il computer deve poter eseguire anche altri programmi. Quando il campione arriva, l'applicazione deve riprendere con i propri dati, nel punto giusto e con il file ancora disponibile. Il solo file eseguibile non contiene queste informazioni: descrive le istruzioni, ma non la situazione raggiunta da questa particolare esecuzione.</p>
+
+<table align="center">
+<tr><td>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#128214;</span> Che cosa significa “il processo possiede”:</strong> significa che una risorsa o un'informazione è associata a quell'esecuzione. Non significa che tutto sia dentro la sua memoria o che ogni risorsa sia esclusivamente sua. Il <strong>kernel</strong>, la parte del sistema operativo che gestisce processi e risorse, conserva strutture di controllo con valori e riferimenti. I manuali chiamano spesso questo modello <strong>PCB</strong> (<em>Process Control Block</em>): una scheda di gestione del processo. In un sistema reale le informazioni possono essere distribuite fra più strutture collegate.</p>
+</td></tr>
+</table>
+
+<p align="justify">Distinguiamo quindi tre posti: la memoria accessibile al programma, le strutture protette del kernel e i registri fisici della CPU. Per ora immaginiamo un processo con un solo flusso di esecuzione. Quando introdurremo i thread, distingueremo le risorse del processo dal contesto e dallo stack di ciascun thread.</p>
+
+### 1. Identificatore: distinguere questa esecuzione
+
+<p align="justify">Avviamo due copie dell'applicazione, una per il sensore dell'aula e una per quello del laboratorio. Hanno lo stesso nome e lo stesso codice: per indicare quale interrompere o osservare, il nome non basta. Il <strong>PID</strong> (<em>Process ID</em>) è il numero con cui il sistema identifica un processo. Per esempio, le due esecuzioni potrebbero avere PID <code>4100</code> e <code>4101</code>; sono valori illustrativi, assegnati dal sistema e non scelti nel sorgente.</p>
+
+<p align="justify">Il PID è registrato nelle strutture del kernel. Un programma Linux può conoscere il proprio con <code>getpid()</code>; gli strumenti di osservazione lo mostrano per collegare ogni riga a un'esecuzione precisa. È necessario perché richieste come “mostra lo stato” o “invia un segnale” devono avere un destinatario. Il numero può essere riutilizzato dopo che il vecchio processo è stato rimosso: non è un'identità permanente. In Linux l'unicità si riferisce allo spazio di identificatori, o <em>PID namespace</em>, in cui si osservano i processi.</p>
+
+### 2. Contesto di esecuzione: riprendere senza ricominciare
+
+<p align="justify">Supponiamo che l'applicazione venga sospesa mentre somma i campioni. Conservare soltanto l'array non basta: bisogna ricordare anche a quale istruzione è arrivata e quali valori intermedi sta usando. Il <strong>contesto di esecuzione</strong> è l'insieme delle informazioni necessarie a riprendere quel flusso di istruzioni.</p>
+
+<ul>
+  <li>Il <strong>contatore di programma</strong>, detto anche <em>program counter</em> o <em>instruction pointer</em>, indica la posizione dell'esecuzione nel codice macchina. Non è il numero di riga del sorgente C: una riga può produrre più istruzioni o essere trasformata dal compilatore.</li>
+  <li>I <strong>registri</strong> sono piccole memorie interne alla CPU: contengono operandi, indirizzi e risultati intermedi. Per esempio, durante una somma possono contenere un campione e il totale parziale.</li>
+  <li>Lo <strong>stack pointer</strong> è un registro che individua la posizione corrente nello stack. Altri registri conservano informazioni di controllo, come gli esiti dei confronti.</li>
+</ul>
+
+<p align="justify">I registri fisici appartengono alla CPU. Quando il kernel sospende un'esecuzione, salva i valori necessari in memoria; prima di riprenderla li ripristina. Il processo possiede dunque il proprio <strong>stato dei registri</strong>, non una CPU personale. Se ripristinassimo i valori dell'altra applicazione, potremmo sommare il campione sbagliato o tornare nel punto sbagliato. Questo è il motivo del cambio di contesto, che riprenderemo nella sezione sul ciclo di vita. Non comporta copiare tutta la memoria del processo a ogni passaggio.</p>
+
+### 3. Spazio di indirizzamento: gli indirizzi che il programma vede
+
+<p align="justify">Un indirizzo permette di individuare una posizione di memoria. Lo <strong>spazio di indirizzamento virtuale</strong> è l'insieme degli indirizzi che un processo può rappresentare; soltanto alcune sue regioni sono effettivamente mappate e accessibili. Fra queste troviamo il codice eseguibile, i dati globali, le librerie e le aree usate per stack e allocazioni dinamiche. Non immaginiamolo come un unico blocco di RAM già riservato interamente al programma.</p>
+
+<p align="justify">Il sistema operativo organizza le mappature e le protezioni; l'hardware di gestione della memoria, la <strong>MMU</strong>, traduce gli indirizzi virtuali usando tabelle predisposte dal kernel. La memoria viene gestita in unità chiamate <strong>pagine</strong>. Per ogni accesso conta anche l'operazione richiesta: una regione può essere leggibile, scrivibile oppure eseguibile, secondo le sue protezioni.</p>
+
+<p align="justify">Perché lo spazio è associato al processo? La variabile <code>media</code> dell'aula deve poter essere distinta da quella del laboratorio. Anche se due processi usassero lo stesso valore numerico di indirizzo, le rispettive traduzioni potrebbero condurre a memorie fisiche diverse. Un puntatore di un processo non permette quindi, da solo, di leggere la variabile dell'altro. Il sistema può anche predisporre pagine condivise: la condivisione dipende dalle mappature, non dall'uguaglianza dei numeri. Gli indirizzi effettivi possono cambiare fra esecuzioni.</p>
+
+### 4. Stack e heap: due esigenze diverse nella stessa memoria
+
+<p align="justify">All'interno dello spazio di indirizzamento servono organizzazioni adatte a durate diverse. Una chiamata di funzione deve ricordare come tornare al chiamante; un insieme di campioni può invece dover rimanere disponibile anche dopo il ritorno dalla funzione che lo ha allocato.</p>
+
+<p align="justify">Lo <strong>stack</strong> è organizzato come una pila: l'ultima chiamata aperta è la prima a concludersi. Nel modello usuale, ogni chiamata dispone di un <strong>record di attivazione</strong>, o <em>stack frame</em>, con informazioni utili alla sua esecuzione e al ritorno. Può contenere variabili locali, valori salvati e informazioni di collegamento; la disposizione concreta dipende dall'architettura, dalle convenzioni di chiamata e dalle ottimizzazioni. Alcuni valori possono restare nei registri.</p>
+
+```text
+main chiama acquisisci, che chiama converti
+
+frame di converti    <- chiamata più recente
+frame di acquisisci
+frame di main
+
+converti termina: si torna ad acquisisci
+acquisisci termina: si torna a main
+```
+
+<p align="justify">Anche due chiamate ricorsive della stessa funzione devono conservare separatamente il proprio stato. Quando una funzione termina, i suoi oggetti locali automatici cessano di esistere: restituire l'indirizzo di uno di essi non ne prolunga la durata.</p>
+
+<p align="justify">L'<strong>heap</strong> indica, nel modello didattico, la memoria gestita con allocazioni dinamiche. Il programma chiede un blocco della dimensione necessaria, ottiene un puntatore e lo usa finché lo rilascia. In C si impiegano funzioni come <code>malloc</code> e <code>free</code>; l'allocatore gestisce blocchi occupati e liberi e richiede memoria al sistema quando serve. L'ordine di rilascio non deve seguire quello delle chiamate di funzione. In Linux le allocazioni possono usare anche mappature distinte dalla regione etichettata <code>[heap]</code>.</p>
+
+```c
+/* Frammento dentro una funzione; richiede <stdlib.h>. */
+int *campioni = malloc(100 * sizeof *campioni);
+if (campioni != NULL) {
+    campioni[0] = 23;
+    /* Qui si possono acquisire ed elaborare gli altri campioni. */
+    free(campioni);
+    campioni = NULL;
+}
+```
+
+<p align="justify">La variabile locale <code>campioni</code> contiene un indirizzo; il blocco per cento interi è un oggetto diverso. Nel disegno semplificato il puntatore è nello stack e il blocco nell'heap, anche se il compilatore può tenere il puntatore in un registro. Il fallimento dell'allocazione è segnalato da <code>NULL</code>. Perdere l'unico puntatore senza liberare il blocco causa una perdita di memoria; usare il blocco dopo <code>free</code> è un errore. Stack e heap appartengono al processo perché sostengono le sue chiamate e i suoi dati; con più thread, ciascuno avrà il proprio stack, mentre l'heap sarà normalmente condiviso.</p>
+
+### 5. File e altri oggetti aperti: riferimenti alle risorse
+
+<p align="justify">Per salvare una media, l'applicazione deve aprire <code>misure.txt</code>. In Linux un <strong>descrittore di file</strong> è un piccolo intero che seleziona una voce della tabella dei descrittori del processo. La voce rimanda a strutture del kernel che rappresentano l'apertura e, per un file ordinario, conservano informazioni come posizione corrente e modalità di accesso. Il contenuto del file non diventa automaticamente una parte della memoria privata del processo.</p>
+
+```text
+processo A                    kernel                    risorsa
+descrittore 3  ---------->  apertura del file  ------->  misure.txt
+                           posizione, modalità
+```
+
+<p align="justify">Lo stesso meccanismo permette di riferirsi anche a pipe, terminali e socket. Per convenzione, <code>0</code>, <code>1</code> e <code>2</code> sono ingresso standard, uscita standard ed errori standard; possono essere rediretti. Il numero <code>3</code> in due processi non identifica necessariamente la stessa risorsa, perché ogni numero va interpretato nella relativa tabella. Viceversa, due descrittori possono riferirsi alla stessa apertura. Chiudere un descrittore rimuove quel riferimento: non significa cancellare il file.</p>
+
+<p align="justify">Nell'esempio del sensore, ricordare il descrittore consente di continuare a scrivere sul file già aperto dopo una sospensione. Quando usiamo <code>fopen</code> in C, lavoriamo invece con un <code>FILE *</code>: un oggetto della libreria che aggiunge gestione del flusso e buffering sopra il descrittore.</p>
+
+### 6. Credenziali e permessi: identità e autorizzazione
+
+<p align="justify">Il PID distingue un'esecuzione; non dice per conto di quale utente essa agisca. Le <strong>credenziali</strong> sono informazioni di identità associate al processo, fra cui identificatori di utente (<strong>UID</strong>) e gruppo (<strong>GID</strong>) e gruppi supplementari. Il kernel le usa nei controlli di accesso. Più processi dello stesso utente possono quindi avere PID diversi e le stesse credenziali.</p>
+
+<p align="justify">I <strong>permessi</strong> esprimono operazioni consentite sulle risorse. Per un file, per esempio, distinguiamo lettura, scrittura ed esecuzione per proprietario, gruppo e altri utenti. Il kernel confronta le credenziali con le regole applicabili all'operazione richiesta. I permessi di <code>misure.txt</code> sono proprietà della risorsa: non sono tutti contenuti nella scheda del processo.</p>
+
+<p align="justify">Se l'applicazione può leggere il file ma non aprirlo in scrittura, conoscere il percorso non basta a ottenere il permesso. Linux distingue anche identità reali ed effettive; nei casi ordinari coincidono, mentre i dettagli dei controlli includono ulteriori meccanismi. Qui ci interessa la separazione: identificare il processo, identificare l'utente e autorizzare un'operazione sono tre problemi diversi.</p>
+
+### 7. Stato di pianificazione: poter avanzare e ottenere la CPU
+
+<p align="justify">La <strong>pianificazione</strong>, o <em>scheduling</em>, decide quale attività pronta eseguire sulle CPU disponibili. Il kernel conserva lo stato dell'attività e informazioni utili alla scelta, come politica e priorità di pianificazione. Le attività pronte sono organizzate in strutture che permettono allo <strong>scheduler</strong>, il componente incaricato della scelta, di individuarle.</p>
+
+<p align="justify">Riprendiamo l'applicazione: mentre calcola la media è <strong>in esecuzione</strong>; se potrebbe continuare ma la CPU esegue altro, è <strong>pronta</strong>; se una lettura bloccante aspetta un campione non ancora disponibile, è <strong>in attesa</strong>. Nel terzo caso assegnarle tempo di CPU non risolverebbe la mancanza del dato. All'arrivo del campione torna pronta e attende di essere selezionata.</p>
+
+<p align="justify">Questo stato appartiene alla singola attività perché due esecuzioni dello stesso programma possono trovarsi in condizioni diverse. Non va confuso con il contatore di programma: quello indica dove riprendere; lo stato indica se si può riprendere e se si sta già eseguendo. Il diagramma successivo rappresenta proprio queste transizioni. Linux pianifica i singoli thread: il modello a un solo flusso ci permette per ora di parlare di processo pronto o in esecuzione.</p>
+
+### 8. Relazioni con altri processi: origine e coordinamento
+
+<p align="justify">Quando avviamo l'applicazione da una shell, entra in gioco una relazione di creazione: un processo può creare un <strong>figlio</strong> e diventare il suo <strong>padre</strong>. Il <strong>PPID</strong> è l'identificatore del padre. Questi collegamenti permettono di rappresentare i processi come un albero; non indicano che la memoria del figlio sia contenuta in quella del padre.</p>
+
+<p align="justify">Immaginiamo che l'applicazione affidi l'esportazione delle misure a un figlio. Il padre può continuare un'altra attività e poi raccoglierne l'esito con <code>wait</code> o <code>waitpid</code>. Il kernel deve ricordare la relazione per gestire questa attesa e conservare le informazioni di terminazione necessarie. La parentela non sincronizza automaticamente ogni operazione: se i due devono scambiarsi campioni, serve un meccanismo di comunicazione.</p>
+
+<p align="justify">Esistono anche <strong>gruppi di processi</strong> e <strong>sessioni</strong>, usati fra l'altro dalla shell per gestire lavori e terminali. Non sono gruppi di utenti: descrivono un'altra relazione. Approfondiremo la creazione con <code>fork</code> e l'attesa nelle sezioni operative; per ora ricordiamo che un processo ha sia uno stato individuale sia legami che il sistema deve amministrare.</p>
+
+### Ricomporre il modello
+
+<p align="justify">Proviamo ora a sospendere idealmente l'applicazione e a descrivere ciò che rimane. Questa tabella collega ogni domanda al posto in cui cercare la risposta; è un modello concettuale, non il layout di una singola struttura del kernel.</p>
+
+<table align="center">
+<thead><tr><th>Domanda</th><th>Elemento</th><th>Organizzazione essenziale</th></tr></thead>
+<tbody>
+<tr><td>Quale esecuzione?</td><td>PID</td><td>Identificatore registrato dal kernel.</td></tr>
+<tr><td>Da dove riprende?</td><td>Contesto</td><td>Valori dei registri attivi nella CPU o salvati in memoria.</td></tr>
+<tr><td>Quali indirizzi vede?</td><td>Spazio di indirizzamento</td><td>Regioni virtuali, mappature e protezioni.</td></tr>
+<tr><td>Come conserva chiamate e dati?</td><td>Stack e heap</td><td>Record di attivazione e blocchi allocati dinamicamente.</td></tr>
+<tr><td>Su quali risorse opera?</td><td>Oggetti aperti</td><td>Descrittori che rimandano a strutture del kernel.</td></tr>
+<tr><td>Per conto di chi agisce?</td><td>Credenziali</td><td>Identità usate insieme alle regole di accesso delle risorse.</td></tr>
+<tr><td>Può avanzare adesso?</td><td>Stato di pianificazione</td><td>Stato e informazioni gestite dallo scheduler.</td></tr>
+<tr><td>Con chi è collegato?</td><td>Relazioni</td><td>Padre, figli, gruppi di processi e sessioni.</td></tr>
+</tbody>
+</table>
+
+<p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Fermati e ragiona:</strong> rispondi motivando, prima di aprire le soluzioni.</p>
+
+<ol>
+  <li>Due esecuzioni dello stesso programma devono avere la stessa media e gli stessi file aperti?</li>
+  <li>Se salviamo l'array dei campioni ma perdiamo il contesto, possiamo riprendere con certezza dal punto corretto?</li>
+  <li>La fine di una funzione libera automaticamente un blocco ottenuto con <code>malloc</code>?</li>
+  <li>Un processo che aspetta un campione e uno che aspetta soltanto la CPU si trovano nello stesso stato?</li>
+  <li>Conoscere il PID di un altro processo o il nome di un file concede automaticamente il diritto di usarli?</li>
+</ol>
+
+<details>
+<summary>Confronta le risposte</summary>
+<ol>
+  <li>No: il codice comune non impone dati uguali o aperture uguali; le esecuzioni hanno una propria storia.</li>
+  <li>No: mancano la posizione nel codice e i valori intermedi necessari alla ripresa.</li>
+  <li>No: la durata del blocco allocato è distinta da quella della variabile locale che ne contiene l'indirizzo; bisogna gestirne il rilascio.</li>
+  <li>No: il primo è in attesa di un evento, il secondo è pronto.</li>
+  <li>No: un identificatore individua una risorsa o un'esecuzione; l'autorizzazione dipende da controlli separati.</li>
+</ol>
+</details>
 
 ## Stato e ciclo di vita di un processo
 
@@ -753,6 +903,9 @@ tpsi4-activity-c-fork-pipe-square-001
 <ul>
   <li>Un programma è un file; un processo è quel programma mentre viene eseguito.</li>
   <li>Ogni processo ha un PID e può avere un processo padre.</li>
+  <li>Il contesto ricorda da dove riprendere; lo spazio di indirizzamento definisce gli indirizzi del processo e le sue mappature.</li>
+  <li>Lo stack sostiene le chiamate di funzione; l'heap serve alle allocazioni dinamiche.</li>
+  <li>I descrittori fanno riferimento alle risorse aperte; le credenziali identificano per conto di chi il processo agisce.</li>
   <li>Il sistema operativo alterna processi pronti e gestisce quelli in attesa.</li>
   <li>Processi distinti hanno memoria separata; i thread dello stesso processo condividono più stato.</li>
   <li>Concorrente significa che più attività avanzano nello stesso intervallo; parallelo significa che eseguono nello stesso istante.</li>
@@ -771,6 +924,11 @@ tpsi4-activity-c-fork-pipe-square-001
 <ul>
   <li>Riferimento curricolare: indice pubblico del volume 2, usato solo per verificare la copertura.</li>
   <li>Fonte tecnica locale: <code>LINUX_PROGRAMMING.md</code>, a partire da <code>Linux Programming</code>.</li>
+  <li>Identità, autorizzazioni e relazioni: <a href="https://man7.org/linux/man-pages/man2/getpid.2.html">getpid(2)</a>, <a href="https://man7.org/linux/man-pages/man7/credentials.7.html">credentials(7)</a> e <a href="https://man7.org/linux/man-pages/man2/wait.2.html">wait(2)</a>.</li>
+  <li>Contesto e chiamate di funzione: manuale GDB, <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Registers.html">Registers</a> e <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Frames.html">Stack Frames</a>.</li>
+  <li>Memoria e allocazioni: <a href="https://man7.org/linux/man-pages/man5/proc_pid_maps.5.html">proc_pid_maps(5)</a> e <a href="https://man7.org/linux/man-pages/man3/malloc.3.html">malloc(3)</a>. La descrizione di stack e heap è un modello didattico, non una disposizione universale della memoria.</li>
+  <li>Risorse aperte: <a href="https://man7.org/linux/man-pages/man2/open.2.html">open(2)</a> e <a href="https://man7.org/linux/man-pages/man5/proc_pid_fd.5.html">proc_pid_fd(5)</a>.</li>
+  <li>Stato e distinzione processo/thread: <a href="https://man7.org/linux/man-pages/man5/proc_pid_status.5.html">proc_pid_status(5)</a> e <a href="https://man7.org/linux/man-pages/man7/pthreads.7.html">pthreads(7)</a>.</li>
   <li>Tutti gli esempi di questo modulo sono formulati ex novo per il pacchetto.</li>
   <li>Gli esempi della fonte Linux con intestazioni di copyright esterne non devono essere duplicati nelle activity senza averne verificato la licenza.</li>
   <li>Stato: <code>draft</code>; revisione docente richiesta prima della pubblicazione agli studenti.</li>
