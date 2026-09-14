@@ -131,7 +131,7 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Lo stesso programma può essere eseguito in più processi. Se apriamo due terminali e avviamo due volte lo stesso comando, il codice del programma è lo stesso, ma le due esecuzioni hanno identificatori, memoria e risorse proprie.</p>
 
-<p align="justify">Per gestire un'esecuzione, il sistema operativo deve poter rispondere a otto domande. Gli elementi elencati qui sono una mappa del percorso: li costruiremo uno alla volta nella sezione <a href="#anatomia-di-un-processo">Anatomia di un processo</a>.</p>
+<p align="justify">Diremo che <strong>il processo possiede</strong> un insieme di informazioni e risorse associate alla sua esecuzione. Per capire quali siano e a cosa servano, partiamo da otto domande a cui il sistema operativo deve poter rispondere. Gli elementi elencati qui sono una mappa del percorso: li costruiremo uno alla volta nella sezione <a href="#anatomia-di-un-processo">Anatomia di un processo</a>, precisando anche il significato di “possiede”.</p>
 
 <ul>
   <li><strong>Quale esecuzione?</strong> Un identificatore.</li>
