@@ -9,6 +9,17 @@ technical_sources:
 transformation: original-course-material
 -->
 
+<!-- visual-orientation -->
+<details>
+<summary>&#128506; <strong>Orientamento della sezione</strong></summary>
+
+<p align="justify"><strong>Contesto:</strong> Distingue comunicazione e sincronizzazione e sviluppa memoria condivisa, messaggi, race, mutex, semafori, condition, deadlock, monitor e problemi classici.</p>
+<p align="justify"><strong>Prerequisiti:</strong> Processi, thread, interleaving, invarianti e gestione degli errori.</p>
+<p align="justify"><strong>Obiettivo:</strong> Progettare un semplice protocollo IPC, riconoscere e correggere race/deadlock e confrontare primitive POSIX e Java.</p>
+<p align="justify"><strong>Prossimo passo:</strong> Completare il laboratorio pipe e progettare un buffer produttore/consumatore.</p>
+
+</details>
+
 ## In questa unità impareremo
 
 Al termine dell'unità lo studente dovrà saper:
@@ -199,6 +210,12 @@ int main(void) {
 
 Il ciclo `read_all` è necessario perché una singola `read` non costituisce un contratto generale di lettura completa per qualunque flusso di byte.
 
+<!-- figure:02-pipe -->
+<p align="center">
+  <img src="../../assets/tpsi4/02-pipe.svg" alt="Dopo pipe e fork, il figlio scrive il quadrato su fd[1] e chiude fd[0]; il padre legge fd[0] e chiude fd[1]. I dati attraversano la pipe del kernel; waitpid raccoglie il figlio." width="960">
+</p>
+<p align="center"><em>Dopo pipe e fork, il figlio scrive il quadrato su fd[1] e chiude fd[0]; il padre legge fd[0] e chiude fd[1]. I dati attraversano la pipe del kernel; waitpid raccoglie il figlio.</em></p>
+
 ## Segnali: notifiche, non contenitori generici
 
 Un segnale comunica principalmente che è avvenuto un evento. Non è il mezzo adatto per trasferire strutture dati complesse.
@@ -234,6 +251,12 @@ Due thread possono leggere lo stesso valore e sovrascriversi. Il problema non è
 Collegamento:
 
 - [Race Conditions](../../LINUX_PROGRAMMING.md#race-conditions)
+
+<!-- figure:02-race -->
+<p align="center">
+  <img src="../../assets/tpsi4/02-race.svg" alt="Nel modello didattico A e B leggono entrambi zero, calcolano uno e scrivono uno. L&#x27;aggiornamento di un thread viene perso." width="960">
+</p>
+<p align="center"><em>Nel modello didattico A e B leggono entrambi zero, calcolano uno e scrivono uno. L&#x27;aggiornamento di un thread viene perso.</em></p>
 
 ## Sezione critica e invariante
 
@@ -405,6 +428,12 @@ final class ParkingLot {
 
 L'opzione di fairness può ridurre alcuni fenomeni di attesa indefinita, ma ha un costo e non sostituisce la progettazione dell'intero protocollo.
 
+<!-- figure:02-mutex-semaforo -->
+<p align="center">
+  <img src="../../assets/tpsi4/02-mutex-semaforo.svg" alt="Un mutex protegge l&#x27;accesso esclusivo allo stato ed è rilasciato dal proprietario. Un semaforo rappresenta disponibilità: acquisire consuma un permesso, rilasciare ne restituisce uno." width="960">
+</p>
+<p align="center"><em>Un mutex protegge l&#x27;accesso esclusivo allo stato ed è rilasciato dal proprietario. Un semaforo rappresenta disponibilità: acquisire consuma un permesso, rilasciare ne restituisce uno.</em></p>
+
 ## Variabili di condizione
 
 Una variabile di condizione permette a un thread di attendere finché lo stato protetto da un mutex può soddisfare una proprietà.
@@ -471,6 +500,12 @@ unlock
 
 In Java, `ArrayBlockingQueue` o un'altra `BlockingQueue` fornisce già un'astrazione robusta. Implementare una coda manuale resta utile come esercizio, ma nel software reale è opportuno valutare primitive consolidate.
 
+<!-- figure:02-buffer-condition -->
+<p align="center">
+  <img src="../../assets/tpsi4/02-buffer-condition.svg" alt="Il produttore attende not_full quando il buffer è pieno; il consumatore attende not_empty quando è vuoto. Inserimento e prelievo avvengono sotto mutex; ogni risveglio richiede un nuovo controllo del predicato." width="960">
+</p>
+<p align="center"><em>Il produttore attende not_full quando il buffer è pieno; il consumatore attende not_empty quando è vuoto. Inserimento e prelievo avvengono sotto mutex; ogni risveglio richiede un nuovo controllo del predicato.</em></p>
+
 ## Lettori e scrittori
 
 Più lettori possono accedere contemporaneamente a dati immutati, mentre uno scrittore richiede accesso esclusivo.
@@ -485,6 +520,12 @@ Le politiche possibili non sono equivalenti:
 Una politica con priorità assoluta ai lettori può causare starvation dello scrittore se arrivano continuamente nuovi lettori. Una soluzione deve dichiarare la politica, non soltanto usare un lock.
 
 In Java esiste `ReadWriteLock`. In POSIX si può usare `pthread_rwlock_t` quando disponibile e adatto, oppure costruire il protocollo con mutex e condition.
+
+<!-- figure:02-lettori-scrittori -->
+<p align="center">
+  <img src="../../assets/tpsi4/02-lettori-scrittori.svg" alt="Più lettori possono leggere insieme; uno scrittore richiede accesso esclusivo, senza lettori attivi. La politica di ammissione deve evitare attese indefinite." width="960">
+</p>
+<p align="center"><em>Più lettori possono leggere insieme; uno scrittore richiede accesso esclusivo, senza lettori attivi. La politica di ammissione deve evitare attese indefinite.</em></p>
 
 ## Deadlock
 
@@ -521,6 +562,12 @@ Se A possiede X e B possiede Y, entrambi possono attendere per sempre.
 - rilevare e recuperare in sistemi che lo prevedono.
 
 Il timeout non dimostra l'assenza di deadlock. Può evitare un'attesa infinita, ma introduce un percorso di recupero che deve essere progettato.
+
+<!-- figure:02-deadlock -->
+<p align="center">
+  <img src="../../assets/tpsi4/02-deadlock.svg" alt="Il thread A possiede X e attende Y; B possiede Y e attende X. Nel grafo la freccia risorsa verso thread indica assegnazione, thread verso risorsa indica attesa." width="960">
+</p>
+<p align="center"><em>Il thread A possiede X e attende Y; B possiede Y e attende X. Nel grafo la freccia risorsa verso thread indica assegnazione, thread verso risorsa indica attesa.</em></p>
 
 ## Monitor
 
@@ -564,6 +611,12 @@ final class OneSlotMailbox<T> {
 
 La classe incapsula stato e regole. In C la stessa idea può essere realizzata con una struttura che contiene dati, mutex e condition, esposta tramite funzioni che mantengono l'invariante.
 
+<!-- figure:02-monitor -->
+<p align="center">
+  <img src="../../assets/tpsi4/02-monitor.svg" alt="I chiamanti accedono allo stato del monitor attraverso operazioni protette. Il monitor contiene stato privato, mutua esclusione e condizioni di attesa." width="960">
+</p>
+<p align="center"><em>I chiamanti accedono allo stato del monitor attraverso operazioni protette. Il monitor contiene stato privato, mutua esclusione e condizioni di attesa.</em></p>
+
 ## Scambio di messaggi e protocollo
 
 Un messaggio utile non è soltanto una sequenza di byte. Deve avere un significato concordato.
@@ -589,6 +642,12 @@ Domande di progettazione:
 - Come viene validata la dimensione dichiarata?
 
 Per un laboratorio locale si può usare una pipe. Per processi non imparentati si possono valutare FIFO, socket locali o code di messaggi. Per la rete diventano rilevanti serializzazione, ordine dei byte, autenticazione e perdita della connessione.
+
+<!-- figure:02-protocollo -->
+<p align="center">
+  <img src="../../assets/tpsi4/02-protocollo.svg" alt="Un messaggio comprende versione, tipo, ID richiesta, lunghezza e payload. Il ricevente accumula i byte e valida il formato prima di elaborare la richiesta." width="960">
+</p>
+<p align="center"><em>Un messaggio comprende versione, tipo, ID richiesta, lunghezza e payload. Il ricevente accumula i byte e valida il formato prima di elaborare la richiesta.</em></p>
 
 ## Ownership come strumento di progetto
 

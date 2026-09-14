@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "components": [
+    {
+      "id": "tpsi-user",
+      "origin": "quinto",
+      "label": "Persona / attore"
+    },
+    {
+      "id": "tpsi-document",
+      "origin": "quinto",
+      "label": "Documento"
+    },
+    {
+      "id": "tpsi-terminal",
+      "origin": "quinto",
+      "label": "Terminale"
+    },
+    {
+      "id": "tpsi-repository",
+      "origin": "quinto",
+      "label": "Repository"
+    },
+    {
+      "id": "tpsi-lock",
+      "origin": "quinto",
+      "label": "Segreto / risorsa protetta"
+    },
+    {
+      "id": "tpsi-test",
+      "origin": "quinto",
+      "label": "Test"
+    },
+    {
+      "id": "tpsi-artifact",
+      "origin": "quinto",
+      "label": "Artefatto"
+    },
+    {
+      "id": "tpsi-server",
+      "origin": "quinto",
+      "label": "Server"
+    },
+    {
+      "id": "tpsi-database",
+      "origin": "quinto",
+      "label": "Archivio dati"
+    },
+    {
+      "id": "tpsi-process",
+      "label": "Processo",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-thread",
+      "label": "Thread",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-memory",
+      "label": "Area di memoria",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-cpu",
+      "label": "CPU / core",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-pipe",
+      "label": "Pipe",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-queue",
+      "label": "Coda / buffer",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-message",
+      "label": "Messaggio",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-mutex",
+      "label": "Mutex",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-semaphore",
+      "label": "Semaforo contatore",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-condition",
+      "label": "Variabile di condizione",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-monitor",
+      "label": "Monitor software",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-commit",
+      "label": "Commit",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-requirement",
+      "label": "Requisito verificabile",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-debugger",
+      "label": "Debugger / osservazione",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-shield",
+      "label": "Controllo di accesso",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-badge-c",
+      "label": "C",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-badge-posix",
+      "label": "POSIX",
+      "origin": "quarto"
+    },
+    {
+      "id": "tpsi-badge-java",
+      "label": "Java",
+      "origin": "quarto"
+    }
+  ]
+}

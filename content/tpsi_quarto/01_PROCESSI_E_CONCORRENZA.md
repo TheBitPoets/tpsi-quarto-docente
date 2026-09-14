@@ -9,6 +9,17 @@ technical_sources:
 transformation: original-course-material
 -->
 
+<!-- visual-orientation -->
+<details>
+<summary>&#128506; <strong>Orientamento della sezione</strong></summary>
+
+<p align="justify"><strong>Contesto:</strong> Costruisce il modello concettuale di processo, thread, risorsa, concorrenza e parallelismo, collegandolo alle sezioni operative della dispensa Linux.</p>
+<p align="justify"><strong>Prerequisiti:</strong> C intermedio, compilazione, memoria, funzioni e puntatori di base.</p>
+<p align="justify"><strong>Obiettivo:</strong> Distinguere programma/processo/thread, descrivere ciclo di vita e risorse, usare fork/exec/wait in esempi controllati e confrontare POSIX e Java.</p>
+<p align="justify"><strong>Prossimo passo:</strong> Svolgere esercizi A-D e avviare il laboratorio fork/pipe.</p>
+
+</details>
+
 ## In questa unità impareremo
 
 Al termine dell'unità lo studente dovrà saper:
@@ -90,16 +101,15 @@ Collegamenti alla fonte tecnica:
 - [Process IDs](../../LINUX_PROGRAMMING.md#process-ids)
 - [Vedere i processi attivi](../../LINUX_PROGRAMMING.md#vedere-i-processi-attivi)
 
+<!-- figure:01-programma-processi -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-programma-processi.svg" alt="Lo stesso eseguibile avvia due processi con PID diversi e spazi di memoria distinti." width="960">
+</p>
+<p align="center"><em>Lo stesso eseguibile avvia due processi con PID diversi e spazi di memoria distinti.</em></p>
+
 ## Stato e ciclo di vita di un processo
 
 Per ragionare sul sistema operativo è utile un modello semplificato a stati:
-
-```text
-nuovo -> pronto -> in esecuzione -> terminato
-                   |          ^
-                   v          |
-                in attesa -----
-```
 
 - **Nuovo**: il sistema sta creando le strutture necessarie.
 - **Pronto**: il processo può essere eseguito, ma aspetta la CPU.
@@ -107,7 +117,7 @@ nuovo -> pronto -> in esecuzione -> terminato
 - **In attesa**: non può proseguire finché non avviene un evento, per esempio la disponibilità di dati.
 - **Terminato**: non esegue più istruzioni; alcune informazioni possono restare temporaneamente disponibili al padre.
 
-Il diagramma non descrive tutti i dettagli di un kernel reale. Serve a capire due idee:
+Nel diagramma, il completamento dell'evento riporta il processo in stato pronto; lo scheduler decide quando assegnargli la CPU. Il diagramma non descrive tutti i dettagli di un kernel reale. Serve a capire due idee:
 
 1. un processo pronto non è necessariamente in esecuzione;
 2. un processo in attesa non deve consumare continuamente la CPU per controllare se l'evento è avvenuto.
@@ -115,6 +125,12 @@ Il diagramma non descrive tutti i dettagli di un kernel reale. Serve a capire du
 ### Cambio di contesto
 
 Quando il sistema sospende un processo e ne esegue un altro, deve salvare e ripristinare il relativo contesto. Questo lavoro ha un costo. La concorrenza non rende automaticamente un programma più veloce: può migliorare reattività e utilizzo delle risorse, ma introduce anche overhead e complessità.
+
+<!-- figure:01-stati-processo -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-stati-processo.svg" alt="Nuovo passa a pronto; lo scheduler porta pronto in esecuzione. Attesa di I/O porta in attesa; l&#x27;evento riporta a pronto. La preemption riporta il processo da in esecuzione a pronto; l&#x27;uscita porta a terminato." width="960">
+</p>
+<p align="center"><em>Nuovo passa a pronto; lo scheduler porta pronto in esecuzione. Attesa di I/O porta in attesa; l&#x27;evento riporta a pronto. La preemption riporta il processo da in esecuzione a pronto; l&#x27;uscita porta a terminato.</em></p>
 
 ## Risorse private e risorse condivise
 
@@ -141,6 +157,12 @@ Ogni thread possiede almeno uno stack e un contesto di esecuzione separati.
 | costo di coordinamento | spesso maggiore | spesso minore, ma più delicato |
 
 L'isolamento riduce alcuni errori, ma rende necessaria una comunicazione esplicita. La condivisione facilita lo scambio di dati, ma può produrre race condition.
+
+<!-- figure:01-memoria-thread -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-memoria-thread.svg" alt="Due processi hanno heap separati. Due thread di uno stesso processo condividono heap, globali e descrittori, ma conservano stack e registri propri." width="960">
+</p>
+<p align="center"><em>Due processi hanno heap separati. Due thread di uno stesso processo condividono heap, globali e descrittori, ma conservano stack e registri propri.</em></p>
 
 ## Sequenziale, concorrente e parallelo
 
@@ -178,6 +200,12 @@ Il parallelismo può aumentare le prestazioni, ma soltanto se il lavoro può ess
 ### Domanda di controllo
 
 Un programma con due thread su un computer a singolo core può essere concorrente? Sì. Può alternare i thread anche se non li esegue simultaneamente.
+
+<!-- figure:01-concorrenza-parallelismo -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-concorrenza-parallelismo.svg" alt="Sequenziale: A termina prima di B. Concorrente su un core: A e B alternano i passi. Parallelo su due core: A e B eseguono passi nello stesso intervallo." width="960">
+</p>
+<p align="center"><em>Sequenziale: A termina prima di B. Concorrente su un core: A e B alternano i passi. Parallelo su due core: A e B eseguono passi nello stesso intervallo.</em></p>
 
 ## Gerarchia dei processi in Linux
 
@@ -223,6 +251,12 @@ Collegamenti:
 - [`fork()` e `exec()`](../../LINUX_PROGRAMMING.md#fork-exec)
 - [Aspettare la terminazione di un processo](../../LINUX_PROGRAMMING.md#aspettare-la-terminazione-di-un-processo)
 - [Processi zombie](../../LINUX_PROGRAMMING.md#processi-zombie)
+
+<!-- figure:01-fork-exec-wait -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-fork-exec-wait.svg" alt="fork crea un figlio con un PID nuovo; exec cambia il programma del figlio mantenendone il PID; waitpid nel padre raccoglie lo stato dopo la terminazione del figlio." width="960">
+</p>
+<p align="center"><em>fork crea un figlio con un PID nuovo; exec cambia il programma del figlio mantenendone il PID; waitpid nel padre raccoglie lo stato dopo la terminazione del figlio.</em></p>
 
 ## Esempio C originale: padre e figlio con uscita controllata
 

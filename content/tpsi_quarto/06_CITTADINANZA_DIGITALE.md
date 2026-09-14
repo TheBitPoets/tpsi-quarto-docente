@@ -7,6 +7,17 @@ curriculum_reference: tpsi4-curriculum-hoepli-volume-2
 transformation: original-course-material
 -->
 
+<!-- visual-orientation -->
+<details>
+<summary>&#128506; <strong>Orientamento della sezione</strong></summary>
+
+<p align="justify"><strong>Contesto:</strong> Integra licenze, provenienza, privacy, segreti, supply chain, accessibilita, valutazione e uso responsabile dell&#x27;AI nel progetto finale.</p>
+<p align="justify"><strong>Prerequisiti:</strong> Tutti i moduli precedenti e un progetto di gruppo in corso.</p>
+<p align="justify"><strong>Obiettivo:</strong> Applicare responsabilita tecnica e digitale a fonti, dati, repository, review, dipendenze, AI e valutazione.</p>
+<p align="justify"><strong>Prossimo passo:</strong> Completare un progetto concorrente documentato, testato e accompagnato da manifest di fonti e policy.</p>
+
+</details>
+
 ## In questa unità impareremo
 
 Al termine dell'unità lo studente dovrà saper:
@@ -100,6 +111,12 @@ Nel pacchetto TPSI:
 
 Dichiarare questa distinzione evita di attribuire al libro un testo che non contiene e di presentare un contenuto AI come fonte primaria.
 
+<!-- figure:06-provenienza -->
+<p align="center">
+  <img src="../../assets/tpsi4/06-provenienza.svg" alt="Libro e documentazione sono riferimenti dichiarati. La bozza originale conserva le fonti; il docente verifica e revisiona; la versione consegnata conserva l&#x27;identità e la storia della revisione." width="960">
+</p>
+<p align="center"><em>Libro e documentazione sono riferimenti dichiarati. La bozza originale conserva le fonti; il docente verifica e revisiona; la versione consegnata conserva l&#x27;identità e la storia della revisione.</em></p>
+
 ## Citare non significa copiare integralmente
 
 Una citazione breve e pertinente può servire a commentare o discutere. Una raccolta sistematica di estratti che ricostruisce l'opera può diventare una riproduzione sostanziale.
@@ -170,6 +187,12 @@ Esempio di matrice:
 | configurare provider | no | limitato | sì |
 
 La UI nascosta non è un controllo di autorizzazione. Il server deve applicare la regola.
+
+<!-- figure:06-accessi -->
+<p align="center">
+  <img src="../../assets/tpsi4/06-accessi.svg" alt="La richiesta porta un&#x27;identità al server. Il server verifica ruolo, operazione e risorsa: può consentire la lettura della propria consegna oppure rifiutare l&#x27;accesso dello studente alla soluzione docente." width="960">
+</p>
+<p align="center"><em>La richiesta porta un&#x27;identità al server. Il server verifica ruolo, operazione e risorsa: può consentire la lettura della propria consegna oppure rifiutare l&#x27;accesso dello studente alla soluzione docente.</em></p>
 
 ## Segreti
 
@@ -579,6 +602,12 @@ sistema concorrente o servizio locale
 ```
 
 Il progetto viene valutato su correttezza, processo, evidenze, chiarezza, responsabilità e capacità di motivare le scelte.
+
+<!-- figure:06-progetto -->
+<p align="center">
+  <img src="../../assets/tpsi4/06-progetto.svg" alt="Un coordinatore distribuisce richieste attraverso una coda limitata a più worker. Ogni richiesta ha un&#x27;identità e un esito tracciabile; requisiti, test e documentazione accompagnano il sistema." width="960">
+</p>
+<p align="center"><em>Un coordinatore distribuisce richieste attraverso una coda limitata a più worker. Ogni richiesta ha un&#x27;identità e un esito tracciabile; requisiti, test e documentazione accompagnano il sistema.</em></p>
 
 ## Fonti e note di revisione
 

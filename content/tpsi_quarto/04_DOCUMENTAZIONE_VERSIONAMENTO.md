@@ -7,6 +7,17 @@ curriculum_reference: tpsi4-curriculum-hoepli-volume-2
 transformation: original-course-material
 -->
 
+<!-- visual-orientation -->
+<details>
+<summary>&#128506; <strong>Orientamento della sezione</strong></summary>
+
+<p align="justify"><strong>Contesto:</strong> Organizza README, documentazione del codice, ADR, contratti, Git, branch, conflitti, pull request, review e provenienza.</p>
+<p align="justify"><strong>Prerequisiti:</strong> Requisiti, criteri di accettazione e uso essenziale di Git.</p>
+<p align="justify"><strong>Obiettivo:</strong> Produrre documenti per pubblici diversi, commit intenzionali e una PR verificabile che colleghi requisiti, codice e test.</p>
+<p align="justify"><strong>Prossimo passo:</strong> Documentare e versionare una activity completa in un branch dedicato.</p>
+
+</details>
+
 ## In questa unità impareremo
 
 Al termine dell'unità lo studente dovrà saper:
@@ -159,6 +170,12 @@ Un runbook descrive operazioni ripetibili:
 ### Changelog e note di rilascio
 
 Il changelog registra modifiche rilevanti per gli utenti o manutentori. Non deve essere la semplice copia dei messaggi di commit.
+
+<!-- figure:04-documentazione -->
+<p align="center">
+  <img src="../../assets/tpsi4/04-documentazione.svg" alt="Il README collega guida di avvio, documentazione architetturale e contratti del codice. I documenti rispondono a domande diverse e vengono mantenuti insieme al progetto." width="960">
+</p>
+<p align="center"><em>Il README collega guida di avvio, documentazione architetturale e contratti del codice. I documenti rispondono a domande diverse e vengono mantenuti insieme al progetto.</em></p>
 
 ## Una fonte autorevole per ogni informazione
 
@@ -367,6 +384,12 @@ Il merge combina storie. Può produrre un commit di merge o un avanzamento linea
 ### Rebase
 
 Il rebase riposiziona commit su una nuova base e riscrive gli identificatori dei commit interessati. È utile per mantenere una storia lineare, ma non va applicato senza attenzione a commit già condivisi.
+
+<!-- figure:04-git -->
+<p align="center">
+  <img src="../../assets/tpsi4/04-git.svg" alt="Da C1 parte feature con F1 e F2 mentre main avanza a C2. Dopo review, un merge crea M con genitori C2 e F2. I conflitti eventuali si risolvono prima del commit di merge." width="960">
+</p>
+<p align="center"><em>Da C1 parte feature con F1 e F2 mentre main avanza a C2. Dopo review, un merge crea M con genitori C2 e F2. I conflitti eventuali si risolvono prima del commit di merge.</em></p>
 
 ## Conflitti
 

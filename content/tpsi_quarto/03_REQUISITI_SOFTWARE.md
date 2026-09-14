@@ -7,6 +7,17 @@ curriculum_reference: tpsi4-curriculum-hoepli-volume-2
 transformation: original-course-material
 -->
 
+<!-- visual-orientation -->
+<details>
+<summary>&#128506; <strong>Orientamento della sezione</strong></summary>
+
+<p align="justify"><strong>Contesto:</strong> Trasforma bisogni e problemi osservati in requisiti, casi d&#x27;uso, scenari, criteri di accettazione e tracciabilità.</p>
+<p align="justify"><strong>Prerequisiti:</strong> Esperienza con piccoli progetti e con gli errori tipici dei sistemi concorrenti.</p>
+<p align="justify"><strong>Obiettivo:</strong> Scrivere requisiti funzionali/non funzionali verificabili, modellare attori e scenari, costruire una specifica leggera.</p>
+<p align="justify"><strong>Prossimo passo:</strong> Produrre una mini SRS e una bozza activity tracciata ai requisiti.</p>
+
+</details>
+
 ## In questa unità impareremo
 
 Al termine dell'unità lo studente dovrà saper:
@@ -355,6 +366,12 @@ flowchart LR
 
 Il diagramma non sostituisce le descrizioni. Serve a mostrare confini e relazioni.
 
+<!-- figure:03-casi-uso -->
+<p align="center">
+  <img src="../../assets/tpsi4/03-casi-uso.svg" alt="Il docente è associato all&#x27;assegnazione del laboratorio; lo studente alla consegna e alla consultazione del feedback. I casi d&#x27;uso sono dentro il confine della piattaforma; gli attori sono esterni." width="960">
+</p>
+<p align="center"><em>Il docente è associato all&#x27;assegnazione del laboratorio; lo studente alla consegna e alla consultazione del feedback. I casi d&#x27;uso sono dentro il confine della piattaforma; gli attori sono esterni.</em></p>
+
 ## Caso di studio: creare e assegnare un laboratorio
 
 ### Attori
@@ -473,6 +490,12 @@ Esempio:
 | RF-03 collegare activity a UDA | `activity_ids` nell'item | test contratto percorso | activity visibile nel pannello studente |
 
 La tracciabilità aiuta a valutare l'impatto di una modifica. Se cambia un requisito, possiamo individuare documenti, codice e test da aggiornare.
+
+<!-- figure:03-tracciabilita -->
+<p align="center">
+  <img src="../../assets/tpsi4/03-tracciabilita.svg" alt="Il requisito di capacità del buffer guida l&#x27;implementazione; un test di inserimento a buffer pieno verifica il comportamento; il report documenta l&#x27;esito. Gli identificatori collegano i quattro artefatti." width="960">
+</p>
+<p align="center"><em>Il requisito di capacità del buffer guida l&#x27;implementazione; un test di inserimento a buffer pieno verifica il comportamento; il report documenta l&#x27;esito. Gli identificatori collegano i quattro artefatti.</em></p>
 
 ## Gestione delle modifiche
 

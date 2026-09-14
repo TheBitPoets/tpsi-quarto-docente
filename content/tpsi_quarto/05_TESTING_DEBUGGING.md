@@ -7,6 +7,17 @@ curriculum_reference: tpsi4-curriculum-hoepli-volume-2
 transformation: original-course-material
 -->
 
+<!-- visual-orientation -->
+<details>
+<summary>&#128506; <strong>Orientamento della sezione</strong></summary>
+
+<p align="justify"><strong>Contesto:</strong> Collega requisiti, verifica, validazione, test statici/dinamici, sanitizer, debugger, regressioni, runner e CI.</p>
+<p align="justify"><strong>Prerequisiti:</strong> Requisiti, documentazione, programmi C e concorrenza.</p>
+<p align="justify"><strong>Obiettivo:</strong> Progettare casi di test, interpretare report, riprodurre e correggere difetti con un metodo basato su evidenze.</p>
+<p align="justify"><strong>Prossimo passo:</strong> Eseguire l&#x27;activity end-to-end, aggiungere una regressione e documentare il risultato.</p>
+
+</details>
+
 ## In questa unità impareremo
 
 Al termine dell'unità lo studente dovrà saper:
@@ -152,6 +163,12 @@ La review statica può cercare:
 - differenze fra requisiti, codice e test;
 - codice duplicato;
 - nomi o contratti ambigui.
+
+<!-- figure:05-statica-dinamica -->
+<p align="center">
+  <img src="../../assets/tpsi4/05-statica-dinamica.svg" alt="La verifica statica esamina codice e documenti senza eseguire il programma: review, analisi e warning. La verifica dinamica esegue il programma con input e confronta risultati e comportamento attesi." width="960">
+</p>
+<p align="center"><em>La verifica statica esamina codice e documenti senza eseguire il programma: review, analisi e warning. La verifica dinamica esegue il programma con input e confronta risultati e comportamento attesi.</em></p>
 
 ## Verifica dinamica
 
@@ -375,6 +392,12 @@ Il debugging efficace è un processo scientifico:
 9. documenta causa e impatto.
 
 Modificare codice casualmente finché il problema scompare non identifica la causa.
+
+<!-- figure:05-debug -->
+<p align="center">
+  <img src="../../assets/tpsi4/05-debug.svg" alt="Riproduci e riduci il difetto, raccogli evidenze, formula un&#x27;ipotesi e mettila alla prova. Se è smentita, formula una nuova ipotesi; se confermata, correggi e aggiungi una regressione." width="960">
+</p>
+<p align="center"><em>Riproduci e riduci il difetto, raccogli evidenze, formula un&#x27;ipotesi e mettila alla prova. Se è smentita, formula una nuova ipotesi; se confermata, correggi e aggiungi una regressione.</em></p>
 
 ## Riproducibilità
 

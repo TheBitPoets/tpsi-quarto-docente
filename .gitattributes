@@ -1,0 +1,2 @@
+# Generated SVGs must compare byte-for-byte on Windows and Linux.
+assets/tpsi4/** text eol=lf
