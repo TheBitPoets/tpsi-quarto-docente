@@ -136,3 +136,7 @@ La figura [main, acquisisci e converti](../assets/tpsi4/01-stack-chiamate-annida
 ## Esempio minimo collegato ai registri
 
 Su richiesta del docente, il percorso per immagini include ora una funzione C di due assegnamenti e sei istruzioni assembly commentate. Usa RDI per il puntatore e RAX per il dato; RIP e RSP sono spiegati in relazione alla ripresa e al ritorno. Una tabella collega il risultato 23 nel registro al valore ancora 20 in memoria mostrato nella figura. Le immagini restano invariate.
+
+## Posizione di RSP nella chiamata
+
+La figura `01-chiamata-stack` mostra ora tre viste delle stesse celle da 8 byte, con indirizzi minori in alto. Le frecce di RSP puntano alla cella 0x1000 prima della chiamata, alla cella 0x0FF0 dopo il salvataggio del ritorno e la riserva locale, poi di nuovo a 0x1000. Il testo esplicita il passaggio intermedio a 0x0FF8. Indirizzi e riserva locale sono illustrativi e distinti dalla funzione minima senza spazio locale. Rendering ispezionato; build e 12 test superati.

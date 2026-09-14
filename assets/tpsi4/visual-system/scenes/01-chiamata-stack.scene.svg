@@ -1,38 +1,68 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-chiamata-stack.svg"><title id="scene-title">Una funzione parte, lo stack ricorda il ritorno</title><desc id="scene-desc">Prima della chiamata è attiva l'attività principale. Durante la funzione lo stack conserva il punto di ritorno e il frame corrente. Al ritorno quel frame non è più attivo e l'esecuzione continua nel chiamante.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="24" fill="{{canvas}}"/>
-<text x="64" y="85" font-size="48" fill="{{surface}}" font-weight="700">Una funzione parte, lo stack ricorda il ritorno</text>
-<text x="64" y="143" font-size="28" fill="{{muted}}" font-weight="400">Tre momenti dello stesso thread: cambia la funzione attiva, il processo resta lo stesso.</text>
-<rect x="64" y="210" width="552" height="650" rx="24" fill="{{surface}}"/>
-<text x="92" y="272" font-size="32" fill="{{ink}}" font-weight="700">1. Prima della chiamata</text>
-<rect x="684" y="210" width="552" height="650" rx="24" fill="{{surface}}"/>
-<text x="712" y="272" font-size="32" fill="{{ink}}" font-weight="700">2. Dentro la funzione</text>
-<rect x="1304" y="210" width="552" height="650" rx="24" fill="{{surface}}"/>
-<text x="1332" y="272" font-size="32" fill="{{ink}}" font-weight="700">3. Dopo il ritorno</text>
-<text x="92" y="348" font-size="28" fill="{{ink}}" font-weight="400">Attività principale:</text>
-<text x="92" y="390" font-size="28" fill="{{ink}}" font-weight="400">sta per chiedere il calcolo.</text>
-<text x="712" y="348" font-size="28" fill="{{ink}}" font-weight="400">Funzione di calcolo:</text>
-<text x="712" y="390" font-size="28" fill="{{ink}}" font-weight="400">sta elaborando il dato.</text>
-<text x="1332" y="348" font-size="28" fill="{{ink}}" font-weight="400">Attività principale:</text>
-<text x="1332" y="390" font-size="28" fill="{{ink}}" font-weight="400">continua dal punto salvato.</text>
-<text x="92" y="488" font-size="26" fill="{{ink}}" font-weight="700">STACK IN MEMORIA</text>
-<rect x="92" y="690" width="496" height="90" rx="24" fill="#dbeafe"/>
-<text x="118" y="743" font-size="28" fill="{{ink}}" font-weight="400">Frame dell’attività principale</text>
-<text x="712" y="488" font-size="26" fill="{{ink}}" font-weight="700">STACK IN MEMORIA</text>
-<rect x="712" y="690" width="496" height="90" rx="24" fill="#dbeafe"/>
-<text x="738" y="743" font-size="28" fill="{{ink}}" font-weight="400">Frame dell’attività principale</text>
-<text x="1332" y="488" font-size="26" fill="{{ink}}" font-weight="700">STACK IN MEMORIA</text>
-<rect x="1332" y="690" width="496" height="90" rx="24" fill="#dbeafe"/>
-<text x="1358" y="743" font-size="28" fill="{{ink}}" font-weight="400">Frame dell’attività principale</text>
-<rect x="712" y="528" width="496" height="140" rx="24" fill="#ccfbf1"/>
-<text x="738" y="570" font-size="26" fill="{{ink}}" font-weight="400">Frame del calcolo</text>
-<text x="738" y="612" font-size="26" fill="{{ink}}" font-weight="400">Dati della chiamata</text>
-<text x="738" y="654" font-size="26" fill="{{ink}}" font-weight="400">Punto di ritorno</text>
-<text x="92" y="620" font-size="28" fill="{{ink}}" font-weight="700">RSP → cima corrente</text>
-<text x="712" y="820" font-size="26" fill="{{ink}}" font-weight="700">RSP → cima del nuovo frame</text>
-<text x="1332" y="553" font-size="26" fill="{{ink}}" font-weight="400">Il frame del calcolo</text>
-<text x="1332" y="595" font-size="26" fill="{{ink}}" font-weight="400">non è più attivo.</text>
-<text x="1332" y="637" font-size="26" fill="{{ink}}" font-weight="400">RSP torna al livello precedente.</text>
-<path d="M620 412 H676" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
-<path d="M1240 412 H1296" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-chiamata-stack.svg"><title id="scene-title">Lo stack cresce: RSP indica la cima corrente</title><desc id="scene-desc">Tre viste dello stesso stack con indirizzi minori in alto e celle da 8 byte. Prima della chiamata RSP punta a 0x1000. La chiamata salva il ritorno a 0x0FF8 e la funzione riserva 8 byte a 0x0FF0, dove punta RSP. Dopo aver rilasciato lo spazio locale e completato il ritorno RSP punta di nuovo a 0x1000.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="24" fill="{{canvas}}"/>
+<text x="64" y="85" font-size="48" fill="{{surface}}" font-weight="700">Lo stack cresce: RSP indica la cima corrente</text>
+<text x="64" y="143" font-size="28" fill="{{muted}}" font-weight="400">Stesso stack nei tre pannelli · una cella = 8 byte · indirizzi illustrativi</text>
+<rect x="64" y="210" width="552" height="672" rx="24" fill="{{surface}}"/>
+<rect x="684" y="210" width="552" height="672" rx="24" fill="{{surface}}"/>
+<rect x="1304" y="210" width="552" height="672" rx="24" fill="{{surface}}"/>
+<text x="88" y="265" font-size="31" fill="{{ink}}" font-weight="700">1. Prima della chiamata</text>
+<text x="708" y="265" font-size="31" fill="{{ink}}" font-weight="700">2. Dentro la funzione</text>
+<text x="1328" y="265" font-size="31" fill="{{ink}}" font-weight="700">3. Dopo il ritorno</text>
+<text x="88" y="321" font-size="26" fill="{{ink}}" font-weight="400">RSP = 0x1000</text>
+<text x="88" y="363" font-size="26" fill="{{ink}}" font-weight="400">È attiva la funzione chiamante.</text>
+<text x="708" y="321" font-size="26" fill="{{ink}}" font-weight="400">RSP = 0x0FF0</text>
+<text x="708" y="363" font-size="26" fill="{{ink}}" font-weight="400">Ritorno salvato + 8 byte locali.</text>
+<text x="1328" y="321" font-size="26" fill="{{ink}}" font-weight="400">RSP = 0x1000</text>
+<text x="1328" y="363" font-size="26" fill="{{ink}}" font-weight="400">Riprende la funzione chiamante.</text>
+<text x="88" y="453" font-size="25" fill="{{ink}}" font-weight="700">0x0FF0</text>
+<rect x="268" y="425" width="320" height="90" rx="24" fill="#e2e8f0"/>
+<text x="286" y="460" font-size="25" fill="{{ink}}" font-weight="400">Spazio non</text>
+<text x="286" y="502" font-size="25" fill="{{ink}}" font-weight="400">ancora usato</text>
+<text x="88" y="563" font-size="25" fill="{{ink}}" font-weight="700">0x0FF8</text>
+<rect x="268" y="535" width="320" height="90" rx="24" fill="#e2e8f0"/>
+<text x="286" y="570" font-size="25" fill="{{ink}}" font-weight="400">Spazio non</text>
+<text x="286" y="612" font-size="25" fill="{{ink}}" font-weight="400">ancora usato</text>
+<text x="88" y="673" font-size="25" fill="{{ink}}" font-weight="700">0x1000</text>
+<rect x="268" y="645" width="320" height="90" rx="24" fill="#dbeafe"/>
+<text x="286" y="680" font-size="25" fill="{{ink}}" font-weight="400">Stack del</text>
+<text x="286" y="722" font-size="25" fill="{{ink}}" font-weight="400">chiamante</text>
+<text x="88" y="715" font-size="25" fill="{{ink}}" font-weight="700">RSP</text>
+<path d="M152 707 H258" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<text x="708" y="453" font-size="25" fill="{{ink}}" font-weight="700">0x0FF0</text>
+<rect x="888" y="425" width="320" height="90" rx="24" fill="#ccfbf1"/>
+<text x="906" y="460" font-size="25" fill="{{ink}}" font-weight="400">Spazio locale</text>
+<text x="906" y="502" font-size="25" fill="{{ink}}" font-weight="400">della funzione</text>
+<text x="708" y="563" font-size="25" fill="{{ink}}" font-weight="700">0x0FF8</text>
+<rect x="888" y="535" width="320" height="90" rx="24" fill="#fef3c7"/>
+<text x="906" y="570" font-size="25" fill="{{ink}}" font-weight="400">Indirizzo</text>
+<text x="906" y="612" font-size="25" fill="{{ink}}" font-weight="400">di ritorno</text>
+<text x="708" y="673" font-size="25" fill="{{ink}}" font-weight="700">0x1000</text>
+<rect x="888" y="645" width="320" height="90" rx="24" fill="#dbeafe"/>
+<text x="906" y="680" font-size="25" fill="{{ink}}" font-weight="400">Stack del</text>
+<text x="906" y="722" font-size="25" fill="{{ink}}" font-weight="400">chiamante</text>
+<text x="708" y="495" font-size="25" fill="{{ink}}" font-weight="700">RSP</text>
+<path d="M772 487 H878" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<text x="1328" y="453" font-size="25" fill="{{ink}}" font-weight="700">0x0FF0</text>
+<rect x="1508" y="425" width="320" height="90" rx="24" fill="#e2e8f0"/>
+<text x="1526" y="460" font-size="25" fill="{{ink}}" font-weight="400">Spazio non</text>
+<text x="1526" y="502" font-size="25" fill="{{ink}}" font-weight="400">più attivo</text>
+<text x="1328" y="563" font-size="25" fill="{{ink}}" font-weight="700">0x0FF8</text>
+<rect x="1508" y="535" width="320" height="90" rx="24" fill="#e2e8f0"/>
+<text x="1526" y="570" font-size="25" fill="{{ink}}" font-weight="400">Spazio non</text>
+<text x="1526" y="612" font-size="25" fill="{{ink}}" font-weight="400">più attivo</text>
+<text x="1328" y="673" font-size="25" fill="{{ink}}" font-weight="700">0x1000</text>
+<rect x="1508" y="645" width="320" height="90" rx="24" fill="#dbeafe"/>
+<text x="1526" y="680" font-size="25" fill="{{ink}}" font-weight="400">Stack del</text>
+<text x="1526" y="722" font-size="25" fill="{{ink}}" font-weight="400">chiamante</text>
+<text x="1328" y="715" font-size="25" fill="{{ink}}" font-weight="700">RSP</text>
+<path d="M1392 707 H1498" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<text x="88" y="790" font-size="25" fill="{{ink}}" font-weight="400">La cima corrente è la cella</text>
+<text x="88" y="832" font-size="25" fill="{{ink}}" font-weight="400">all’indirizzo indicato da RSP.</text>
+<text x="708" y="790" font-size="24" fill="{{ink}}" font-weight="400">Cresce verso indirizzi minori.</text>
+<text x="708" y="832" font-size="24" fill="{{ink}}" font-weight="400">RSP diminuisce: 0x1000 → 0x0FF0.</text>
+<text x="1328" y="790" font-size="24" fill="{{ink}}" font-weight="400">Si rilascia lo spazio locale</text>
+<text x="1328" y="832" font-size="24" fill="{{ink}}" font-weight="400">e si recupera il ritorno: RSP aumenta.</text>
+<path d="M620 581 H676" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<path d="M1240 581 H1296" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
 <rect x="64" y="920" width="1792" height="94" rx="24" fill="{{panel}}"/>
-<text x="94" y="977" font-size="28" fill="{{surface}}" font-weight="400">Schema dei frame, non disposizione esatta dei byte: il compilatore può organizzare diversamente i dettagli.</text>
+<text x="94" y="977" font-size="28" fill="{{surface}}" font-weight="400">Nel disegno: indirizzi minori in alto ↑ · la pila cresce verso l’alto; al ritorno RSP aumenta e la pila si riduce.</text>
 <text x="64" y="1054" font-size="24" fill="{{muted}}" font-weight="400">TPSI 4 · Intel x86-64 · Modello didattico semplificato</text></g></svg>

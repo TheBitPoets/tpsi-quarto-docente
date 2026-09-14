@@ -317,11 +317,13 @@ f:
 
 <!-- figure:01-chiamata-stack -->
 <p align="center">
-  <img src="../../assets/tpsi4/01-chiamata-stack.svg" alt="Prima della chiamata è attiva l&#x27;attività principale. Durante la funzione lo stack conserva il punto di ritorno e il frame corrente. Al ritorno quel frame non è più attivo e l&#x27;esecuzione continua nel chiamante." width="960">
+  <img src="../../assets/tpsi4/01-chiamata-stack.svg" alt="Tre viste dello stesso stack con indirizzi minori in alto e celle da 8 byte. Prima della chiamata RSP punta a 0x1000. La chiamata salva il ritorno a 0x0FF8 e la funzione riserva 8 byte a 0x0FF0, dove punta RSP. Dopo aver rilasciato lo spazio locale e completato il ritorno RSP punta di nuovo a 0x1000." width="960">
 </p>
-<p align="center"><em>Lo stack conserva ciò che serve alle chiamate aperte. Terminata una funzione, si riprende dal punto di ritorno del chiamante.</em></p>
+<p align="center"><em>La crescita avviene verso indirizzi minori: RSP passa da 0x1000 a 0x0FF8 con la chiamata e a 0x0FF0 riservando spazio locale. Al ritorno torna a 0x1000.</em></p>
 
-<p align="justify">Segui i tre momenti: prima lavora l'attività principale; poi è attiva la funzione di calcolo, con il proprio <strong>frame</strong>; infine il calcolo termina e si torna al punto conservato. Il registro <strong>RSP</strong> segue la cima corrente dello stack. Un frame raccoglie le informazioni utili a quella chiamata; la disposizione concreta dipende dal codice generato.</p>
+<p align="justify">I tre pannelli mostrano le stesse posizioni di memoria: <strong>gli indirizzi minori sono in alto</strong>. Prima della chiamata <strong>RSP vale 0x1000</strong>. La chiamata salva un indirizzo di ritorno di 8 byte e porta RSP a <strong>0x0FF8</strong>; nell'esempio, la funzione riserva poi altri 8 byte per uso locale e RSP diventa <strong>0x0FF0</strong>. La freccia del pannello centrale punta proprio a questa nuova cima.</p>
+
+<p align="justify">Per tornare al chiamante si percorre il cammino inverso: si rilasciano gli 8 byte locali, tornando a <strong>0x0FF8</strong>, poi si recupera l'indirizzo di ritorno e RSP torna a <strong>0x1000</strong>. <strong>Quando lo stack cresce, RSP diminuisce; quando lo stack si riduce, RSP aumenta.</strong> Le celle grigie non sono più parte attiva della chiamata terminata: il loro contenuto non deve essere cancellato per poterle riutilizzare. Gli indirizzi e gli 8 byte locali sono una scelta illustrativa; la funzione minima precedente non richiede quello spazio locale.</p>
 
 <p align="justify">In questo passaggio il processo e il thread rimangono gli stessi. Una chiamata di funzione cambia il punto del programma in esecuzione. Il <a href="#cambio-di-contesto">cambio di contesto</a>, invece, permette di sospendere un'attività e farne avanzare un'altra.</p>
 
