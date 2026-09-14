@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-chiamata-stack.svg"><title id="scene-title">Una funzione parte, lo stack ricorda il ritorno</title><desc id="scene-desc">Prima della chiamata è attiva l'attività principale. Durante la funzione lo stack conserva il punto di ritorno e il frame corrente. Al ritorno quel frame non è più attivo e l'esecuzione continua nel chiamante.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="24" fill="{{canvas}}"/>
+<text x="64" y="85" font-size="48" fill="{{surface}}" font-weight="700">Una funzione parte, lo stack ricorda il ritorno</text>
+<text x="64" y="143" font-size="28" fill="{{muted}}" font-weight="400">Tre momenti dello stesso thread: cambia la funzione attiva, il processo resta lo stesso.</text>
+<rect x="64" y="210" width="552" height="650" rx="24" fill="{{surface}}"/>
+<text x="92" y="272" font-size="32" fill="{{ink}}" font-weight="700">1. Prima della chiamata</text>
+<rect x="684" y="210" width="552" height="650" rx="24" fill="{{surface}}"/>
+<text x="712" y="272" font-size="32" fill="{{ink}}" font-weight="700">2. Dentro la funzione</text>
+<rect x="1304" y="210" width="552" height="650" rx="24" fill="{{surface}}"/>
+<text x="1332" y="272" font-size="32" fill="{{ink}}" font-weight="700">3. Dopo il ritorno</text>
+<text x="92" y="348" font-size="28" fill="{{ink}}" font-weight="400">Attività principale:</text>
+<text x="92" y="390" font-size="28" fill="{{ink}}" font-weight="400">sta per chiedere il calcolo.</text>
+<text x="712" y="348" font-size="28" fill="{{ink}}" font-weight="400">Funzione di calcolo:</text>
+<text x="712" y="390" font-size="28" fill="{{ink}}" font-weight="400">sta elaborando il dato.</text>
+<text x="1332" y="348" font-size="28" fill="{{ink}}" font-weight="400">Attività principale:</text>
+<text x="1332" y="390" font-size="28" fill="{{ink}}" font-weight="400">continua dal punto salvato.</text>
+<text x="92" y="488" font-size="26" fill="{{ink}}" font-weight="700">STACK IN MEMORIA</text>
+<rect x="92" y="690" width="496" height="90" rx="24" fill="#dbeafe"/>
+<text x="118" y="743" font-size="28" fill="{{ink}}" font-weight="400">Frame dell’attività principale</text>
+<text x="712" y="488" font-size="26" fill="{{ink}}" font-weight="700">STACK IN MEMORIA</text>
+<rect x="712" y="690" width="496" height="90" rx="24" fill="#dbeafe"/>
+<text x="738" y="743" font-size="28" fill="{{ink}}" font-weight="400">Frame dell’attività principale</text>
+<text x="1332" y="488" font-size="26" fill="{{ink}}" font-weight="700">STACK IN MEMORIA</text>
+<rect x="1332" y="690" width="496" height="90" rx="24" fill="#dbeafe"/>
+<text x="1358" y="743" font-size="28" fill="{{ink}}" font-weight="400">Frame dell’attività principale</text>
+<rect x="712" y="528" width="496" height="140" rx="24" fill="#ccfbf1"/>
+<text x="738" y="570" font-size="26" fill="{{ink}}" font-weight="400">Frame del calcolo</text>
+<text x="738" y="612" font-size="26" fill="{{ink}}" font-weight="400">Dati della chiamata</text>
+<text x="738" y="654" font-size="26" fill="{{ink}}" font-weight="400">Punto di ritorno</text>
+<text x="92" y="620" font-size="28" fill="{{ink}}" font-weight="700">RSP → cima corrente</text>
+<text x="712" y="820" font-size="26" fill="{{ink}}" font-weight="700">RSP → cima del nuovo frame</text>
+<text x="1332" y="553" font-size="26" fill="{{ink}}" font-weight="400">Il frame del calcolo</text>
+<text x="1332" y="595" font-size="26" fill="{{ink}}" font-weight="400">non è più attivo.</text>
+<text x="1332" y="637" font-size="26" fill="{{ink}}" font-weight="400">RSP torna al livello precedente.</text>
+<path d="M620 412 H676" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<path d="M1240 412 H1296" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<rect x="64" y="920" width="1792" height="94" rx="24" fill="{{panel}}"/>
+<text x="94" y="977" font-size="28" fill="{{surface}}" font-weight="400">Schema dei frame, non disposizione esatta dei byte: il compilatore può organizzare diversamente i dettagli.</text>
+<text x="64" y="1054" font-size="24" fill="{{muted}}" font-weight="400">TPSI 4 · Intel x86-64 · Modello didattico semplificato</text></g></svg>

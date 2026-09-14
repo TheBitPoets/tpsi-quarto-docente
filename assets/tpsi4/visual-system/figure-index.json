@@ -356,6 +356,47 @@
       ],
       "status": "composed",
       "book_visual_comparison": "pending-access"
+    },
+    {
+      "id": "01-registri-memoria",
+      "title": "I registri indicano dove lavorare",
+      "alt": "RIP indica la prossima istruzione, RSP la cima dello stack e RDI il blocco dati nell'esempio. RAX contiene il risultato temporaneo 23, mentre il blocco nell'heap contiene ancora 20.",
+      "caption": "I registri contengono valori e indirizzi; codice, stack e heap rimangono nella memoria del processo.",
+      "section": "Anatomia di un processo",
+      "components": [
+        "tpsi-cpu"
+      ],
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "scene": "assets/tpsi4/visual-system/scenes/01-registri-memoria.scene.svg",
+      "output": "assets/tpsi4/01-registri-memoria.svg",
+      "status": "composed",
+      "book_visual_comparison": "pending-access"
+    },
+    {
+      "id": "01-chiamata-stack",
+      "title": "Una funzione parte, lo stack ricorda il ritorno",
+      "alt": "Prima della chiamata è attiva l'attività principale. Durante la funzione lo stack conserva il punto di ritorno e il frame corrente. Al ritorno quel frame non è più attivo e l'esecuzione continua nel chiamante.",
+      "caption": "Lo stack conserva ciò che serve alle chiamate aperte. Terminata una funzione, si riprende dal punto di ritorno del chiamante.",
+      "section": "Anatomia di un processo",
+      "components": [],
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "scene": "assets/tpsi4/visual-system/scenes/01-chiamata-stack.scene.svg",
+      "output": "assets/tpsi4/01-chiamata-stack.svg",
+      "status": "composed",
+      "book_visual_comparison": "pending-access"
+    },
+    {
+      "id": "01-contesto-salvataggio",
+      "title": "Una CPU, due processi: salvare per riprendere",
+      "alt": "A calcola 23 ma il suo dato in memoria vale ancora 20. Il kernel salva il contesto di A e la CPU esegue B. Quando A riprende, ritrova risultato, punto di esecuzione, indirizzi e memoria corretti, quindi scrive 23.",
+      "caption": "Durante la pausa il risultato resta nel contesto salvato. Alla ripresa A ritrova registri e memoria coerenti e può completare la scrittura.",
+      "section": "Stato e ciclo di vita di un processo",
+      "components": [],
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "scene": "assets/tpsi4/visual-system/scenes/01-contesto-salvataggio.scene.svg",
+      "output": "assets/tpsi4/01-contesto-salvataggio.svg",
+      "status": "composed",
+      "book_visual_comparison": "pending-access"
     }
   ]
 }

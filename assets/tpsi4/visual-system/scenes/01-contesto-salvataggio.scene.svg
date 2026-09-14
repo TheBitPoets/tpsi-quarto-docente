@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-contesto-salvataggio.svg"><title id="scene-title">Una CPU, due processi: salvare per riprendere</title><desc id="scene-desc">A calcola 23 ma il suo dato in memoria vale ancora 20. Il kernel salva il contesto di A e la CPU esegue B. Quando A riprende, ritrova risultato, punto di esecuzione, indirizzi e memoria corretti, quindi scrive 23.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="24" fill="{{canvas}}"/>
+<text x="64" y="85" font-size="48" fill="{{surface}}" font-weight="700">Una CPU, due processi: salvare per riprendere</text>
+<text x="64" y="143" font-size="28" fill="{{muted}}" font-weight="400">Il tempo scorre da sinistra a destra · una CPU logica · un thread per processo.</text>
+<rect x="64" y="210" width="552" height="650" rx="24" fill="{{surface}}"/>
+<rect x="684" y="210" width="552" height="650" rx="24" fill="{{surface}}"/>
+<rect x="1304" y="210" width="552" height="650" rx="24" fill="{{surface}}"/>
+<text x="92" y="272" font-size="32" fill="{{ink}}" font-weight="700">1. A sta lavorando</text>
+<text x="712" y="272" font-size="32" fill="{{ink}}" font-weight="700">2. La CPU esegue B</text>
+<text x="1332" y="272" font-size="32" fill="{{ink}}" font-weight="700">3. A riprende</text>
+<rect x="92" y="315" width="496" height="204" rx="24" fill="#dbeafe"/>
+<text x="116" y="362" font-size="26" fill="{{ink}}" font-weight="400">Registri della CPU: stato di A</text>
+<text x="116" y="404" font-size="26" fill="{{ink}}" font-weight="400">RAX: risultato 23</text>
+<text x="116" y="446" font-size="26" fill="{{ink}}" font-weight="400">RIP: deve ancora scrivere</text>
+<text x="116" y="488" font-size="26" fill="{{ink}}" font-weight="400">RSP e indirizzo del dato</text>
+<rect x="712" y="315" width="496" height="100" rx="24" fill="#fef3c7"/>
+<text x="736" y="357" font-size="25" fill="{{ink}}" font-weight="400">Registri della CPU: stato di B</text>
+<text x="736" y="399" font-size="25" fill="{{ink}}" font-weight="400">Ora sono usati per un altro lavoro.</text>
+<rect x="712" y="448" width="496" height="205" rx="24" fill="#e0e7ff"/>
+<text x="736" y="490" font-size="25" fill="{{ink}}" font-weight="400">Contesto di A salvato dal kernel</text>
+<text x="736" y="532" font-size="25" fill="{{ink}}" font-weight="400">Risultato: 23</text>
+<text x="736" y="574" font-size="25" fill="{{ink}}" font-weight="400">Punto: prima della scrittura</text>
+<text x="736" y="616" font-size="25" fill="{{ink}}" font-weight="400">RSP e altri valori necessari</text>
+<rect x="1332" y="315" width="496" height="204" rx="24" fill="#dbeafe"/>
+<text x="1356" y="362" font-size="26" fill="{{ink}}" font-weight="400">Registri di A ripristinati</text>
+<text x="1356" y="404" font-size="26" fill="{{ink}}" font-weight="400">Risultato 23 e punto corretto</text>
+<text x="1356" y="446" font-size="26" fill="{{ink}}" font-weight="400">Stack e indirizzi di A</text>
+<text x="1356" y="488" font-size="26" fill="{{ink}}" font-weight="400">Mappature di A attive</text>
+<rect x="92" y="695" width="496" height="110" rx="24" fill="#ccfbf1"/>
+<text x="116" y="739" font-size="25" fill="{{ink}}" font-weight="400">Dato di A in memoria: 20</text>
+<text x="116" y="781" font-size="25" fill="{{ink}}" font-weight="400">La scrittura non è ancora avvenuta.</text>
+<rect x="712" y="695" width="496" height="110" rx="24" fill="#ccfbf1"/>
+<text x="736" y="739" font-size="25" fill="{{ink}}" font-weight="400">Dato di A in memoria: ancora 20</text>
+<text x="736" y="781" font-size="25" fill="{{ink}}" font-weight="400">La memoria di A resta disponibile.</text>
+<rect x="1332" y="695" width="496" height="110" rx="24" fill="#ccfbf1"/>
+<text x="1356" y="739" font-size="25" fill="{{ink}}" font-weight="400">A esegue la scrittura</text>
+<text x="1356" y="781" font-size="25" fill="{{ink}}" font-weight="400">Il dato in memoria diventa 23.</text>
+<path d="M620 547 H676" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<path d="M1240 547 H1296" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
+<rect x="64" y="920" width="1792" height="94" rx="24" fill="{{panel}}"/>
+<text x="94" y="977" font-size="28" fill="{{surface}}" font-weight="400">Il cambio di contesto conserva lo stato necessario: non copia ogni volta l’intero stack e l’intero heap.</text>
+<text x="64" y="1054" font-size="24" fill="{{muted}}" font-weight="400">TPSI 4 · Intel x86-64 · Modello didattico semplificato</text></g></svg>

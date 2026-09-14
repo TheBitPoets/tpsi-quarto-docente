@@ -58,7 +58,7 @@ Server, database, lucchetto di sicurezza e badge C/POSIX/Java restano disponibil
 
 ## Piano delle figure e collocazione
 
-Aggiornamento: il registro comprende ora **23 figure**. La nuova [Spazio virtuale, kernel e MMU](../assets/tpsi4/01-indirizzi-virtuali-mmu.svg) è inserita nella lezione 1, in “Anatomia di un processo”, subito dopo la spiegazione dello spazio di indirizzamento. Riutilizza il simbolo `tpsi-document`; pagine, frame e tabelle sono pannelli etichettati composti con la palette esistente, senza nuovi simboli di catalogo.
+Aggiornamento: il registro comprende ora **26 figure**. La nuova [Spazio virtuale, kernel e MMU](../assets/tpsi4/01-indirizzi-virtuali-mmu.svg) è inserita nella lezione 1, in “Anatomia di un processo”, subito dopo la spiegazione dello spazio di indirizzamento. Riutilizza il simbolo `tpsi-document`; pagine, frame e tabelle sono pannelli etichettati composti con la palette esistente, senza nuovi simboli di catalogo.
 
 La scena collega eseguibile, regioni virtuali sparse, tabelle del processo, gestione globale dei frame e RAM. Distingue preparazione delle mappature, traduzione hardware tramite TLB/tabelle e gestione dei page fault. Mostra pagine di 4 KiB e la traduzione illustrativa `0x402A → 0x902A`. Le strutture globali di gestione della RAM non sono rappresentate come un secondo stadio della traduzione MMU. Riferimenti tecnici: [Linux Page Tables](https://docs.kernel.org/mm/page_tables.html) e [Physical Memory](https://docs.kernel.org/mm/physical_memory.html).
 
@@ -122,3 +122,9 @@ Il confronto delle figure interne del libro resta **da fare**, non è un audit c
 Le 22 figure e i tre cataloghi sono stati renderizzati con Chrome headless e ispezionati visivamente. Il controllo ha portato a spostare un'etichetta nel diagramma degli stati. Verificati 91 collegamenti locali dei documenti di orientamento, audit e README; titoli e blocchi di codice delle sei dispense sono preservati, salvo la sostituzione intenzionale dello schema ASCII degli stati.
 
 La build deterministica e i sette test del Visual System passano. I controlli sono inseriti nella Quality per Windows e Ubuntu. La revisione didattica del docente e il confronto con le figure interne bSmart restano aperti.
+
+## Semplificazione del contesto con figure
+
+Il percorso C/assembly della lezione 1 ? sostituito da tre figure originali: [registri e memoria](../assets/tpsi4/01-registri-memoria.svg), [chiamata e stack](../assets/tpsi4/01-chiamata-stack.svg), [salvataggio e ripresa](../assets/tpsi4/01-contesto-salvataggio.svg). Il testo introduce pochi registri Intel x86-64 e segue il calcolo 20 + 3 senza listati n? comandi di compilazione. Gli altri esempi operativi del modulo rimangono nelle rispettive sezioni.
+
+Riutilizzato il simbolo CPU; pannelli, frecce e palette appartengono al sistema esistente. Nessun nuovo simbolo necessario. Le scene sono state renderizzate e ispezionate visivamente; la build e i 12 test di grafica e formattazione passano.

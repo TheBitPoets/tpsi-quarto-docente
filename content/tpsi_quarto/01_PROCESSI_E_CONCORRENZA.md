@@ -198,7 +198,7 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">I registri fisici appartengono alla CPU. Quando il kernel sospende un'esecuzione, salva i valori necessari in memoria; prima di riprenderla li ripristina. Il processo possiede dunque il proprio <strong>stato dei registri</strong>, non una CPU personale. Se ripristinassimo i valori dell'altra applicazione, potremmo sommare il campione sbagliato o tornare nel punto sbagliato. Questo è il motivo del cambio di contesto, che riprenderemo nella sezione sul ciclo di vita. Non comporta copiare tutta la memoria del processo a ogni passaggio.</p>
 
-<p align="justify">Dopo aver chiarito spazio di indirizzamento, stack e heap, renderemo concreto questo modello con <a href="#dal-c-ai-registri-intel-x86-64">un esempio C e assembly su Intel x86-64</a>. Vedremo i nomi dei registri e seguiremo una sospensione fra due istruzioni.</p>
+<p align="justify">Dopo aver chiarito spazio di indirizzamento, stack e heap, renderemo concreto questo modello con <a href="#registri-e-memoria-su-intel-x86-64">un percorso per immagini su Intel x86-64</a>. Vedremo i nomi dei registri e seguiremo una sospensione fra due istruzioni.</p>
 
 ### 3. Spazio di indirizzamento: gli indirizzi che il programma vede
 
@@ -264,128 +264,46 @@ if (campioni != NULL) {
 
 <p align="justify">La variabile locale <code>campioni</code> contiene un indirizzo; il blocco per cento interi è un oggetto diverso. Nel disegno semplificato il puntatore è nello stack e il blocco nell'heap, anche se il compilatore può tenere il puntatore in un registro. Il fallimento dell'allocazione è segnalato da <code>NULL</code>. Perdere l'unico puntatore senza liberare il blocco causa una perdita di memoria; usare il blocco dopo <code>free</code> è un errore. Stack e heap appartengono al processo perché sostengono le sue chiamate e i suoi dati; con più thread, ciascuno avrà il proprio stack, mentre l'heap sarà normalmente condiviso.</p>
 
-### Dal C ai registri Intel x86-64
+### Registri e memoria su Intel x86-64
 
-<p align="justify">Scegliamo come riferimento una CPU <strong>Intel in modalità a 64 bit (x86-64)</strong> con Linux. Le regole per passare argomenti e risultati alle funzioni sono quelle della <strong>System V AMD64 ABI</strong>: un accordo fra codice chiamante e chiamato. Il nome AMD64 identifica qui l'ABI usata anche sulle CPU Intel compatibili. L'architettura definisce le istruzioni disponibili; l'ABI stabilisce come usarle per far collaborare le funzioni. Su Windows le convenzioni di chiamata sono diverse.</p>
+<p align="justify">Usiamo una CPU Intel x86-64 come riferimento e seguiamo un gesto semplice: <strong>leggere il numero 20, aggiungere 3 e scrivere 23 al suo posto</strong>. Un programma scritto in C viene tradotto in istruzioni macchina; l'assembly è un modo leggibile di rappresentarle. Per capire il contesto basta seguire ciò che queste istruzioni fanno ai registri e alla memoria.</p>
 
-#### Il percorso dal sorgente alla CPU
+#### Primo passo: dove si trova il lavoro in corso?
 
-```text
-contesto.c  -> compilatore -> assembly -> assemblatore -> file oggetto
-                                                        |
-                           eseguibile <- linker e librerie
-```
+<p align="justify">Immaginiamo di fermare l'esecuzione dopo il calcolo, ma prima della scrittura. Il nuovo valore è già pronto nella CPU, mentre il dato in memoria non è ancora cambiato. La figura mostra questa situazione.</p>
 
-<p align="justify">Il compilatore traduce operazioni C in operazioni della macchina; l'assembly ne rende leggibili istruzioni e operandi. L'assemblatore le codifica in byte, mentre il linker collega il codice con le parti necessarie di altri moduli e librerie. La CPU esegue il <strong>codice macchina</strong>, non il testo C né il testo assembly. Possiamo chiedere al compilatore di fermarsi all'assembly per osservare la traduzione. Le ottimizzazioni possono modificarla: una variabile C non ha necessariamente un posto fisso in memoria e una chiamata può essere sostituita dal codice della funzione.</p>
+<!-- figure:01-registri-memoria -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-registri-memoria.svg" alt="RIP indica la prossima istruzione, RSP la cima dello stack e RDI il blocco dati nell&#x27;esempio. RAX contiene il risultato temporaneo 23, mentre il blocco nell&#x27;heap contiene ancora 20." width="960">
+</p>
+<p align="center"><em>I registri contengono valori e indirizzi; codice, stack e heap rimangono nella memoria del processo.</em></p>
 
-#### I registri da riconoscere
+<p align="justify">Leggiamola partendo dai registri. Ogni registro è una piccola memoria interna alla CPU; quelli indicati qui possono contenere valori a 64 bit.</p>
 
-<p align="justify">Un registro a 64 bit conserva un valore di 64 bit: può essere un numero oppure un indirizzo, secondo l'uso dell'istruzione. Ecco i nomi necessari per leggere l'esempio. I ruoli relativi ad argomenti e risultati dipendono dall'ABI scelta.</p>
+<ul>
+  <li><strong>RIP — dove riprendere:</strong> individua il punto del codice da cui proseguire. Qui il prossimo lavoro è scrivere il risultato.</li>
+  <li><strong>RSP — dove si trova la cima dello stack:</strong> permette di continuare a usare lo stack della chiamata in corso.</li>
+  <li><strong>RAX — un risultato temporaneo:</strong> nel nostro esempio contiene 23. È un registro generale: il suo contenuto dipende dalle istruzioni eseguite.</li>
+  <li><strong>RDI — un indirizzo:</strong> qui indica il blocco da aggiornare nell'heap. Anche questo è un registro generale, non un registro riservato all'heap.</li>
+</ul>
 
-<table align="center">
-<thead><tr><th>Registro</th><th>Ruolo nel nostro modello</th><th>Perché interessa alla ripresa</th></tr></thead>
-<tbody>
-<tr><td><code>RIP</code></td><td>Posizione dell'esecuzione nel codice macchina.</td><td>Individua l'istruzione da cui proseguire.</td></tr>
-<tr><td><code>RSP</code></td><td>Puntatore alla cima corrente dello stack.</td><td>Individua lo stack su cui continuare a lavorare.</td></tr>
-<tr><td><code>RBP</code></td><td>Può essere usato come riferimento stabile del frame corrente.</td><td>Permette di ritrovare i dati del frame quando il codice lo usa così; il compilatore può anche usarlo diversamente.</td></tr>
-<tr><td><code>RAX</code></td><td>Registro generale, usato anche per restituire interi e puntatori.</td><td>Può contenere un risultato ancora da utilizzare.</td></tr>
-<tr><td><code>RDI, RSI, RDX, RCX, R8, R9</code></td><td>Primi sei argomenti interi o puntatori delle chiamate ordinarie nell'ABI scelta.</td><td>Possono contenere parametri, indirizzi o valori intermedi.</td></tr>
-<tr><td><code>RBX, R10–R15</code></td><td>Altri registri generali.</td><td>Possono conservare stato del calcolo: non sono irrilevanti perché l'esempio ne usa pochi.</td></tr>
-<tr><td><code>RFLAGS</code></td><td>Contiene flag di stato e controllo; per esempio <code>ZF</code> indica un risultato nullo.</td><td>Un salto condizionato deve ritrovare l'esito del confronto precedente.</td></tr>
-<tr><td><code>CR3</code></td><td>Registro privilegiato che individua la radice delle tabelle delle pagine, con ulteriori campi di controllo.</td><td>Il kernel deve attivare le traduzioni di memoria corrette quando cambia spazio di indirizzamento.</td></tr>
-</tbody>
-</table>
+<p align="justify">Altri registri completano lo stato: <strong>RBP</strong> può aiutare a ritrovare i dati della chiamata corrente; <strong>RFLAGS</strong> conserva anche esiti di operazioni e confronti. Il kernel gestisce inoltre le traduzioni della memoria, collegate a <strong>CR3</strong>, già incontrato nel diagramma dello spazio virtuale. Non è necessario imparare tutto l'elenco per seguire l'esempio: servono il punto di ripresa, i valori intermedi e gli indirizzi corretti.</p>
 
-<p align="justify"><code>EAX</code>, <code>EDI</code> ed <code>ESI</code> sono i nomi delle parti basse a 32 bit di <code>RAX</code>, <code>RDI</code> e <code>RSI</code>. Non sono altri registri indipendenti. Nei nostri esempi un <code>int</code> occupa 32 bit, un puntatore 64 bit; scrivere in <code>EAX</code> azzera anche i 32 bit alti di <code>RAX</code>. Il contesto reale comprende inoltre altro stato architetturale, per esempio quello dei calcoli in virgola mobile e vettoriali: questa tabella seleziona ciò che serve al primo esempio.</p>
+<p align="justify"><strong>Stack e heap sono aree di memoria, non registri.</strong> I registri contengono alcuni valori e indirizzi usati per lavorare su quelle aree. Per questo il processo deve ritrovare sia lo stato della CPU sia la propria memoria.</p>
 
-#### Un programma C piccolo e completo
+#### Secondo passo: una funzione deve sapere dove tornare
 
-<p align="justify">Salva questo sorgente come <code>contesto.c</code>. La funzione riceve un puntatore e un incremento: legge il numero puntato, calcola il risultato e lo scrive nella stessa posizione. <code>main</code> alloca quel numero dinamicamente, chiama la funzione e libera il blocco.</p>
+<p align="justify">L'attività principale chiede a una funzione di calcolare il nuovo valore. Durante la chiamata bisogna conservare il punto da cui continuare quando il calcolo finisce. Lo stack sostiene questa organizzazione: la chiamata aggiunge le informazioni necessarie e il ritorno rende nuovamente attiva la chiamata precedente.</p>
 
-```c
-#include <stdlib.h>
+<!-- figure:01-chiamata-stack -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-chiamata-stack.svg" alt="Prima della chiamata è attiva l&#x27;attività principale. Durante la funzione lo stack conserva il punto di ritorno e il frame corrente. Al ritorno quel frame non è più attivo e l&#x27;esecuzione continua nel chiamante." width="960">
+</p>
+<p align="center"><em>Lo stack conserva ciò che serve alle chiamate aperte. Terminata una funzione, si riprende dal punto di ritorno del chiamante.</em></p>
 
-void incrementa(int *p, int delta)
-{
-    int nuovo = *p + delta;
-    *p = nuovo;
-}
+<p align="justify">Segui i tre momenti: prima lavora l'attività principale; poi è attiva la funzione di calcolo, con il proprio <strong>frame</strong>; infine il calcolo termina e si torna al punto conservato. Il registro <strong>RSP</strong> segue la cima corrente dello stack. Un frame raccoglie le informazioni utili a quella chiamata; la disposizione concreta dipende dal codice generato.</p>
 
-int main(void)
-{
-    int *p = malloc(sizeof *p);
-    if (p == NULL) {
-        return 1;
-    }
-    *p = 20;
-    incrementa(p, 3);
-    int esito = (*p == 23) ? 0 : 2;
-    free(p);
-    return esito;
-}
-```
-
-<p align="justify">Su Linux x86-64 con GCC, questi comandi producono prima l'assembly e poi l'eseguibile. <code>-S</code> si ferma prima dell'assemblaggio, <code>-masm=intel</code> sceglie la sintassi Intel, <code>-O0</code> evita le normali ottimizzazioni e <code>-fno-omit-frame-pointer</code> facilita il riconoscimento dei frame. Il programma non stampa: il codice di uscita atteso è <code>0</code> in caso di successo.</p>
-
-```bash
-gcc -std=c11 -Wall -Wextra -O0 -fno-omit-frame-pointer -masm=intel -S contesto.c -o contesto.s
-gcc -std=c11 -Wall -Wextra -O0 -g contesto.c -o contesto
-./contesto
-echo $?
-```
-
-<p align="justify">Leggiamo prima una <strong>traduzione didattica compatta</strong> del corpo di <code>incrementa</code>. È assembly x86-64 in sintassi Intel, ma non è presentato come l'output esatto di GCC con quei comandi: il file generato può contenere frame, copie aggiuntive e direttive. In questa sintassi si scrive prima la destinazione, poi la sorgente; le parentesi quadre significano “accedi alla memoria all'indirizzo indicato”.</p>
-
-```asm
-# All'ingresso: RDI = p; ESI = delta
-incrementa:
-    mov eax, DWORD PTR [rdi]  # leggi l'int puntato da p
-    add eax, esi              # somma delta al valore letto
-    mov DWORD PTR [rdi], eax  # scrivi il risultato nello stesso int
-    ret                       # torna al chiamante
-```
-
-<p align="justify"><code>DWORD PTR</code> indica un accesso di 4 byte. Se <code>RDI</code> contiene l'indirizzo del blocco inizializzato a <code>20</code> ed <code>ESI</code> vale <code>3</code>, la prima istruzione mette <code>20</code> in <code>EAX</code>, la seconda lo porta a <code>23</code> e la terza aggiorna il blocco in memoria. La variabile C <code>nuovo</code> non richiede qui uno spazio nello stack: il risultato passa attraverso <code>EAX</code>.</p>
-
-#### Chiamata, ritorno e stack: che cosa fanno CALL e RET
-
-<p align="justify">Prima della chiamata, il chiamante prepara il puntatore in <code>RDI</code> e l'incremento in <code>ESI</code>. Una normale <code>call incrementa</code> salva sullo stack l'indirizzo dell'istruzione successiva alla chiamata e trasferisce il controllo alla funzione. Nel nostro caso a 64 bit, questo salvataggio riduce <code>RSP</code> di 8 byte: lo stack cresce verso indirizzi minori. <code>ret</code> recupera quell'indirizzo e riporta <code>RSP</code> avanti di 8 byte.</p>
-
-```text
-Prima di CALL:          RSP = S
-Dopo CALL:             RSP = S - 8; [RSP] = indirizzo di ritorno
-Dopo RET:              RSP = S;     esecuzione ripresa nel chiamante
-```
-
-<p align="justify">Quando serve un frame esplicito, possiamo incontrare una sequenza come questa. È uno schema distinto dal corpo compatto precedente: mostra soltanto apertura e chiusura del frame, non una seconda funzione completa.</p>
-
-```asm
-push rbp          # RSP -= 8; salva il vecchio RBP nello stack
-mov rbp, rsp      # fissa il riferimento del nuovo frame
-sub rsp, 16       # riserva 16 byte per dati locali o temporanei
-# ... corpo della funzione; per esempio un int in [rbp-4] ...
-mov rsp, rbp      # abbandona lo spazio locale riservato
-pop rbp           # recupera il riferimento del chiamante
-ret               # recupera l'indirizzo di ritorno
-```
-
-<p align="justify">Qui <code>[rbp-4]</code> è un indirizzo calcolato sottraendo 4 al contenuto di <code>RBP</code>. I byte locali rimangono fisicamente in memoria finché non vengono sovrascritti, ma dopo il ritorno non sono più oggetti locali validi di quella chiamata. L'ABI impone anche regole di allineamento dello stack, rispettate dal codice generato dal compilatore.</p>
-
-#### Dove sono codice, stack e heap
-
-```text
-CPU                         spazio virtuale del processo
-RIP ----------------------> codice: mov, add, call, ret...
-RSP ----------------------> stack: frame e indirizzi di ritorno
-RBP ----------------------> riferimento del frame, se utilizzato
-RDI (p nell'esempio) ------> blocco dinamico: [ int 20, poi 23 ]
-
-CR3 -> tabelle delle pagine -> traduzione verso la memoria fisica
-```
-
-<p align="justify">Il disegno mostra collegamenti, non l'ordine delle regioni né una scala di indirizzi. Codice, dati globali, stack, allocazioni dinamiche e librerie occupano regioni virtuali; le traduzioni stabiliscono quali pagine fisiche corrispondono a quelle regioni. Non esiste un “registro heap” equivalente a <code>RSP</code>: gli indirizzi dei blocchi possono stare nei registri, nello stack, in variabili globali o in altri blocchi.</p>
-
-<p align="justify">Quando <code>malloc</code> riesce, il puntatore restituito passa per <code>RAX</code> secondo l'ABI; il chiamante deve conservarlo dove necessario. <code>free</code> riceve quel puntatore come argomento. Quindi <strong>i registri permettono di raggiungere e manipolare gli oggetti; non contengono l'intero stack o l'intero heap</strong>. Preservare gli indirizzi senza mantenere valide le relative mappature e i dati non sarebbe sufficiente per riprendere il programma.</p>
+<p align="justify">In questo passaggio il processo e il thread rimangono gli stessi. Una chiamata di funzione cambia il punto del programma in esecuzione. Il <a href="#cambio-di-contesto">cambio di contesto</a>, invece, permette di sospendere un'attività e farne avanzare un'altra.</p>
 
 ### 5. File e altri oggetti aperti: riferimenti alle risorse
 
@@ -485,40 +403,27 @@ descrittore 3  ---------->  apertura del file  ------->  misure.txt
 
 ### Cambio di contesto
 
-<p align="justify">Torniamo alla traduzione compatta di <code>incrementa</code>. Immaginiamo una sospensione <strong>dopo <code>add eax, esi</code> e prima della scrittura in memoria</strong>. Il blocco contiene ancora <code>20</code>, ma <code>EAX</code> contiene già <code>23</code>. Se durante la pausa un altro processo usa <code>EAX</code>, non possiamo ricostruire la situazione conservando soltanto il contenuto dell'heap.</p>
+<p align="justify">Riprendiamo il calcolo <strong>20 + 3</strong>. Il processo A ha già ottenuto 23 in un registro, ma non lo ha ancora scritto nel proprio blocco di memoria. Ora il sistema operativo decide di assegnare la CPU al processo B. Consideriamo una sola CPU logica e un thread per processo.</p>
 
-<table align="center">
-<thead><tr><th>Informazione di A alla sospensione</th><th>Che cosa deve ritrovare A</th></tr></thead>
-<tbody>
-<tr><td><code>RIP</code></td><td>L'istruzione <code>mov DWORD PTR [rdi], eax</code>, ancora da eseguire.</td></tr>
-<tr><td><code>RAX</code> e <code>RDI</code></td><td>Il risultato <code>23</code> e l'indirizzo a cui scriverlo.</td></tr>
-<tr><td><code>RSP</code>, eventuale <code>RBP</code></td><td>Lo stack corretto, compreso l'indirizzo che <code>ret</code> userà.</td></tr>
-<tr><td>Altri registri e <code>RFLAGS</code></td><td>Lo stato architetturale necessario a proseguire senza alterare il calcolo.</td></tr>
-<tr><td>Memoria e sue traduzioni</td><td>Il codice, lo stack e il blocco ancora contenente <code>20</code>, agli indirizzi attesi.</td></tr>
-</tbody>
-</table>
-
-<p align="justify">Consideriamo una CPU logica e due processi A e B, ciascuno con un thread. Un'interruzione del timer può portare il controllo al kernel; lo scheduler può decidere di far avanzare B. Il percorso seguente descrive l'effetto complessivo, non una singola istruzione che salva magicamente tutto.</p>
+<!-- figure:01-contesto-salvataggio -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-contesto-salvataggio.svg" alt="A calcola 23 ma il suo dato in memoria vale ancora 20. Il kernel salva il contesto di A e la CPU esegue B. Quando A riprende, ritrova risultato, punto di esecuzione, indirizzi e memoria corretti, quindi scrive 23." width="960">
+</p>
+<p align="center"><em>Durante la pausa il risultato resta nel contesto salvato. Alla ripresa A ritrova registri e memoria coerenti e può completare la scrittura.</em></p>
 
 <ol>
-  <li><strong>Entrata nel kernel.</strong> La CPU conserva automaticamente una parte dello stato di ritorno dall'interruzione, fra cui posizione e flag; il codice di ingresso del kernel completa il salvataggio dei registri necessari. L'esecuzione privilegiata usa stack del kernel, distinti dallo stack utente illustrato sopra.</li>
-  <li><strong>Sospensione di A.</strong> Il kernel mantiene il suo contesto nelle strutture e negli stack associati al thread. Se A è stato soltanto interrotto mentre poteva avanzare, rimane pronto; se aspetta un'operazione bloccante, è in attesa.</li>
-  <li><strong>Selezione di B.</strong> Lo scheduler sceglie un'attività pronta. Il codice di cambio passa al contesto di esecuzione nel kernel di B, incluso il relativo stack.</li>
-  <li><strong>Memoria corretta.</strong> Se occorre cambiare spazio di indirizzamento, il kernel attiva le traduzioni di B tramite i meccanismi che coinvolgono <code>CR3</code>. Non copia tutto l'heap o tutti i frame di A dentro B. Fra thread dello stesso processo, lo spazio utente è normalmente comune.</li>
-  <li><strong>Ripresa di B e successivamente di A.</strong> Il percorso di ritorno ripristina lo stato utente dell'attività scelta. Quando toccherà nuovamente ad A, saranno ricostituiti i suoi valori: la scrittura memorizzerà <code>23</code> nel suo blocco e <code>ret</code> troverà il suo indirizzo di ritorno.</li>
+  <li><strong>A lavora:</strong> nei registri ci sono il risultato 23, il punto da cui proseguire e gli indirizzi necessari. Il dato in memoria vale ancora 20.</li>
+  <li><strong>A viene sospeso:</strong> il kernel, con il supporto dell'hardware, conserva il contesto necessario nelle strutture e negli stack associati al thread. La CPU può usare i registri per B; i valori salvati di A restano disponibili in memoria.</li>
+  <li><strong>A riprende:</strong> il sistema ripristina il suo stato e le mappature corrette. A ritrova il risultato 23, il proprio stack e il blocco da aggiornare. Può quindi completare la scrittura.</li>
 </ol>
 
-<p align="justify">I dettagli dipendono dal percorso di ingresso, dalle funzionalità della CPU e dal kernel: interruzioni e chiamate di sistema non salvano lo stato esattamente nello stesso modo. Entrare nel kernel, inoltre, non implica sempre passare a un altro processo. Il punto comune è preservare il contesto necessario alla ripresa. In Linux x86-64 la gestione è una collaborazione fra hardware e software; non coincide con il solo salvataggio eseguito dalla CPU all'arrivo dell'interruzione.</p>
+<p align="justify">Non basta ricordare soltanto “il processo stava facendo una somma”. Se perdiamo il risultato intermedio, non sappiamo che cosa scrivere; se perdiamo l'indirizzo, non sappiamo dove scriverlo; se perdiamo il punto di esecuzione, non sappiamo quale operazione compiere dopo. Il contesto unisce queste informazioni.</p>
 
-<table align="center">
-<tr><td>
-<p align="justify"><strong><span style="font-size: 1.15em;">&#128214;</span> Chiamata di funzione e cambio di contesto:</strong> <code>call</code> e <code>ret</code> operano normalmente nello stesso thread. L'ABI divide i registri fra quelli che la funzione chiamata deve preservare, come <code>RBX</code>, <code>RBP</code> e <code>R12–R15</code>, e quelli che può modificare, come <code>RAX</code> e i registri degli argomenti. Il chiamante protegge gli eventuali valori ancora necessari. Una sospensione può invece avvenire fra istruzioni qualsiasi: il sistema deve preservare lo stato necessario anche dei registri che una normale chiamata potrebbe modificare. Le due operazioni hanno quindi responsabilità diverse.</p>
-</td></tr>
-</table>
+<p align="justify">Il salvataggio non copia a ogni cambio tutto lo stack e tutto l'heap: i loro dati restano nella memoria gestita dal sistema. Vanno conservati lo stato necessario della CPU e la possibilità di accedere alla memoria corretta. La figura evidenzia pochi elementi, ma il sistema deve preservare anche gli altri registri e lo stato architetturale necessari.</p>
 
-<p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Controlla il modello:</strong> se A riprendesse con <code>RAX</code> di B, quale dato scriverebbe? Se recuperasse <code>RAX</code> ma non il proprio <code>RDI</code>, dove tenterebbe di scriverlo? Se ripristinasse tutti i registri generali ma usasse traduzioni di memoria sbagliate, gli stessi indirizzi avrebbero ancora il significato atteso? Queste tre domande spiegano perché contesto della CPU e contesto della memoria devono essere coerenti.</p>
+<p align="justify">Un'interruzione del timer o un'operazione che richiede attesa può portare il controllo al kernel. Lo scheduler decide quale attività pronta eseguire. Entrare nel kernel non comporta sempre cambiare processo; quando il cambio avviene, il lavoro di salvataggio e ripristino ha un costo.</p>
 
-<p align="justify">Quando il sistema sospende un processo e ne esegue un altro, deve salvare e ripristinare il relativo contesto. Questo lavoro ha un costo. La concorrenza non rende automaticamente un programma più veloce: può migliorare reattività e utilizzo delle risorse, ma introduce anche overhead e complessità.</p>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Controlla il modello:</strong> durante la pausa di A, dove si trova il valore 23? Perché il blocco di A contiene ancora 20? Che cosa deve ritrovare A per completare la scrittura? Rileggi i tre pannelli della figura per motivare le risposte.</p>
 
 <!-- figure:01-stati-processo -->
 <p align="center">
@@ -1115,7 +1020,6 @@ tpsi4-activity-c-fork-pipe-square-001
   <li>Identità, autorizzazioni e relazioni: <a href="https://man7.org/linux/man-pages/man2/getpid.2.html">getpid(2)</a>, <a href="https://man7.org/linux/man-pages/man7/credentials.7.html">credentials(7)</a> e <a href="https://man7.org/linux/man-pages/man2/wait.2.html">wait(2)</a>.</li>
   <li>Contesto e chiamate di funzione: manuale GDB, <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Registers.html">Registers</a> e <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Frames.html">Stack Frames</a>.</li>
   <li>Architettura di riferimento: <a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html">Intel 64 and IA-32 Architectures Software Developer's Manuals</a>, volume 1 per registri e chiamate, volume 2 per istruzioni e volume 3 per memoria e interruzioni. Gli schemi selezionano gli elementi utili alla lezione.</li>
-  <li>Convenzioni delle chiamate Linux x86-64: <a href="https://gitlab.com/x86-psABIs/x86-64-ABI">System V AMD64 ABI</a>. Generazione dell'assembly: <a href="https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html">GCC, Overall Options</a>. L'assembly commentato è una traduzione didattica, non un dump di una specifica versione del compilatore.</li>
   <li>Contesto nel kernel: <a href="https://docs.kernel.org/arch/x86/kernel-stacks.html">Linux, Kernel Stacks</a> e <a href="https://github.com/torvalds/linux/blob/master/arch/x86/entry/entry_64.S">codice di ingresso e cambio del contesto x86-64</a>. La sequenza descrive il comportamento complessivo senza riprodurre l'implementazione del kernel.</li>
   <li>Memoria e allocazioni: <a href="https://man7.org/linux/man-pages/man5/proc_pid_maps.5.html">proc_pid_maps(5)</a> e <a href="https://man7.org/linux/man-pages/man3/malloc.3.html">malloc(3)</a>. La descrizione di stack e heap è un modello didattico, non una disposizione universale della memoria.</li>
   <li>Risorse aperte: <a href="https://man7.org/linux/man-pages/man2/open.2.html">open(2)</a> e <a href="https://man7.org/linux/man-pages/man5/proc_pid_fd.5.html">proc_pid_fd(5)</a>.</li>
