@@ -239,24 +239,54 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Anche due chiamate ricorsive della stessa funzione devono conservare separatamente il proprio stato. Quando una funzione termina, i suoi oggetti locali automatici cessano di esistere: restituire l'indirizzo di uno di essi non ne prolunga la durata.</p>
 
-<p align="justify">L'<strong>heap</strong> indica, nel modello didattico, la memoria gestita con allocazioni dinamiche. Il programma chiede un blocco della dimensione necessaria, ottiene un puntatore e lo usa finché lo rilascia. In C si impiegano funzioni come <code>malloc</code> e <code>free</code>; l'allocatore gestisce blocchi occupati e liberi e richiede memoria al sistema quando serve. L'ordine di rilascio non deve seguire quello delle chiamate di funzione. In Linux le allocazioni possono usare anche mappature distinte dalla regione etichettata <code>[heap]</code>.</p>
-
-```c
-/* Frammento dentro una funzione; richiede <stdlib.h>. */
-int *campioni = malloc(100 * sizeof *campioni);
-if (campioni != NULL) {
-    campioni[0] = 23;
-    /* Qui si possono acquisire ed elaborare gli altri campioni. */
-    free(campioni);
-    campioni = NULL;
-}
-```
-
-<p align="justify">La variabile locale <code>campioni</code> contiene un indirizzo; il blocco per cento interi è un oggetto diverso. Nel disegno semplificato il puntatore è nello stack e il blocco nell'heap, anche se il compilatore può tenere il puntatore in un registro. Il fallimento dell'allocazione è segnalato da <code>NULL</code>. Perdere l'unico puntatore senza liberare il blocco causa una perdita di memoria; usare il blocco dopo <code>free</code> è un errore. Stack e heap appartengono al processo perché sostengono le sue chiamate e i suoi dati; con più thread, ciascuno avrà il proprio stack, mentre l'heap sarà normalmente condiviso.</p>
+<p align="justify">L'<strong>heap</strong> indica, nel modello didattico, la memoria gestita con allocazioni dinamiche. Il programma chiede un blocco della dimensione necessaria, ottiene un puntatore e lo usa finché lo rilascia. In C si impiegano funzioni come <code>malloc</code> e <code>free</code>; l'allocatore gestisce blocchi occupati e liberi e richiede memoria al sistema quando serve. L'ordine di rilascio non deve seguire quello delle chiamate di funzione.</p>
 
 ### Registri e memoria su Intel x86-64
 
 <p align="justify">Usiamo una CPU Intel x86-64 come riferimento e seguiamo un gesto semplice: <strong>leggere il numero 20, aggiungere 3 e scrivere 23 al suo posto</strong>. Un programma scritto in C viene tradotto in istruzioni macchina; l'assembly è un modo leggibile di rappresentarle. Per capire il contesto basta seguire ciò che queste istruzioni fanno ai registri e alla memoria.</p>
+
+#### Un esempio minimo: dal C ai registri della figura
+
+<p align="justify">La funzione riceve il puntatore <code>p</code>, scrive 20 nel blocco indicato e poi aggiunge 3 al valore che vi trova. Il chiamante deve passarle un indirizzo valido e scrivibile; per collegarci alla figura, immaginiamo che il blocco sia già stato allocato nell'heap. La funzione non lo alloca e non lo libera.</p>
+
+```c
+void f(long *p)
+{
+    *p = 20;
+    *p = *p + 3;
+}
+```
+
+<p align="justify"><code>p</code> è l'indirizzo; <code>*p</code> è il dato a quell'indirizzo. Usiamo <code>long</code> perché, nel riferimento <strong>Linux x86-64</strong>, occupa 64 bit: possiamo così usare direttamente <code>RAX</code>, come nella figura. Passando <code>p</code> come parametro rendiamo esplicita la sua provenienza; con <code>void f(void)</code> il puntatore dovrebbe essere disponibile in altro modo, per esempio come variabile globale.</p>
+
+<p align="justify">All'ingresso della funzione, la <a href="https://gitlab.com/x86-psABIs/x86-64-ABI">convenzione System V AMD64 delle chiamate Linux x86-64</a> prevede che il primo parametro puntatore sia in <strong>RDI</strong>. Leggiamo questa traduzione didattica in sintassi Intel: prima la destinazione, poi la sorgente. Le parentesi quadre in <code>[rdi]</code> significano <strong>“la memoria all'indirizzo contenuto in RDI”</strong>.</p>
+
+```asm
+f:
+    mov rax, 20       # 1. Metti 20 nel registro RAX
+    mov [rdi], rax    # 2. Scrivi 20 nella memoria puntata da p
+    mov rax, [rdi]    # 3. Rileggi quel dato e mettilo in RAX
+    add rax, 3        # 4. Aggiungi 3: RAX ora contiene 23
+    mov [rdi], rax    # 5. Scrivi 23 nella memoria puntata da p
+    ret              # 6. Torna al chiamante
+```
+
+<p align="justify">Le prime due istruzioni realizzano <code>*p = 20</code>; le tre successive realizzano <code>*p = *p + 3</code>. <code>mov</code> copia un valore senza cancellare la sorgente. <code>add rax, 3</code> mette il risultato nello stesso <code>RAX</code>: non serve un altro registro per conservare la somma. <strong>RDI mantiene l'indirizzo del blocco durante tutti questi passaggi.</strong></p>
+
+<table align="center">
+<thead><tr><th>Dopo il passaggio</th><th>RAX: valore di lavoro</th><th>Memoria puntata da RDI</th></tr></thead>
+<tbody>
+<tr><td>1. Preparare il valore</td><td>20</td><td>Non ancora inizializzata dalla funzione.</td></tr>
+<tr><td>2. Scrivere il valore iniziale</td><td>20</td><td>20</td></tr>
+<tr><td>3. Rileggere il dato</td><td>20</td><td>20</td></tr>
+<tr><td>4. Calcolare la somma</td><td><strong>23</strong></td><td><strong>Ancora 20: è il momento della figura.</strong></td></tr>
+<tr><td>5. Scrivere il risultato</td><td>23</td><td>23</td></tr>
+</tbody>
+</table>
+
+<p align="justify"><strong>RIP</strong> permette di seguire il punto di esecuzione: subito dopo il passaggio 4 indica la scrittura ancora da eseguire. <strong>RSP</strong> individua la cima dello stack; alla fine <code>ret</code> recupera da lì l'indirizzo di ritorno salvato dalla chiamata. Nel corpo semplificato non occorrono altri registri o un nuovo spazio per variabili locali.</p>
+
+<p align="justify">Questa sequenza è scelta per rendere visibile ogni passaggio, non è l'output di una specifica compilazione. Un compilatore può evitare la rilettura o riconoscere che il risultato finale è sempre 23. Qui la rilettura serve a distinguere chiaramente <strong>il dato in memoria</strong> dal <strong>valore nel registro</strong>.</p>
 
 #### Primo passo: dove si trova il lavoro in corso?
 
@@ -277,7 +307,7 @@ if (campioni != NULL) {
   <li><strong>RDI — un indirizzo:</strong> qui indica il blocco da aggiornare nell'heap. Anche questo è un registro generale, non un registro riservato all'heap.</li>
 </ul>
 
-<p align="justify">Altri registri completano lo stato: <strong>RBP</strong> può aiutare a ritrovare i dati della chiamata corrente; <strong>RFLAGS</strong> conserva anche esiti di operazioni e confronti. Il kernel gestisce inoltre le traduzioni della memoria, collegate a <strong>CR3</strong>, già incontrato nel diagramma dello spazio virtuale. Non è necessario imparare tutto l'elenco per seguire l'esempio: servono il punto di ripresa, i valori intermedi e gli indirizzi corretti.</p>
+<p align="justify">Altri registri completano lo stato: <strong>RBP</strong> può aiutare a ritrovare i dati della chiamata corrente; <strong>RFLAGS</strong> conserva anche esiti di operazioni e confronti. Il kernel gestisce inoltre le traduzioni della memoria, collegate a <strong>CR3</strong>, che permette di individuare le tabelle attive. Non è necessario imparare tutto l'elenco per seguire l'esempio: servono il punto di ripresa, i valori intermedi e gli indirizzi corretti.</p>
 
 <p align="justify"><strong>Stack e heap sono aree di memoria, non registri.</strong> I registri contengono alcuni valori e indirizzi usati per lavorare su quelle aree. Per questo il processo deve ritrovare sia lo stato della CPU sia la propria memoria.</p>
 

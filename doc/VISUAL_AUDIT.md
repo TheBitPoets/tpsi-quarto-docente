@@ -132,3 +132,7 @@ Riutilizzato il simbolo CPU; pannelli, frecce e palette appartengono al sistema 
 ## Stack delle chiamate annidate
 
 La figura [main, acquisisci e converti](../assets/tpsi4/01-stack-chiamate-annidate.svg) sostituisce lo schema ASCII nel paragrafo 4 della lezione 1. Tre pannelli mostrano lo stack mentre esegue converti, dopo il ritorno ad acquisisci e dopo il ritorno a main. Colori costanti e diciture sulla cima dello stack distinguono i frame. Nessun nuovo simbolo: composizione con pannelli e frecce esistenti. Rendering ispezionato; build e 12 test superati.
+
+## Esempio minimo collegato ai registri
+
+Su richiesta del docente, il percorso per immagini include ora una funzione C di due assegnamenti e sei istruzioni assembly commentate. Usa RDI per il puntatore e RAX per il dato; RIP e RSP sono spiegati in relazione alla ripresa e al ritorno. Una tabella collega il risultato 23 nel registro al valore ancora 20 in memoria mostrato nella figura. Le immagini restano invariate.
