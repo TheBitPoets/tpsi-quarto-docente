@@ -1,0 +1,255 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc">
+  <title id="scene-title">Dal file agli indirizzi: spazio virtuale, kernel e MMU</title>
+  <desc id="scene-desc">Il kernel crea le regioni del processo a partire dall'eseguibile e gestisce tabelle delle pagine e frame fisici. V4 è mappata su F9, V32 su F2 e una pagina di stack su F12; V5 non è presente. La MMU traduce 0x402A in 0x902A mantenendo l'offset, usando la TLB o le tabelle indicate da CR3. Un page fault passa al kernel.</desc>
+  <defs>
+    <style>.tpsi-line{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:8}.tpsi-thin{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:5}</style>
+    <symbol id="tpsi-user" viewBox="0 0 240 260">
+      <circle cx="120" cy="75" r="56" fill="#60a5fa" />
+      <path d="M28 246c4-75 39-116 92-116s88 41 92 116z" fill="#2563eb" />
+      <circle cx="120" cy="75" r="34" fill="#dbeafe" opacity=".65" />
+    </symbol>
+    <symbol id="tpsi-server" viewBox="0 0 420 320">
+      <rect x="35" y="25" width="350" height="270" rx="24" fill="#dff8ed" stroke="#73d5a8" stroke-width="6" />
+      <g fill="#164e45">
+        <rect x="75" y="65" width="270" height="52" rx="10" />
+        <rect x="75" y="134" width="270" height="52" rx="10" />
+        <rect x="75" y="203" width="270" height="52" rx="10" />
+      </g>
+      <g fill="#34d399">
+        <circle cx="311" cy="91" r="8" />
+        <circle cx="285" cy="91" r="8" />
+        <circle cx="311" cy="160" r="8" />
+        <circle cx="285" cy="160" r="8" />
+        <circle cx="311" cy="229" r="8" />
+        <circle cx="285" cy="229" r="8" />
+      </g>
+    </symbol>
+    <symbol id="tpsi-database" viewBox="0 0 420 300">
+      <ellipse cx="210" cy="58" rx="170" ry="48" fill="#93c5fd" />
+      <rect x="40" y="58" width="340" height="170" fill="#4f46e5" />
+      <ellipse cx="210" cy="228" rx="170" ry="48" fill="#3730a3" />
+      <ellipse cx="210" cy="58" rx="145" ry="30" fill="#dbeafe" opacity=".72" />
+      <path d="M40 116c0 27 76 48 170 48s170-21 170-48M40 174c0 27 76 48 170 48s170-21 170-48" fill="none" stroke="#a5b4fc" stroke-width="5" opacity=".7" />
+    </symbol>
+    <symbol id="tpsi-repository" viewBox="0 0 360 280">
+      <rect x="45" y="32" width="270" height="64" rx="14" fill="#d1fae5" stroke="#34d399" stroke-width="5" />
+      <rect x="45" y="108" width="270" height="64" rx="14" fill="#a7f3d0" stroke="#10b981" stroke-width="5" />
+      <rect x="45" y="184" width="270" height="64" rx="14" fill="#6ee7b7" stroke="#059669" stroke-width="5" />
+      <path d="M82 64h196M82 140h196M82 216h196" class="tpsi-thin" stroke="#065f46" />
+    </symbol>
+    <symbol id="tpsi-document" viewBox="0 0 280 340">
+      <path d="M35 10h140l70 70v250H35z" fill="#f8fafc" stroke="#94a3b8" stroke-width="6" />
+      <path d="M175 10v70h70" fill="#dbeafe" stroke="#94a3b8" stroke-width="6" />
+      <path d="M72 130h136M72 174h136M72 218h105M72 262h120" class="tpsi-thin" stroke="#64748b" />
+    </symbol>
+    <symbol id="tpsi-terminal" viewBox="0 0 420 280">
+      <rect x="10" y="15" width="400" height="250" rx="24" fill="#111827" stroke="#64748b" stroke-width="6" />
+      <path d="M10 60h400" stroke="#64748b" stroke-width="5" />
+      <circle cx="38" cy="38" r="8" fill="#ef4444" />
+      <circle cx="64" cy="38" r="8" fill="#f59e0b" />
+      <circle cx="90" cy="38" r="8" fill="#22c55e" />
+      <path d="M65 115l38 32-38 32M129 185h95" class="tpsi-line" stroke="#a7f3d0" />
+    </symbol>
+    <symbol id="tpsi-lock" viewBox="0 0 280 320">
+      <rect x="32" y="128" width="216" height="174" rx="28" fill="#fb7185" stroke="#be123c" stroke-width="6" />
+      <path d="M78 128V89a62 62 0 0 1 124 0v39" fill="none" stroke="#e11d48" stroke-width="20" stroke-linecap="round" />
+      <circle cx="140" cy="202" r="20" fill="#881337" />
+      <path d="M140 220v38" stroke="#881337" stroke-width="14" stroke-linecap="round" />
+    </symbol>
+    <symbol id="tpsi-test" viewBox="0 0 300 320">
+      <path d="M108 20h84M126 20v89L55 261a27 27 0 0 0 25 39h140a27 27 0 0 0 25-39l-71-152V20" fill="#ede9fe" stroke="#7c3aed" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M83 238h134" stroke="#a78bfa" stroke-width="45" stroke-linecap="round" opacity=".7" />
+      <path d="M106 220l31 31 66-76" class="tpsi-line" stroke="#16a34a" />
+    </symbol>
+    <symbol id="tpsi-artifact" viewBox="0 0 340 300">
+      <path d="M28 78l142-62 142 62-142 64z" fill="#fbbf24" />
+      <path d="M28 78v145l142 64V142z" fill="#d97706" />
+      <path d="M312 78v145l-142 64V142z" fill="#f59e0b" />
+      <path d="M112 42l143 64v58" fill="none" stroke="#fff7d6" stroke-width="10" opacity=".8" />
+    </symbol>
+    <symbol id="tpsi-process" viewBox="0 0 240 180" data-label="Processo">
+      <rect x="12" y="12" width="216" height="156" rx="18" fill="#dbeafe" stroke="#2563eb" stroke-width="6" />
+      <path d="M12 52h216" stroke="#2563eb" stroke-width="5" />
+      <circle cx="36" cy="32" r="7" fill="#2563eb" />
+      <rect x="36" y="78" width="68" height="64" rx="8" fill="#93c5fd" />
+      <path d="M128 88h70M128 112h70M128 136h45" stroke="#2563eb" stroke-width="6" />
+    </symbol>
+    <symbol id="tpsi-thread" viewBox="0 0 240 180" data-label="Thread">
+      <path d="M24 90h192" fill="none" stroke="#0d9488" stroke-width="8" />
+      <circle cx="42" cy="90" r="22" fill="#ccfbf1" stroke="#0d9488" stroke-width="6" />
+      <circle cx="112" cy="90" r="22" fill="#ccfbf1" stroke="#0d9488" stroke-width="6" />
+      <path d="M177 59l43 31-43 31z" fill="#0d9488" />
+    </symbol>
+    <symbol id="tpsi-memory" viewBox="0 0 240 180" data-label="Area di memoria">
+      <rect x="12" y="20" width="216" height="140" rx="14" fill="#eef2ff" stroke="#4f46e5" stroke-width="6" />
+      <path d="M12 66h216M12 112h216M84 20v140M156 20v140" stroke="#818cf8" stroke-width="4" />
+    </symbol>
+    <symbol id="tpsi-cpu" viewBox="0 0 240 180" data-label="CPU / core">
+      <rect x="54" y="30" width="132" height="120" rx="14" fill="#fef3c7" stroke="#d97706" stroke-width="6" />
+      <rect x="84" y="58" width="72" height="64" rx="6" fill="#d97706" />
+      <path d="M30 54h24M30 90h24M30 126h24M186 54h24M186 90h24M186 126h24M84 8v22M120 8v22M156 8v22M84 150v22M120 150v22M156 150v22" stroke="#d97706" stroke-width="6" />
+    </symbol>
+    <symbol id="tpsi-pipe" viewBox="0 0 240 180" data-label="Pipe">
+      <path d="M24 54h192v72H24z" fill="#ccfbf1" stroke="#0d9488" stroke-width="6" />
+      <ellipse cx="24" cy="90" rx="14" ry="36" fill="#99f6e4" stroke="#0d9488" stroke-width="5" />
+      <ellipse cx="216" cy="90" rx="14" ry="36" fill="#f0fdfa" stroke="#0d9488" stroke-width="5" />
+      <path d="M70 90h96l-20-16m20 16-20 16" fill="none" stroke="#0d9488" stroke-width="6" />
+    </symbol>
+    <symbol id="tpsi-queue" viewBox="0 0 240 180" data-label="Coda / buffer">
+      <rect x="12" y="52" width="216" height="76" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="5" />
+      <path d="M66 52v76M120 52v76M174 52v76" stroke="#818cf8" stroke-width="4" />
+      <rect x="23" y="64" width="32" height="52" rx="5" fill="#4f46e5" />
+      <rect x="77" y="64" width="32" height="52" rx="5" fill="#818cf8" />
+    </symbol>
+    <symbol id="tpsi-message" viewBox="0 0 240 180" data-label="Messaggio">
+      <rect x="26" y="36" width="188" height="112" rx="14" fill="#ccfbf1" stroke="#0d9488" stroke-width="6" />
+      <path d="M32 46l88 62 88-62M32 140l55-51M208 140l-55-51" fill="none" stroke="#0d9488" stroke-width="5" />
+    </symbol>
+    <symbol id="tpsi-mutex" viewBox="0 0 240 180" data-label="Mutex">
+      <path d="M74 73V53a46 46 0 0 1 92 0v20" fill="none" stroke="#0d9488" stroke-width="12" />
+      <rect x="46" y="73" width="148" height="92" rx="16" fill="#ccfbf1" stroke="#0d9488" stroke-width="6" />
+      <circle cx="120" cy="108" r="14" fill="#0d9488" />
+      <path d="M120 118v25" stroke="#0d9488" stroke-width="10" />
+    </symbol>
+    <symbol id="tpsi-semaphore" viewBox="0 0 240 180" data-label="Semaforo contatore">
+      <rect x="18" y="26" width="204" height="130" rx="18" fill="#fef3c7" stroke="#d97706" stroke-width="6" />
+      <circle cx="62" cy="90" r="23" fill="#d97706" />
+      <circle cx="120" cy="90" r="23" fill="#d97706" />
+      <circle cx="178" cy="90" r="23" fill="none" stroke="#d97706" stroke-width="4" stroke-dasharray="6 5" />
+    </symbol>
+    <symbol id="tpsi-condition" viewBox="0 0 240 180" data-label="Variabile di condizione">
+      <path d="M52 44a68 68 0 1 1-12 86" fill="none" stroke="#d97706" stroke-width="8" />
+      <path d="M18 130h40v38" fill="none" stroke="#d97706" stroke-width="8" />
+      <path d="M93 66h18v49H93zM130 66h18v49h-18z" fill="#d97706" />
+    </symbol>
+    <symbol id="tpsi-monitor" viewBox="0 0 240 180" data-label="Monitor software">
+      <rect x="16" y="16" width="208" height="148" rx="20" fill="#ccfbf1" stroke="#0d9488" stroke-width="6" />
+      <rect x="42" y="48" width="96" height="84" rx="10" fill="#99f6e4" />
+      <path d="M156 54h43M156 90h43M156 126h43" stroke="#0d9488" stroke-width="9" />
+    </symbol>
+    <symbol id="tpsi-commit" viewBox="0 0 240 180" data-label="Commit">
+      <path d="M12 90h216" stroke="#64748b" stroke-width="7" />
+      <circle cx="120" cy="90" r="44" fill="#dbeafe" stroke="#2563eb" stroke-width="7" />
+      <circle cx="120" cy="90" r="15" fill="#2563eb" />
+    </symbol>
+    <symbol id="tpsi-requirement" viewBox="0 0 240 180" data-label="Requisito verificabile">
+      <rect x="40" y="12" width="160" height="156" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="6" />
+      <path d="M66 56l10 12 22-24M66 105l10 12 22-24" fill="none" stroke="#0d9488" stroke-width="6" />
+      <path d="M115 57h59M115 107h59M66 145h108" stroke="#64748b" stroke-width="5" />
+    </symbol>
+    <symbol id="tpsi-debugger" viewBox="0 0 240 180" data-label="Debugger / osservazione">
+      <circle cx="105" cy="72" r="48" fill="#ede9fe" stroke="#7c3aed" stroke-width="7" />
+      <path d="M141 108l61 52" stroke="#7c3aed" stroke-width="16" stroke-linecap="round" />
+      <path d="M80 72h50M105 47v50" stroke="#7c3aed" stroke-width="5" />
+    </symbol>
+    <symbol id="tpsi-shield" viewBox="0 0 240 180" data-label="Controllo di accesso">
+      <path d="M120 12l86 30v58c0 35-44 61-86 73-42-12-86-38-86-73V42z" fill="#ffe4e6" stroke="#e11d48" stroke-width="6" />
+      <path d="M78 86l29 30 57-62" fill="none" stroke="#be123c" stroke-width="9" />
+    </symbol>
+    <symbol id="tpsi-badge-c" viewBox="0 0 240 180" data-label="C">
+      <rect x="16" y="34" width="208" height="112" rx="20" fill="#102a43" />
+      <text x="120" y="108" fill="#f8fafc" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" font-size="42">C</text>
+    </symbol>
+    <symbol id="tpsi-badge-posix" viewBox="0 0 240 180" data-label="POSIX">
+      <rect x="16" y="34" width="208" height="112" rx="20" fill="#102a43" />
+      <text x="120" y="108" fill="#f8fafc" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" font-size="42">POSIX</text>
+    </symbol>
+    <symbol id="tpsi-badge-java" viewBox="0 0 240 180" data-label="Java">
+      <rect x="16" y="34" width="208" height="112" rx="20" fill="#102a43" />
+      <text x="120" y="108" fill="#f8fafc" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" font-size="42">Java</text>
+    </symbol>
+  </defs>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#2563eb" />
+    </marker>
+  </defs>
+  <g font-family="Arial, sans-serif">
+    <rect x="0" y="0" width="1920" height="1080" rx="16" fill="#08192c" stroke="none" stroke-width="2" />
+    <text x="64" y="80" font-size="48" fill="#f8fafc" font-weight="700">Dal file agli indirizzi: chi prepara, chi traduce</text>
+    <text x="64" y="132" font-size="28" fill="#b9ccdf" font-weight="400">Linux su Intel x86-64 · pagine di 4 KiB · schema ridotto, indirizzi e frame illustrativi</text>
+    <rect x="64" y="180" width="270" height="580" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
+    <text x="84" y="224" font-size="32" fill="#102a43" font-weight="700">1. Disco</text>
+    <use href="#tpsi-document" x="138" y="250" width="110" height="115" />
+    <text x="88" y="408" font-size="24" fill="#102a43" font-weight="400">Eseguibile ELF</text>
+    <text x="88" y="440" font-size="24" fill="#102a43" font-weight="400">codice e dati</text>
+    <text x="88" y="472" font-size="24" fill="#102a43" font-weight="400">inizializzati</text>
+    <rect x="84" y="514" width="230" height="204" rx="16" fill="#e0f2fe" stroke="none" stroke-width="2" />
+    <text x="100" y="548" font-size="24" fill="#102a43" font-weight="400">Il kernel crea</text>
+    <text x="100" y="580" font-size="24" fill="#102a43" font-weight="400">le regioni virtuali.</text>
+    <text x="100" y="612" font-size="24" fill="#102a43" font-weight="400">Le pagine servono</text>
+    <text x="100" y="644" font-size="24" fill="#102a43" font-weight="400">in RAM quando</text>
+    <text x="100" y="676" font-size="24" fill="#102a43" font-weight="400">vengono usate.</text>
+    <rect x="380" y="180" width="390" height="580" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
+    <text x="400" y="224" font-size="32" fill="#102a43" font-weight="700">2. Spazio virtuale</text>
+    <text x="400" y="262" font-size="24" fill="#102a43" font-weight="400">Del processo · molto sparso</text>
+    <text x="404" y="300" font-size="23" fill="#102a43" font-weight="400">… grandi intervalli inutilizzati …</text>
+    <rect x="400" y="320" width="350" height="48" rx="16" fill="#dbeafe" stroke="none" stroke-width="2" />
+    <text x="415" y="352" font-size="24" fill="#102a43" font-weight="400">V4 · codice · presente</text>
+    <rect x="400" y="380" width="350" height="48" rx="16" fill="#fef3c7" stroke="none" stroke-width="2" />
+    <text x="415" y="412" font-size="24" fill="#102a43" font-weight="400">V5 · codice · non presente</text>
+    <rect x="400" y="478" width="350" height="48" rx="16" fill="#e0e7ff" stroke="none" stroke-width="2" />
+    <text x="415" y="510" font-size="24" fill="#102a43" font-weight="400">V32 · heap · presente</text>
+    <rect x="400" y="576" width="350" height="48" rx="16" fill="#ccfbf1" stroke="none" stroke-width="2" />
+    <text x="415" y="608" font-size="24" fill="#102a43" font-weight="400">Stack · pagina presente</text>
+    <text x="422" y="461" font-size="24" fill="#102a43" font-weight="400">… spazio non mappato …</text>
+    <text x="422" y="559" font-size="24" fill="#102a43" font-weight="400">… spazio non mappato …</text>
+    <text x="422" y="658" font-size="24" fill="#102a43" font-weight="400">… altri indirizzi virtuali …</text>
+    <text x="400" y="708" font-size="23" fill="#102a43" font-weight="700">Spazio virtuale ≠ RAM occupata</text>
+    <path d="M334 300 H374" fill="none" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)" />
+    <text x="338" y="282" font-size="20" fill="#b9ccdf" font-weight="400">avvio</text>
+    <rect x="820" y="180" width="530" height="580" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
+    <text x="840" y="224" font-size="32" fill="#102a43" font-weight="700">3. Strutture del kernel</text>
+    <text x="840" y="262" font-size="24" fill="#102a43" font-weight="400">In RAM · gestite dal sistema operativo</text>
+    <rect x="840" y="282" width="490" height="254" rx="16" fill="#e0e7ff" stroke="none" stroke-width="2" />
+    <text x="858" y="314" font-size="26" fill="#102a43" font-weight="700">Per processo: regioni e tabelle</text>
+    <text x="858" y="347" font-size="24" fill="#102a43" font-weight="400">CR3 → radice → livelli → voci PTE</text>
+    <text x="858" y="387" font-size="23" fill="#102a43" font-weight="400">V4 → F9    presente · lettura/esecuzione</text>
+    <text x="858" y="419" font-size="23" fill="#102a43" font-weight="400">V5 → —     non presente</text>
+    <text x="858" y="451" font-size="23" fill="#102a43" font-weight="400">V32 → F2  presente · lettura/scrittura</text>
+    <text x="858" y="483" font-size="23" fill="#102a43" font-weight="400">Stack → F12   presente · lettura/scrittura</text>
+    <rect x="840" y="556" width="490" height="174" rx="16" fill="#fef3c7" stroke="none" stroke-width="2" />
+    <text x="858" y="590" font-size="26" fill="#102a43" font-weight="700">Gestione globale della RAM</text>
+    <text x="858" y="624" font-size="23" fill="#102a43" font-weight="400">Descrittori dei frame (struct page),</text>
+    <text x="858" y="656" font-size="23" fill="#102a43" font-weight="400">stato libero/occupato, allocatore.</text>
+    <text x="858" y="688" font-size="23" fill="#102a43" font-weight="400">Il kernel li usa per assegnare i frame.</text>
+    <path d="M770 345 H814" fill="none" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)" />
+    <rect x="1400" y="180" width="456" height="580" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
+    <text x="1420" y="224" font-size="32" fill="#102a43" font-weight="700">4. RAM fisica</text>
+    <text x="1420" y="262" font-size="24" fill="#102a43" font-weight="400">Frame non necessariamente contigui</text>
+    <rect x="1420" y="288" width="416" height="48" rx="16" fill="#f1f5f9" stroke="none" stroke-width="2" />
+    <text x="1434" y="320" font-size="23" fill="#102a43" font-weight="400">F0 · libero</text>
+    <rect x="1420" y="348" width="416" height="48" rx="16" fill="#e0e7ff" stroke="none" stroke-width="2" />
+    <text x="1434" y="380" font-size="23" fill="#102a43" font-weight="400">F2 · dati heap di A</text>
+    <rect x="1420" y="408" width="416" height="48" rx="16" fill="#f1f5f9" stroke="none" stroke-width="2" />
+    <text x="1434" y="440" font-size="23" fill="#102a43" font-weight="400">… altri frame …</text>
+    <rect x="1420" y="468" width="416" height="48" rx="16" fill="#dbeafe" stroke="none" stroke-width="2" />
+    <text x="1434" y="500" font-size="23" fill="#102a43" font-weight="400">F9 · codice di A</text>
+    <rect x="1420" y="528" width="416" height="48" rx="16" fill="#f1f5f9" stroke="none" stroke-width="2" />
+    <text x="1434" y="560" font-size="23" fill="#102a43" font-weight="400">… kernel, tabelle, altri processi …</text>
+    <rect x="1420" y="588" width="416" height="48" rx="16" fill="#ccfbf1" stroke="none" stroke-width="2" />
+    <text x="1434" y="620" font-size="23" fill="#102a43" font-weight="400">F12 · stack di A</text>
+    <text x="1420" y="684" font-size="24" fill="#102a43" font-weight="400">F2, F9, F12 sono frame fisici.</text>
+    <text x="1420" y="716" font-size="24" fill="#102a43" font-weight="400">Le tabelle stesse occupano RAM.</text>
+    <path d="M1330 375 H1370 V492 H1414" fill="none" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)" />
+    <path d="M1330 439 H1384 V372 H1414" fill="none" stroke="#4f46e5" stroke-width="3" marker-end="url(#arrow)" />
+    <path d="M1330 471 H1358 V612 H1414" fill="none" stroke="#0d9488" stroke-width="3" marker-end="url(#arrow)" />
+    <rect x="64" y="790" width="1792" height="230" rx="16" fill="#132b45" stroke="none" stroke-width="2" />
+    <text x="88" y="827" font-size="28" fill="#f8fafc" font-weight="700">UN ACCESSO: la MMU traduce; il kernel interviene se necessario</text>
+    <rect x="88" y="850" width="325" height="84" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
+    <text x="106" y="884" font-size="24" fill="#102a43" font-weight="400">CPU: indirizzo 0x402A</text>
+    <text x="106" y="916" font-size="24" fill="#102a43" font-weight="400">pagina V4 + offset 0x02A</text>
+    <rect x="466" y="850" width="675" height="84" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
+    <text x="486" y="884" font-size="24" fill="#102a43" font-weight="400">MMU: cerca nella TLB (cache delle traduzioni).</text>
+    <text x="486" y="916" font-size="24" fill="#102a43" font-weight="400">Se manca: legge le tabelle a partire da CR3.</text>
+    <rect x="1198" y="850" width="630" height="84" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
+    <text x="1218" y="884" font-size="24" fill="#102a43" font-weight="400">V4 → F9: indirizzo fisico 0x902A</text>
+    <text x="1218" y="916" font-size="24" fill="#102a43" font-weight="400">base del frame + lo stesso offset 0x02A</text>
+    <path d="M413 892 H460" fill="none" stroke="#7dd3fc" stroke-width="3" marker-end="url(#arrow)" />
+    <path d="M1141 892 H1192" fill="none" stroke="#7dd3fc" stroke-width="3" marker-end="url(#arrow)" />
+    <text x="88" y="969" font-size="24" fill="#f8fafc" font-weight="400">V5 non presente → page fault → kernel: verifica la regione, carica dal file e aggiorna la PTE → riprova.</text>
+    <text x="88" y="1001" font-size="23" fill="#b9ccdf" font-weight="400">Accesso non consentito: il kernel segnala un errore. Le strutture globali non sono un secondo stadio della traduzione.</text>
+    <text x="64" y="1054" font-size="24" fill="#b9ccdf" font-weight="400">TPSI 4 · Frecce: corrispondenze logiche e percorso di traduzione; nessuna scala di dimensioni.</text>
+  </g>
+</svg>

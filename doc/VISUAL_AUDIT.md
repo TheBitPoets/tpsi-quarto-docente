@@ -58,6 +58,12 @@ Server, database, lucchetto di sicurezza e badge C/POSIX/Java restano disponibil
 
 ## Piano delle figure e collocazione
 
+Aggiornamento: il registro comprende ora **23 figure**. La nuova [Spazio virtuale, kernel e MMU](../assets/tpsi4/01-indirizzi-virtuali-mmu.svg) è inserita nella lezione 1, in “Anatomia di un processo”, subito dopo la spiegazione dello spazio di indirizzamento. Riutilizza il simbolo `tpsi-document`; pagine, frame e tabelle sono pannelli etichettati composti con la palette esistente, senza nuovi simboli di catalogo.
+
+La scena collega eseguibile, regioni virtuali sparse, tabelle del processo, gestione globale dei frame e RAM. Distingue preparazione delle mappature, traduzione hardware tramite TLB/tabelle e gestione dei page fault. Mostra pagine di 4 KiB e la traduzione illustrativa `0x402A → 0x902A`. Le strutture globali di gestione della RAM non sono rappresentate come un secondo stadio della traduzione MMU. Riferimenti tecnici: [Linux Page Tables](https://docs.kernel.org/mm/page_tables.html) e [Physical Memory](https://docs.kernel.org/mm/physical_memory.html).
+
+La nuova figura è stata renderizzata con Chrome headless e ispezionata: etichette nei pannelli, percorsi delle frecce e corrispondenze V4/F9, V32/F2 e stack/F12 sono leggibili. Build, sette test del Visual System e cinque test di formattazione superati.
+
 Tutte le figure sotto sono composte e inserite. La revisione docente resta aperta, come per le dispense in stato `draft`. Il registro strutturato è [figure-index.json](../assets/tpsi4/visual-system/figure-index.json): conserva sezione, alt, didascalia, componenti e percorsi.
 
 | Figura | Sezione della dispensa | Domanda a cui risponde |

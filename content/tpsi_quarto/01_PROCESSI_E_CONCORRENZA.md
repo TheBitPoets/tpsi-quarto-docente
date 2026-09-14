@@ -170,7 +170,15 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 </td></tr>
 </table>
 
-<p align="justify">Distinguiamo quindi tre posti: la memoria accessibile al programma, le strutture protette del kernel e i registri fisici della CPU. Per ora immaginiamo un processo con un solo flusso di esecuzione. Quando introdurremo i thread, distingueremo le risorse del processo dal contesto e dallo stack di ciascun thread.</p>
+<p align="justify">Distinguiamo quindi tre posti:</p>
+
+<ul>
+  <li><strong>la memoria accessibile al programma;</strong></li>
+  <li><strong>le strutture protette del kernel;</strong></li>
+  <li><strong>i registri fisici della CPU.</strong></li>
+</ul>
+
+<p align="justify">Per ora immaginiamo un processo con un solo flusso di esecuzione. Quando introdurremo i thread, distingueremo le risorse del processo dal contesto e dallo stack di ciascun thread.</p>
 
 ### 1. Identificatore: distinguere questa esecuzione
 
@@ -199,6 +207,28 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 <p align="justify">Il sistema operativo organizza le mappature e le protezioni; l'hardware di gestione della memoria, la <strong>MMU</strong>, traduce gli indirizzi virtuali usando tabelle predisposte dal kernel. La memoria viene gestita in unità chiamate <strong>pagine</strong>. Per ogni accesso conta anche l'operazione richiesta: una regione può essere leggibile, scrivibile oppure eseguibile, secondo le sue protezioni.</p>
 
 <p align="justify">Perché lo spazio è associato al processo? La variabile <code>media</code> dell'aula deve poter essere distinta da quella del laboratorio. Anche se due processi usassero lo stesso valore numerico di indirizzo, le rispettive traduzioni potrebbero condurre a memorie fisiche diverse. Un puntatore di un processo non permette quindi, da solo, di leggere la variabile dell'altro. Il sistema può anche predisporre pagine condivise: la condivisione dipende dalle mappature, non dall'uguaglianza dei numeri. Gli indirizzi effettivi possono cambiare fra esecuzioni.</p>
+
+<p align="justify">Leggiamo il diagramma in due momenti. <strong>All'avvio</strong>, il kernel ricava dall'eseguibile le regioni di codice e dati e predispone anche quelle necessarie a stack e allocazioni. Non carica l'intero spazio virtuale: molte regioni restano inutilizzate e alcune pagine vengono rese presenti soltanto al primo accesso. <strong>Durante l'esecuzione</strong>, la CPU produce indirizzi virtuali e la MMU li traduce usando le mappature predisposte dal kernel.</p>
+
+<!-- figure:01-indirizzi-virtuali-mmu -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-indirizzi-virtuali-mmu.svg" alt="Il kernel crea le regioni del processo a partire dall&#x27;eseguibile e gestisce tabelle delle pagine e frame fisici. V4 è mappata su F9, V32 su F2 e una pagina di stack su F12; V5 non è presente. La MMU traduce 0x402A in 0x902A mantenendo l&#x27;offset, usando la TLB o le tabelle indicate da CR3. Un page fault passa al kernel." width="960">
+</p>
+<p align="center"><em>Lo spazio virtuale è sparso: solo alcune pagine sono presenti in RAM. Il kernel prepara le mappature; la MMU traduce gli indirizzi conservando l’offset nella pagina.</em></p>
+
+<p align="justify">La figura distingue tre oggetti che non vanno confusi:</p>
+
+<ul>
+  <li><strong>Le regioni virtuali del processo:</strong> descrivono gli intervalli validi, le protezioni e l'eventuale file da cui ricavare i dati. Consentono al kernel di distinguere una pagina valida da caricare da un indirizzo non consentito.</li>
+  <li><strong>Le tabelle delle pagine del processo:</strong> sono una gerarchia in RAM. Le voci finali, chiamate <em>PTE</em>, indicano frame fisici e attributi della mappatura. La figura le riassume in poche righe; <code>CR3</code> permette all'hardware di individuare la radice della gerarchia attiva.</li>
+  <li><strong>Le strutture globali di gestione della memoria fisica:</strong> il kernel mantiene descrittori dei frame, come <code>struct page</code> in Linux, e strutture per gestire memoria libera e occupata. Servono ad assegnare e amministrare la RAM; la MMU non le consulta come un'altra tabella di traduzione.</li>
+</ul>
+
+<p align="justify">Con pagine di <strong>4 KiB, cioè 4096 byte</strong>, l'indirizzo si divide in numero di pagina e posizione interna, detta <strong>offset</strong>. Nell'esempio <code>0x402A</code> significa pagina virtuale 4 e offset <code>0x02A</code>. La mappatura porta al frame fisico 9: la sua base è <code>0x9000</code>, quindi l'indirizzo fisico è <code>0x902A</code>. Cambia la pagina, non la posizione del byte al suo interno. La <strong>TLB</strong> conserva traduzioni recenti; se quella cercata manca, su x86-64 l'hardware consulta la gerarchia delle tabelle.</p>
+
+<p align="justify">Per la pagina V5, il diagramma mostra invece un <strong>page fault</strong>: la pagina non è presente. Il kernel controlla che l'accesso sia valido e, nel caso illustrato, rende disponibili i dati dell'eseguibile in un frame e aggiorna la mappatura; l'istruzione può essere ritentata. Un indirizzo non valido o una violazione delle protezioni produce invece un errore. Il kernel prepara e corregge le mappature, ma non esegue una routine software per ogni normale lettura in memoria.</p>
+
+<p align="justify">Il termine Linux <em>Page Global Directory</em> (PGD) indica un livello della gerarchia: la parola “global” non significa che tutti i processi condividano una sola tabella per i propri indirizzi utente. Per i dettagli: <a href="https://docs.kernel.org/mm/page_tables.html">Linux, Page Tables</a> e <a href="https://docs.kernel.org/mm/physical_memory.html">Physical Memory</a>.</p>
 
 ### 4. Stack e heap: due esigenze diverse nella stessa memoria
 
