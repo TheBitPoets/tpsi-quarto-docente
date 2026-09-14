@@ -19,16 +19,14 @@
     },
     {
       "id": "01-indirizzi-virtuali-mmu",
-      "title": "Dal file agli indirizzi: spazio virtuale, kernel e MMU",
+      "title": "Dalle pagine virtuali alle pagine fisiche",
       "section": "Anatomia di un processo",
-      "alt": "Il kernel crea le regioni del processo a partire dall'eseguibile e gestisce tabelle delle pagine e frame fisici. V4 è mappata su F9, V32 su F2 e una pagina di stack su F12; V5 non è presente. La MMU traduce 0x402A in 0x902A mantenendo l'offset, usando la TLB o le tabelle indicate da CR3. Un page fault passa al kernel.",
-      "caption": "Lo spazio virtuale è sparso: solo alcune pagine sono presenti in RAM. Il kernel prepara le mappature; la MMU traduce gli indirizzi conservando l’offset nella pagina.",
+      "alt": "A sinistra lo spazio virtuale del processo è diviso in pagine. Al centro il kernel prepara una tabella: V1 corrisponde a F4, V2 a F1 e V3 a F6. La MMU usa queste corrispondenze per tradurre gli indirizzi. A destra la RAM contiene i frame fisici in un ordine diverso.",
+      "caption": "Il kernel prepara le corrispondenze; la MMU le usa per raggiungere le pagine fisiche. Pagine virtuali vicine possono occupare frame fisici distanti.",
       "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
       "scene": "assets/tpsi4/visual-system/scenes/01-indirizzi-virtuali-mmu.scene.svg",
       "output": "assets/tpsi4/01-indirizzi-virtuali-mmu.svg",
-      "components": [
-        "tpsi-document"
-      ],
+      "components": [],
       "status": "composed",
       "book_visual_comparison": "pending-access"
     },

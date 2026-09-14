@@ -202,33 +202,28 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 ### 3. Spazio di indirizzamento: gli indirizzi che il programma vede
 
-<p align="justify">Un indirizzo permette di individuare una posizione di memoria. Lo <strong>spazio di indirizzamento virtuale</strong> è l'insieme degli indirizzi che un processo può rappresentare; soltanto alcune sue regioni sono effettivamente mappate e accessibili. Fra queste troviamo il codice eseguibile, i dati globali, le librerie e le aree usate per stack e allocazioni dinamiche. Non immaginiamolo come un unico blocco di RAM già riservato interamente al programma.</p>
-
-<p align="justify">Il sistema operativo organizza le mappature e le protezioni; l'hardware di gestione della memoria, la <strong>MMU</strong>, traduce gli indirizzi virtuali usando tabelle predisposte dal kernel. La memoria viene gestita in unità chiamate <strong>pagine</strong>. Per ogni accesso conta anche l'operazione richiesta: una regione può essere leggibile, scrivibile oppure eseguibile, secondo le sue protezioni.</p>
-
-<p align="justify">Perché lo spazio è associato al processo? La variabile <code>media</code> dell'aula deve poter essere distinta da quella del laboratorio. Anche se due processi usassero lo stesso valore numerico di indirizzo, le rispettive traduzioni potrebbero condurre a memorie fisiche diverse. Un puntatore di un processo non permette quindi, da solo, di leggere la variabile dell'altro. Il sistema può anche predisporre pagine condivise: la condivisione dipende dalle mappature, non dall'uguaglianza dei numeri. Gli indirizzi effettivi possono cambiare fra esecuzioni.</p>
-
-<p align="justify">Leggiamo il diagramma in due momenti. <strong>All'avvio</strong>, il kernel ricava dall'eseguibile le regioni di codice e dati e predispone anche quelle necessarie a stack e allocazioni. Non carica l'intero spazio virtuale: molte regioni restano inutilizzate e alcune pagine vengono rese presenti soltanto al primo accesso. <strong>Durante l'esecuzione</strong>, la CPU produce indirizzi virtuali e la MMU li traduce usando le mappature predisposte dal kernel.</p>
+<p align="justify">Un indirizzo indica una posizione di memoria. Il processo usa un proprio <strong>spazio di indirizzi virtuali</strong>, suddiviso in blocchi chiamati <strong>pagine virtuali</strong>. La RAM ? organizzata in blocchi corrispondenti, le <strong>pagine fisiche</strong> o <strong>frame</strong>. Per trovare un dato, bisogna collegare la pagina vista dal programma alla sua posizione nella RAM.</p>
 
 <!-- figure:01-indirizzi-virtuali-mmu -->
 <p align="center">
-  <img src="../../assets/tpsi4/01-indirizzi-virtuali-mmu.svg" alt="Il kernel crea le regioni del processo a partire dall&#x27;eseguibile e gestisce tabelle delle pagine e frame fisici. V4 è mappata su F9, V32 su F2 e una pagina di stack su F12; V5 non è presente. La MMU traduce 0x402A in 0x902A mantenendo l&#x27;offset, usando la TLB o le tabelle indicate da CR3. Un page fault passa al kernel." width="960">
+  <img src="../../assets/tpsi4/01-indirizzi-virtuali-mmu.svg" alt="A sinistra lo spazio virtuale del processo è diviso in pagine. Al centro il kernel prepara una tabella: V1 corrisponde a F4, V2 a F1 e V3 a F6. La MMU usa queste corrispondenze per tradurre gli indirizzi. A destra la RAM contiene i frame fisici in un ordine diverso." width="960">
 </p>
-<p align="center"><em>Lo spazio virtuale è sparso: solo alcune pagine sono presenti in RAM. Il kernel prepara le mappature; la MMU traduce gli indirizzi conservando l’offset nella pagina.</em></p>
+<p align="center"><em>Il kernel prepara le corrispondenze; la MMU le usa per raggiungere le pagine fisiche. Pagine virtuali vicine possono occupare frame fisici distanti.</em></p>
 
-<p align="justify">La figura distingue tre oggetti che non vanno confusi:</p>
+<p align="justify">Segui la figura in quattro passaggi:</p>
 
-<ul>
-  <li><strong>Le regioni virtuali del processo:</strong> descrivono gli intervalli validi, le protezioni e l'eventuale file da cui ricavare i dati. Consentono al kernel di distinguere una pagina valida da caricare da un indirizzo non consentito.</li>
-  <li><strong>Le tabelle delle pagine del processo:</strong> sono una gerarchia in RAM. Le voci finali, chiamate <em>PTE</em>, indicano frame fisici e attributi della mappatura. La figura le riassume in poche righe; <code>CR3</code> permette all'hardware di individuare la radice della gerarchia attiva.</li>
-  <li><strong>Le strutture globali di gestione della memoria fisica:</strong> il kernel mantiene descrittori dei frame, come <code>struct page</code> in Linux, e strutture per gestire memoria libera e occupata. Servono ad assegnare e amministrare la RAM; la MMU non le consulta come un'altra tabella di traduzione.</li>
-</ul>
+<ol>
+  <li><strong>A sinistra, le pagine virtuali:</strong> sono il modo in cui il processo vede organizzata la propria memoria. Lo spazio pu? essere molto grande e solo una parte delle pagine ? presente in RAM.</li>
+  <li><strong>Al centro, il kernel e le strutture dati:</strong> il sistema operativo assegna i frame e prepara le tabelle delle pagine. Nella figura la tabella dice, per esempio, che la pagina virtuale V1 si trova nel frame fisico F4. Il kernel tiene anche traccia dei frame liberi e occupati.</li>
+  <li><strong>Sotto, la MMU:</strong> ? la parte hardware della CPU che traduce gli indirizzi usando le corrispondenze preparate dal kernel. Il programma indica una posizione virtuale; la MMU permette di raggiungere quella fisica corretta.</li>
+  <li><strong>A destra, le pagine fisiche:</strong> sono i blocchi effettivamente presenti nella RAM. Cerca gli stessi colori: V1 ? in F4, V2 in F1 e V3 in F6. L'ordine nella RAM pu? essere diverso dall'ordine virtuale.</li>
+</ol>
 
-<p align="justify">Con pagine di <strong>4 KiB, cioè 4096 byte</strong>, l'indirizzo si divide in numero di pagina e posizione interna, detta <strong>offset</strong>. Nell'esempio <code>0x402A</code> significa pagina virtuale 4 e offset <code>0x02A</code>. La mappatura porta al frame fisico 9: la sua base è <code>0x9000</code>, quindi l'indirizzo fisico è <code>0x902A</code>. Cambia la pagina, non la posizione del byte al suo interno. La <strong>TLB</strong> conserva traduzioni recenti; se quella cercata manca, su x86-64 l'hardware consulta la gerarchia delle tabelle.</p>
+<p align="justify"><strong>Mappare una pagina</strong> significa stabilire questa corrispondenza. La tabella contiene indicazioni su dove trovare le pagine; i dati delle pagine sono nei frame fisici. Le tabelle sono anch'esse conservate in RAM: nella figura sono separate per distinguerne la funzione.</p>
 
-<p align="justify">Per la pagina V5, il diagramma mostra invece un <strong>page fault</strong>: la pagina non è presente. Il kernel controlla che l'accesso sia valido e, nel caso illustrato, rende disponibili i dati dell'eseguibile in un frame e aggiorna la mappatura; l'istruzione può essere ritentata. Un indirizzo non valido o una violazione delle protezioni produce invece un errore. Il kernel prepara e corregge le mappature, ma non esegue una routine software per ogni normale lettura in memoria.</p>
+<p align="justify">Ogni processo ha le proprie mappature: lo stesso indirizzo virtuale in due processi pu? quindi portare a dati fisici diversi. Per riprendere correttamente un processo, il sistema deve rendere nuovamente utilizzabili le sue corrispondenze.</p>
 
-<p align="justify">Il termine Linux <em>Page Global Directory</em> (PGD) indica un livello della gerarchia: la parola “global” non significa che tutti i processi condividano una sola tabella per i propri indirizzi utente. Per i dettagli: <a href="https://docs.kernel.org/mm/page_tables.html">Linux, Page Tables</a> e <a href="https://docs.kernel.org/mm/physical_memory.html">Physical Memory</a>.</p>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Leggi l'immagine:</strong> in quale frame si trova V2? Chi prepara la corrispondenza e chi la usa per tradurre l'indirizzo?</p>
 
 ### 4. Stack e heap: due esigenze diverse nella stessa memoria
 

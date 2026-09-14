@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc">
-  <title id="scene-title">Dal file agli indirizzi: spazio virtuale, kernel e MMU</title>
-  <desc id="scene-desc">Il kernel crea le regioni del processo a partire dall'eseguibile e gestisce tabelle delle pagine e frame fisici. V4 è mappata su F9, V32 su F2 e una pagina di stack su F12; V5 non è presente. La MMU traduce 0x402A in 0x902A mantenendo l'offset, usando la TLB o le tabelle indicate da CR3. Un page fault passa al kernel.</desc>
+  <title id="scene-title">Dalle pagine virtuali alle pagine fisiche</title>
+  <desc id="scene-desc">A sinistra lo spazio virtuale del processo è diviso in pagine. Al centro il kernel prepara una tabella: V1 corrisponde a F4, V2 a F1 e V3 a F6. La MMU usa queste corrispondenze per tradurre gli indirizzi. A destra la RAM contiene i frame fisici in un ordine diverso.</desc>
   <defs>
     <style>.tpsi-line{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:8}.tpsi-thin{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:5}</style>
     <symbol id="tpsi-user" viewBox="0 0 240 260">
@@ -161,95 +161,65 @@
     </symbol>
   </defs>
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
-      <path d="M0 0L10 5L0 10z" fill="#2563eb" />
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#7dd3fc" />
     </marker>
   </defs>
   <g font-family="Arial, sans-serif">
-    <rect x="0" y="0" width="1920" height="1080" rx="16" fill="#08192c" stroke="none" stroke-width="2" />
-    <text x="64" y="80" font-size="48" fill="#f8fafc" font-weight="700">Dal file agli indirizzi: chi prepara, chi traduce</text>
-    <text x="64" y="132" font-size="28" fill="#b9ccdf" font-weight="400">Linux su Intel x86-64 · pagine di 4 KiB · schema ridotto, indirizzi e frame illustrativi</text>
-    <rect x="64" y="180" width="270" height="580" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
-    <text x="84" y="224" font-size="32" fill="#102a43" font-weight="700">1. Disco</text>
-    <use href="#tpsi-document" x="138" y="250" width="110" height="115" />
-    <text x="88" y="408" font-size="24" fill="#102a43" font-weight="400">Eseguibile ELF</text>
-    <text x="88" y="440" font-size="24" fill="#102a43" font-weight="400">codice e dati</text>
-    <text x="88" y="472" font-size="24" fill="#102a43" font-weight="400">inizializzati</text>
-    <rect x="84" y="514" width="230" height="204" rx="16" fill="#e0f2fe" stroke="none" stroke-width="2" />
-    <text x="100" y="548" font-size="24" fill="#102a43" font-weight="400">Il kernel crea</text>
-    <text x="100" y="580" font-size="24" fill="#102a43" font-weight="400">le regioni virtuali.</text>
-    <text x="100" y="612" font-size="24" fill="#102a43" font-weight="400">Le pagine servono</text>
-    <text x="100" y="644" font-size="24" fill="#102a43" font-weight="400">in RAM quando</text>
-    <text x="100" y="676" font-size="24" fill="#102a43" font-weight="400">vengono usate.</text>
-    <rect x="380" y="180" width="390" height="580" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
-    <text x="400" y="224" font-size="32" fill="#102a43" font-weight="700">2. Spazio virtuale</text>
-    <text x="400" y="262" font-size="24" fill="#102a43" font-weight="400">Del processo · molto sparso</text>
-    <text x="404" y="300" font-size="23" fill="#102a43" font-weight="400">… grandi intervalli inutilizzati …</text>
-    <rect x="400" y="320" width="350" height="48" rx="16" fill="#dbeafe" stroke="none" stroke-width="2" />
-    <text x="415" y="352" font-size="24" fill="#102a43" font-weight="400">V4 · codice · presente</text>
-    <rect x="400" y="380" width="350" height="48" rx="16" fill="#fef3c7" stroke="none" stroke-width="2" />
-    <text x="415" y="412" font-size="24" fill="#102a43" font-weight="400">V5 · codice · non presente</text>
-    <rect x="400" y="478" width="350" height="48" rx="16" fill="#e0e7ff" stroke="none" stroke-width="2" />
-    <text x="415" y="510" font-size="24" fill="#102a43" font-weight="400">V32 · heap · presente</text>
-    <rect x="400" y="576" width="350" height="48" rx="16" fill="#ccfbf1" stroke="none" stroke-width="2" />
-    <text x="415" y="608" font-size="24" fill="#102a43" font-weight="400">Stack · pagina presente</text>
-    <text x="422" y="461" font-size="24" fill="#102a43" font-weight="400">… spazio non mappato …</text>
-    <text x="422" y="559" font-size="24" fill="#102a43" font-weight="400">… spazio non mappato …</text>
-    <text x="422" y="658" font-size="24" fill="#102a43" font-weight="400">… altri indirizzi virtuali …</text>
-    <text x="400" y="708" font-size="23" fill="#102a43" font-weight="700">Spazio virtuale ≠ RAM occupata</text>
-    <path d="M334 300 H374" fill="none" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)" />
-    <text x="338" y="282" font-size="20" fill="#b9ccdf" font-weight="400">avvio</text>
-    <rect x="820" y="180" width="530" height="580" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
-    <text x="840" y="224" font-size="32" fill="#102a43" font-weight="700">3. Strutture del kernel</text>
-    <text x="840" y="262" font-size="24" fill="#102a43" font-weight="400">In RAM · gestite dal sistema operativo</text>
-    <rect x="840" y="282" width="490" height="254" rx="16" fill="#e0e7ff" stroke="none" stroke-width="2" />
-    <text x="858" y="314" font-size="26" fill="#102a43" font-weight="700">Per processo: regioni e tabelle</text>
-    <text x="858" y="347" font-size="24" fill="#102a43" font-weight="400">CR3 → radice → livelli → voci PTE</text>
-    <text x="858" y="387" font-size="23" fill="#102a43" font-weight="400">V4 → F9    presente · lettura/esecuzione</text>
-    <text x="858" y="419" font-size="23" fill="#102a43" font-weight="400">V5 → —     non presente</text>
-    <text x="858" y="451" font-size="23" fill="#102a43" font-weight="400">V32 → F2  presente · lettura/scrittura</text>
-    <text x="858" y="483" font-size="23" fill="#102a43" font-weight="400">Stack → F12   presente · lettura/scrittura</text>
-    <rect x="840" y="556" width="490" height="174" rx="16" fill="#fef3c7" stroke="none" stroke-width="2" />
-    <text x="858" y="590" font-size="26" fill="#102a43" font-weight="700">Gestione globale della RAM</text>
-    <text x="858" y="624" font-size="23" fill="#102a43" font-weight="400">Descrittori dei frame (struct page),</text>
-    <text x="858" y="656" font-size="23" fill="#102a43" font-weight="400">stato libero/occupato, allocatore.</text>
-    <text x="858" y="688" font-size="23" fill="#102a43" font-weight="400">Il kernel li usa per assegnare i frame.</text>
-    <path d="M770 345 H814" fill="none" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)" />
-    <rect x="1400" y="180" width="456" height="580" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
-    <text x="1420" y="224" font-size="32" fill="#102a43" font-weight="700">4. RAM fisica</text>
-    <text x="1420" y="262" font-size="24" fill="#102a43" font-weight="400">Frame non necessariamente contigui</text>
-    <rect x="1420" y="288" width="416" height="48" rx="16" fill="#f1f5f9" stroke="none" stroke-width="2" />
-    <text x="1434" y="320" font-size="23" fill="#102a43" font-weight="400">F0 · libero</text>
-    <rect x="1420" y="348" width="416" height="48" rx="16" fill="#e0e7ff" stroke="none" stroke-width="2" />
-    <text x="1434" y="380" font-size="23" fill="#102a43" font-weight="400">F2 · dati heap di A</text>
-    <rect x="1420" y="408" width="416" height="48" rx="16" fill="#f1f5f9" stroke="none" stroke-width="2" />
-    <text x="1434" y="440" font-size="23" fill="#102a43" font-weight="400">… altri frame …</text>
-    <rect x="1420" y="468" width="416" height="48" rx="16" fill="#dbeafe" stroke="none" stroke-width="2" />
-    <text x="1434" y="500" font-size="23" fill="#102a43" font-weight="400">F9 · codice di A</text>
-    <rect x="1420" y="528" width="416" height="48" rx="16" fill="#f1f5f9" stroke="none" stroke-width="2" />
-    <text x="1434" y="560" font-size="23" fill="#102a43" font-weight="400">… kernel, tabelle, altri processi …</text>
-    <rect x="1420" y="588" width="416" height="48" rx="16" fill="#ccfbf1" stroke="none" stroke-width="2" />
-    <text x="1434" y="620" font-size="23" fill="#102a43" font-weight="400">F12 · stack di A</text>
-    <text x="1420" y="684" font-size="24" fill="#102a43" font-weight="400">F2, F9, F12 sono frame fisici.</text>
-    <text x="1420" y="716" font-size="24" fill="#102a43" font-weight="400">Le tabelle stesse occupano RAM.</text>
-    <path d="M1330 375 H1370 V492 H1414" fill="none" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)" />
-    <path d="M1330 439 H1384 V372 H1414" fill="none" stroke="#4f46e5" stroke-width="3" marker-end="url(#arrow)" />
-    <path d="M1330 471 H1358 V612 H1414" fill="none" stroke="#0d9488" stroke-width="3" marker-end="url(#arrow)" />
-    <rect x="64" y="790" width="1792" height="230" rx="16" fill="#132b45" stroke="none" stroke-width="2" />
-    <text x="88" y="827" font-size="28" fill="#f8fafc" font-weight="700">UN ACCESSO: la MMU traduce; il kernel interviene se necessario</text>
-    <rect x="88" y="850" width="325" height="84" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
-    <text x="106" y="884" font-size="24" fill="#102a43" font-weight="400">CPU: indirizzo 0x402A</text>
-    <text x="106" y="916" font-size="24" fill="#102a43" font-weight="400">pagina V4 + offset 0x02A</text>
-    <rect x="466" y="850" width="675" height="84" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
-    <text x="486" y="884" font-size="24" fill="#102a43" font-weight="400">MMU: cerca nella TLB (cache delle traduzioni).</text>
-    <text x="486" y="916" font-size="24" fill="#102a43" font-weight="400">Se manca: legge le tabelle a partire da CR3.</text>
-    <rect x="1198" y="850" width="630" height="84" rx="16" fill="#f8fafc" stroke="none" stroke-width="2" />
-    <text x="1218" y="884" font-size="24" fill="#102a43" font-weight="400">V4 → F9: indirizzo fisico 0x902A</text>
-    <text x="1218" y="916" font-size="24" fill="#102a43" font-weight="400">base del frame + lo stesso offset 0x02A</text>
-    <path d="M413 892 H460" fill="none" stroke="#7dd3fc" stroke-width="3" marker-end="url(#arrow)" />
-    <path d="M1141 892 H1192" fill="none" stroke="#7dd3fc" stroke-width="3" marker-end="url(#arrow)" />
-    <text x="88" y="969" font-size="24" fill="#f8fafc" font-weight="400">V5 non presente → page fault → kernel: verifica la regione, carica dal file e aggiorna la PTE → riprova.</text>
-    <text x="88" y="1001" font-size="23" fill="#b9ccdf" font-weight="400">Accesso non consentito: il kernel segnala un errore. Le strutture globali non sono un secondo stadio della traduzione.</text>
-    <text x="64" y="1054" font-size="24" fill="#b9ccdf" font-weight="400">TPSI 4 · Frecce: corrispondenze logiche e percorso di traduzione; nessuna scala di dimensioni.</text>
+    <rect x="0" y="0" width="1920" height="1080" rx="24" fill="#08192c" />
+    <text x="64" y="85" font-size="48" fill="#f8fafc" font-weight="700">Dalle pagine virtuali alle pagine fisiche</text>
+    <text x="64" y="143" font-size="28" fill="#b9ccdf" font-weight="400">Il programma usa indirizzi virtuali · la RAM contiene le pagine fisiche</text>
+    <rect x="64" y="210" width="480" height="660" rx="24" fill="#f8fafc" />
+    <text x="92" y="268" font-size="32" fill="#102a43" font-weight="700">SPAZIO VIRTUALE</text>
+    <text x="92" y="313" font-size="28" fill="#102a43" font-weight="400">Gli indirizzi che vede</text>
+    <text x="92" y="355" font-size="28" fill="#102a43" font-weight="400">il processo</text>
+    <rect x="92" y="390" width="424" height="72" rx="24" fill="#dbeafe" />
+    <text x="116" y="436" font-size="30" fill="#102a43" font-weight="400">V1 · pagina virtuale</text>
+    <rect x="92" y="484" width="424" height="72" rx="24" fill="#ccfbf1" />
+    <text x="116" y="530" font-size="30" fill="#102a43" font-weight="400">V2 · pagina virtuale</text>
+    <rect x="92" y="578" width="424" height="72" rx="24" fill="#fef3c7" />
+    <text x="116" y="624" font-size="30" fill="#102a43" font-weight="400">V3 · pagina virtuale</text>
+    <text x="92" y="722" font-size="26" fill="#102a43" font-weight="400">… molte altre pagine …</text>
+    <text x="92" y="764" font-size="26" fill="#102a43" font-weight="400">Non tutte sono presenti in RAM.</text>
+    <rect x="644" y="210" width="612" height="390" rx="24" fill="#f8fafc" />
+    <text x="674" y="262" font-size="32" fill="#102a43" font-weight="700">KERNEL · sistema operativo</text>
+    <text x="674" y="306" font-size="28" fill="#102a43" font-weight="400">Prepara e aggiorna le strutture dati</text>
+    <rect x="674" y="330" width="552" height="178" rx="24" fill="#e0e7ff" />
+    <text x="698" y="370" font-size="28" fill="#102a43" font-weight="700">Tabella delle pagine del processo</text>
+    <text x="714" y="420" font-size="30" fill="#102a43" font-weight="400">V1 → F4</text>
+    <text x="968" y="420" font-size="30" fill="#102a43" font-weight="400">V2 → F1</text>
+    <text x="714" y="472" font-size="30" fill="#102a43" font-weight="400">V3 → F6</text>
+    <text x="674" y="549" font-size="25" fill="#102a43" font-weight="400">Gestisce anche quali frame fisici</text>
+    <text x="674" y="591" font-size="25" fill="#102a43" font-weight="400">sono liberi o occupati.</text>
+    <rect x="644" y="682" width="612" height="188" rx="24" fill="#dbeafe" />
+    <text x="674" y="726" font-size="32" fill="#102a43" font-weight="700">MMU · hardware della CPU</text>
+    <text x="674" y="773" font-size="27" fill="#102a43" font-weight="400">Usa le corrispondenze per tradurre</text>
+    <text x="674" y="815" font-size="27" fill="#102a43" font-weight="400">un indirizzo virtuale in uno fisico.</text>
+    <path d="M950 600 V673" fill="none" stroke="#7dd3fc" stroke-width="5" marker-end="url(#arrow)" />
+    <text x="973" y="640" font-size="23" fill="#b9ccdf" font-weight="400">tabelle usate</text>
+    <rect x="1356" y="210" width="500" height="660" rx="24" fill="#f8fafc" />
+    <text x="1384" y="268" font-size="32" fill="#102a43" font-weight="700">RAM · MEMORIA FISICA</text>
+    <text x="1384" y="310" font-size="26" fill="#102a43" font-weight="400">Pagine fisiche, dette anche frame</text>
+    <rect x="1384" y="345" width="444" height="65" rx="24" fill="#ccfbf1" />
+    <text x="1408" y="387" font-size="29" fill="#102a43" font-weight="400">F1 · contiene V2</text>
+    <rect x="1384" y="429" width="444" height="65" rx="24" fill="#f1f5f9" />
+    <text x="1408" y="471" font-size="29" fill="#102a43" font-weight="400">F2 · altro / libero</text>
+    <rect x="1384" y="513" width="444" height="65" rx="24" fill="#f1f5f9" />
+    <text x="1408" y="555" font-size="29" fill="#102a43" font-weight="400">F3 · altro / libero</text>
+    <rect x="1384" y="597" width="444" height="65" rx="24" fill="#dbeafe" />
+    <text x="1408" y="639" font-size="29" fill="#102a43" font-weight="400">F4 · contiene V1</text>
+    <rect x="1384" y="681" width="444" height="65" rx="24" fill="#f1f5f9" />
+    <text x="1408" y="723" font-size="29" fill="#102a43" font-weight="400">F5 · altro / libero</text>
+    <rect x="1384" y="765" width="444" height="65" rx="24" fill="#fef3c7" />
+    <text x="1408" y="807" font-size="29" fill="#102a43" font-weight="400">F6 · contiene V3</text>
+    <path d="M544 800 H634" fill="none" stroke="#7dd3fc" stroke-width="5" marker-end="url(#arrow)" />
+    <path d="M1256 800 H1346" fill="none" stroke="#7dd3fc" stroke-width="5" marker-end="url(#arrow)" />
+    <text x="556" y="747" font-size="19" fill="#b9ccdf" font-weight="400">indirizzo</text>
+    <text x="558" y="775" font-size="19" fill="#b9ccdf" font-weight="400">virtuale</text>
+    <text x="1265" y="747" font-size="19" fill="#b9ccdf" font-weight="400">indirizzo</text>
+    <text x="1278" y="775" font-size="19" fill="#b9ccdf" font-weight="400">fisico</text>
+    <rect x="64" y="920" width="1792" height="94" rx="24" fill="#132b45" />
+    <text x="94" y="977" font-size="28" fill="#f8fafc" font-weight="400">Stesso colore e stessa sigla V: la stessa pagina vista dal programma e collocata nella RAM.</text>
+    <text x="64" y="1054" font-size="24" fill="#b9ccdf" font-weight="400">TPSI 4 · Intel x86-64 · Modello didattico semplificato</text>
   </g>
 </svg>
