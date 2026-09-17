@@ -12,12 +12,42 @@ spec.loader.exec_module(formatter)
 
 class LessonFormattingTests(unittest.TestCase):
     def test_lessons_are_balanced_and_already_normalized(self):
-        self.assertEqual(len(formatter.DEFAULT_LESSONS), 6)
+        self.assertGreater(len(formatter.DEFAULT_LESSONS), 0)
         for path in formatter.DEFAULT_LESSONS:
             with self.subTest(lesson=path.name):
                 text = path.read_text(encoding="utf-8")
                 self.assertEqual(formatter.validation_errors(text), [])
                 self.assertEqual(formatter.normalize(text), text)
+
+    def test_every_lesson_has_visible_definition_panels(self):
+        for path in formatter.DEFAULT_LESSONS:
+            with self.subTest(lesson=path.name):
+                text = path.read_text(encoding="utf-8")
+                self.assertIn('<!-- definition -->', text)
+                self.assertEqual(formatter.validation_errors(text), [])
+
+    def test_definition_template_and_marker_errors_are_detected(self):
+        panel = ('<!-- definition -->\n<table align="center">\n<tr><td>\n'
+                 '&#10071; <strong>Importante</strong>\n'
+                 '<p align="justify">A <strong>term</strong> has a meaning.</p>\n'
+                 '</td></tr>\n</table>\n<!-- /definition -->')
+        valid = '# Lesson\n\n' + panel + '\n'
+        self.assertEqual(formatter.validation_errors(valid), [])
+        self.assertEqual(formatter.normalize(valid), valid)
+        invalid = [
+            panel.replace('align="center"', 'align="left"'),
+            panel.replace('align="justify"', 'align="left"'),
+            panel.replace('<strong>term</strong>', 'term'),
+            panel.replace('<!-- /definition -->', ''),
+            panel.replace('<!-- definition -->', ''),
+            panel.replace('<!-- definition -->', '<!-- definition -->\n<!-- definition -->'),
+            panel.replace('<p align="justify">', '<details><p align="justify">').replace('</p>', '</p></details>'),
+        ]
+        for sample in invalid:
+            with self.subTest(panel=sample):
+                self.assertTrue(formatter.validation_errors('# Lesson\n\n' + sample))
+        code_example = '# Lesson\n\n```html\n' + invalid[0] + '\n```\n'
+        self.assertEqual(formatter.validation_errors(code_example), [])
 
     def test_orientation_uses_the_reference_icons_and_table(self):
         for path in formatter.DEFAULT_LESSONS:

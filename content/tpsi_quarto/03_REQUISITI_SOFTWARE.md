@@ -121,7 +121,14 @@ esterna e senza errori bloccanti entro 10 minuti.
 
 ### Bisogno
 
-<p align="justify">È il problema o l'obiettivo dello stakeholder.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>bisogno</strong> è il problema o l'obiettivo dello stakeholder.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ```text
 Il docente vuole riutilizzare materiali provenienti da fonti diverse.
@@ -129,7 +136,14 @@ Il docente vuole riutilizzare materiali provenienti da fonti diverse.
 
 ### Requisito
 
-<p align="justify">È una proprietà o capacità richiesta al sistema.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>requisito</strong> è una proprietà o capacità richiesta al sistema.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ```text
 Il sistema deve permettere al docente di selezionare contenuti da più fonti
@@ -138,7 +152,14 @@ catalogate e inserirli nella stessa UDA conservando la provenienza.
 
 ### Soluzione
 
-<p align="justify">È una scelta progettuale che soddisfa uno o più requisiti.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Una <strong>soluzione</strong> è una scelta progettuale che soddisfa uno o più requisiti.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ```text
 La Course Board usa un catalogo `sources[]` e memorizza `source_id` negli item.
@@ -146,7 +167,14 @@ La Course Board usa un catalogo `sources[]` e memorizza `source_id` negli item.
 
 ### Vincolo
 
-<p align="justify">Limita le soluzioni ammesse.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>vincolo</strong> limita le soluzioni ammesse.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ```text
 Il primo MVP deve funzionare senza un database esterno e senza fetch di rete.
@@ -156,7 +184,16 @@ Il primo MVP deve funzionare senza un database esterno e senza fetch di rete.
 
 ## La specifica dei requisiti
 
-<p align="justify">Una specifica dei requisiti descrive ciò che il sistema deve offrire e i limiti entro cui deve operare. Non deve essere necessariamente un documento enorme. Anche un progetto scolastico beneficia di una specifica breve, coerente e versionata.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Una <strong>specifica dei requisiti</strong> descrive ciò che il sistema deve offrire e i limiti entro cui deve operare.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Non deve essere necessariamente un documento enorme. Anche un progetto scolastico beneficia di una specifica breve, coerente e versionata.</p>
 
 <p align="justify">Una struttura minima può contenere:</p>
 
@@ -208,7 +245,14 @@ di prova.
 
 ## Requisiti funzionali
 
-<p align="justify">Descrivono servizi, comportamenti e regole del sistema.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">I <strong>requisiti funzionali</strong> descrivono servizi, comportamenti e regole del sistema.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempi:</p>
 
@@ -224,7 +268,14 @@ RF-05 Il grader usa anche test non distribuiti allo studente.
 
 ## Requisiti non funzionali
 
-<p align="justify">Descrivono qualità, limiti e condizioni operative.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">I <strong>requisiti non funzionali</strong> descrivono qualità, limiti e condizioni operative.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Categorie frequenti:</p>
 
@@ -268,7 +319,14 @@ della prova, salvo scelta esplicita del docente.
 
 ## Stakeholder e attori
 
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">Uno <strong>stakeholder</strong> ha interesse nel sistema o ne subisce gli effetti. Un <strong>attore</strong> interagisce con il sistema in un caso d'uso.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Possibili stakeholder di una piattaforma didattica:</p>
 
@@ -415,7 +473,14 @@ Non sarebbe meglio avere un bottone rosso qui?
 
 ## Attori, casi d'uso e scenari
 
-<p align="justify">Un caso d'uso descrive un obiettivo dell'attore e le interazioni significative con il sistema.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>caso d'uso</strong> descrive un obiettivo dell'attore e le interazioni significative con il sistema.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ### Template leggero
 
@@ -438,7 +503,16 @@ Postcondizioni: fonte e provenienza disponibili nel progetto
 
 ### Scenario
 
-<p align="justify">Uno scenario è un percorso specifico dentro il caso d'uso. Il flusso principale è uno scenario; ogni alternativa ne forma un altro.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Uno <strong>scenario</strong> è un percorso specifico dentro il caso d'uso.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Il flusso principale è uno scenario; ogni alternativa ne forma un altro.</p>
 
 ### Diagramma di contesto
 
@@ -510,7 +584,14 @@ RNF-LAB-02 I test nascosti non devono essere eseguiti nel processo studente.
 
 ## Criteri di accettazione
 
-<p align="justify">Un criterio di accettazione traduce il requisito in comportamento osservabile.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>criterio di accettazione</strong> traduce il requisito in comportamento osservabile.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Formato Given/When/Then:</p>
 

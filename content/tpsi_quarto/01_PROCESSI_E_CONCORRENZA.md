@@ -90,7 +90,18 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
 
 ## Problema iniziale: una sola attività o più attività coordinate?
 
-<p align="justify">Immaginiamo una stazione che misura la temperatura di un'aula. L'applicazione deve <strong>leggere un sensore</strong>, <strong>inviare le misure a un server attraverso un socket</strong> e <strong>aggiornare una schermata</strong> con temperatura, orario e pulsanti. Un socket è un punto di comunicazione usato dal programma per scambiare dati sulla rete. L'utente si aspetta che i comandi rispondano anche quando il sensore o la rete sono lenti.</p>
+<p align="justify">Immaginiamo una stazione che misura la temperatura di un'aula. L'applicazione deve <strong>leggere un sensore</strong>, <strong>inviare le misure a un server attraverso un socket</strong> e <strong>aggiornare una schermata</strong> con temperatura, orario e pulsanti.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>socket</strong> è un punto di comunicazione usato dal programma per scambiare dati sulla rete.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">L'utente si aspetta che i comandi rispondano anche quando il sensore o la rete sono lenti.</p>
 
 ### Una sola attività: prima leggi, poi invia, poi aggiorna
 
@@ -143,13 +154,15 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
 
 ## Dal programma al processo
 
+<!-- definition -->
 <table align="center">
 <tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">
-<strong><span style="font-size: 1.15em;">&#128214;</span> Definizione:</strong>
 Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o un insieme di istruzioni memorizzate. Un <strong>processo</strong> è un'esecuzione attiva di quel programma, con uno stato che cambia nel tempo.</p>
 </td></tr>
 </table>
+<!-- /definition -->
 
 <p align="justify">Lo stesso programma può essere eseguito in più processi. Se apriamo due terminali e avviamo due volte lo stesso comando, il codice del programma è lo stesso, ma le due esecuzioni hanno identificatori, memoria e risorse proprie.</p>
 
@@ -157,11 +170,29 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Per svolgere questo lavoro, il sistema operativo conserva <strong>informazioni su ciascun processo</strong> e le aggiorna mentre l'esecuzione avanza. Diremo quindi che <strong>il processo possiede</strong> un insieme di <strong>informazioni e risorse</strong> associate alla sua esecuzione. Le risorse sono i mezzi con cui lavora; le informazioni permettono al sistema operativo di identificarlo, controllarlo e gestirne l'avanzamento.</p>
 
-<p align="justify">Pensiamo al <strong>multitasking</strong>: più attività avanzano nello stesso intervallo di tempo. Anche con una sola CPU logica, il sistema operativo può interrompere temporaneamente l'esecuzione di un processo e assegnare la CPU a un altro. Il primo processo non termina: dovrà poter riprendere più tardi dal punto in cui era stato sospeso. Per ora immaginiamo che ogni processo abbia un solo flusso di esecuzione.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Pensiamo al <strong>multitasking</strong>: più attività avanzano nello stesso intervallo di tempo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Anche con una sola CPU logica, il sistema operativo può interrompere temporaneamente l'esecuzione di un processo e assegnare la CPU a un altro. Il primo processo non termina: dovrà poter riprendere più tardi dal punto in cui era stato sospeso. Per ora immaginiamo che ogni processo abbia un solo flusso di esecuzione.</p>
 
 <p align="justify">Che cosa bisogna ricordare per riprenderlo? Almeno <strong>il punto raggiunto nel codice e i valori che la CPU stava usando</strong>, per esempio un risultato parziale o l'indirizzo di un dato. Queste informazioni fanno parte del <strong>contesto di esecuzione</strong>. Il contesto è quindi una parte delle informazioni associate al processo, non l'insieme di tutte le sue risorse.</p>
 
-<p align="justify">Il passaggio da un'attività a un'altra richiede un <strong>cambio di contesto</strong>: il sistema conserva lo stato necessario dell'attività sospesa e ripristina quello dell'attività che deve proseguire. In questo modo la CPU può essere riutilizzata senza perdere il lavoro in corso. Nelle sezioni successive vedremo concretamente il ruolo dei registri e della memoria.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il passaggio da un'attività a un'altra richiede un <strong>cambio di contesto</strong>: il sistema conserva lo stato necessario dell'attività sospesa e ripristina quello dell'attività che deve proseguire.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">In questo modo la CPU può essere riutilizzata senza perdere il lavoro in corso. Nelle sezioni successive vedremo concretamente il ruolo dei registri e della memoria.</p>
 
 <p align="justify">Per ciascun processo che sta gestendo, anche quando non sta usando la CPU, il sistema operativo deve dunque mantenere informazioni aggiornate per poter rispondere in ogni momento a queste <strong>otto domande</strong>. Le approfondiremo nella sezione <a href="#anatomia-di-un-processo">Anatomia di un processo</a>:</p>
 
@@ -196,11 +227,14 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Seguiamo una sola esecuzione dell'applicazione iniziale: legge campioni da un sensore, calcola una media e salva i risultati in <code>misure.txt</code>. Mentre aspetta un campione, il computer deve poter eseguire anche altri programmi. Quando il campione arriva, l'applicazione deve riprendere con i propri dati, nel punto giusto e con il file ancora disponibile. Il solo file eseguibile non contiene queste informazioni: descrive le istruzioni, ma non la situazione raggiunta da questa particolare esecuzione.</p>
 
+<!-- definition -->
 <table align="center">
 <tr><td>
-<p align="justify"><strong><span style="font-size: 1.15em;">&#128214;</span> Che cosa significa “il processo possiede”:</strong> significa che una risorsa o un'informazione è associata a quell'esecuzione. Non significa che tutto sia dentro la sua memoria o che ogni risorsa sia esclusivamente sua. Il <strong>kernel</strong>, la parte del sistema operativo che gestisce processi e risorse, conserva strutture di controllo con valori e riferimenti. I manuali chiamano spesso questo modello <strong>PCB</strong> (<em>Process Control Block</em>): una scheda di gestione del processo. In un sistema reale le informazioni possono essere distribuite fra più strutture collegate.</p>
+&#10071; <strong>Importante</strong>
+<p align="justify"><strong>Che cosa significa “il processo possiede”:</strong> significa che una risorsa o un'informazione è associata a quell'esecuzione. Non significa che tutto sia dentro la sua memoria o che ogni risorsa sia esclusivamente sua. Il <strong>kernel</strong>, la parte del sistema operativo che gestisce processi e risorse, conserva strutture di controllo con valori e riferimenti. I manuali chiamano spesso questo modello <strong>PCB</strong> (<em>Process Control Block</em>): una scheda di gestione del processo. In un sistema reale le informazioni possono essere distribuite fra più strutture collegate.</p>
 </td></tr>
 </table>
+<!-- /definition -->
 
 <p align="justify">Possiamo immaginare il <strong>PCB come una scheda strutturata</strong>, con campi numerici e collegamenti ad altre strutture. Il sistema operativo la usa per riconoscere il processo, decidere quando eseguirlo, sospenderlo e ritrovare le sue risorse. Nel modello didattico vi troviamo, direttamente o tramite riferimenti:</p>
 
@@ -233,19 +267,38 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 ### 1. Identificatore: distinguere questa esecuzione
 
-<p align="justify">Avviamo due copie dell'applicazione, una per il sensore dell'aula e una per quello del laboratorio. Hanno lo stesso nome e lo stesso codice: per indicare quale interrompere o osservare, il nome non basta. Il <strong>PID</strong> (<em>Process ID</em>) è il numero con cui il sistema identifica un processo. Per esempio, le due esecuzioni potrebbero avere PID <code>4100</code> e <code>4101</code>; sono valori illustrativi, assegnati dal sistema e non scelti nel sorgente.</p>
+<p align="justify">Avviamo due copie dell'applicazione, una per il sensore dell'aula e una per quello del laboratorio. Hanno lo stesso nome e lo stesso codice: per indicare quale interrompere o osservare, il nome non basta.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>PID</strong> (<em>Process ID</em>) è il numero con cui il sistema identifica un processo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Per esempio, le due esecuzioni potrebbero avere PID <code>4100</code> e <code>4101</code>; sono valori illustrativi, assegnati dal sistema e non scelti nel sorgente.</p>
 
 <p align="justify">Il PID è registrato nelle strutture del kernel. Un programma Linux può conoscere il proprio con <code>getpid()</code>; gli strumenti di osservazione lo mostrano per collegare ogni riga a un'esecuzione precisa. È necessario perché richieste come “mostra lo stato” o “invia un segnale” devono avere un destinatario. Il numero può essere riutilizzato dopo che il vecchio processo è stato rimosso: non è un'identità permanente. In Linux l'unicità si riferisce allo spazio di identificatori, o <em>PID namespace</em>, in cui si osservano i processi.</p>
 
 ### 2. Contesto di esecuzione: riprendere senza ricominciare
 
-<p align="justify">Supponiamo che l'applicazione venga sospesa mentre somma i campioni. Conservare soltanto l'array non basta: bisogna ricordare anche a quale istruzione è arrivata e quali valori intermedi sta usando. Il <strong>contesto di esecuzione</strong> è l'insieme delle informazioni necessarie a riprendere quel flusso di istruzioni.</p>
+<p align="justify">Supponiamo che l'applicazione venga sospesa mentre somma i campioni. Conservare soltanto l'array non basta: bisogna ricordare anche a quale istruzione è arrivata e quali valori intermedi sta usando.</p>
 
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>contesto di esecuzione</strong> è l'insieme delle informazioni necessarie a riprendere quel flusso di istruzioni.</p>
 <ul>
   <li>Il <strong>contatore di programma</strong>, detto anche <em>program counter</em> o <em>instruction pointer</em>, indica la posizione dell'esecuzione nel codice macchina. Non è il numero di riga del sorgente C: una riga può produrre più istruzioni o essere trasformata dal compilatore.</li>
   <li>I <strong>registri</strong> sono piccole memorie interne alla CPU: contengono operandi, indirizzi e risultati intermedi. Per esempio, durante una somma possono contenere un campione e il totale parziale.</li>
   <li>Lo <strong>stack pointer</strong> è un registro che individua la posizione corrente nello stack. Altri registri conservano informazioni di controllo, come gli esiti dei confronti.</li>
 </ul>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">I registri fisici appartengono alla CPU. Quando il kernel sospende un'esecuzione, salva i valori necessari in memoria; prima di riprenderla li ripristina. Il processo possiede dunque il proprio <strong>stato dei registri</strong>, non una CPU personale. Se ripristinassimo i valori dell'altra applicazione, potremmo sommare il campione sbagliato o tornare nel punto sbagliato. Questo è il motivo del cambio di contesto, che riprenderemo nella sezione sul ciclo di vita. Non comporta copiare tutta la memoria del processo a ogni passaggio.</p>
 
@@ -255,11 +308,36 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Il sistema operativo tiene traccia delle informazioni già introdotte attraverso il <strong>PCB e le strutture a esso collegate</strong>. Ma sapere quale processo sta eseguendo e da dove deve riprendere non basta: bisogna anche sapere <strong>dove si trovano i suoi dati in memoria</strong>.</p>
 
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">Per questo, oltre alla scheda di controllo, il kernel mantiene per lo spazio di memoria del processo le <strong>tabelle delle pagine</strong>. Le ritrova attraverso i riferimenti alla gestione della memoria associati al processo. Sono strutture distinte dal PCB: registrano le corrispondenze che la MMU usa per tradurre gli indirizzi.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
-<p align="justify">Questa organizzazione della memoria in blocchi si chiama <strong>paginazione</strong>. Permette al programma di usare i propri indirizzi virtuali, mentre il sistema operativo colloca le pagine nei frame disponibili della RAM. Vediamo nella figura come si collegano le varie parti.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Questa organizzazione della memoria in blocchi si chiama <strong>paginazione</strong>.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
-<p align="justify">Un indirizzo indica una posizione di memoria. Il processo usa un proprio <strong>spazio di indirizzi virtuali</strong>, suddiviso in blocchi chiamati <strong>pagine virtuali</strong>. La RAM è organizzata in blocchi corrispondenti, le <strong>pagine fisiche</strong> o <strong>frame</strong>. Per trovare un dato, bisogna collegare la pagina vista dal programma alla sua posizione nella RAM.</p>
+<p align="justify">Permette al programma di usare i propri indirizzi virtuali, mentre il sistema operativo colloca le pagine nei frame disponibili della RAM. Vediamo nella figura come si collegano le varie parti.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un indirizzo indica una posizione di memoria. Il processo usa un proprio <strong>spazio di indirizzi virtuali</strong>, suddiviso in blocchi chiamati <strong>pagine virtuali</strong>. La RAM è organizzata in blocchi corrispondenti, le <strong>pagine fisiche</strong> o <strong>frame</strong>.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Per trovare un dato, bisogna collegare la pagina vista dal programma alla sua posizione nella RAM.</p>
 
 <!-- figure:01-indirizzi-virtuali-mmu -->
 <p align="center">
@@ -276,7 +354,16 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
   <li><strong>A destra, le pagine fisiche:</strong> sono i blocchi effettivamente presenti nella RAM. Cerca gli stessi colori: V1 è in F4, V2 in F1 e V3 in F6. L'ordine nella RAM può essere diverso dall'ordine virtuale.</li>
 </ol>
 
-<p align="justify"><strong>Mappare una pagina</strong> significa stabilire questa corrispondenza. La tabella contiene indicazioni su dove trovare le pagine; i dati delle pagine sono nei frame fisici. Le tabelle sono anch'esse conservate in RAM: nella figura sono separate per distinguerne la funzione.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify"><strong>Mappare una pagina</strong> significa stabilire la corrispondenza tra una pagina virtuale e il frame fisico che la contiene.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">La tabella contiene indicazioni su dove trovare le pagine; i dati delle pagine sono nei frame fisici. Le tabelle sono anch'esse conservate in RAM: nella figura sono separate per distinguerne la funzione.</p>
 
 <p align="justify">Ogni processo ha le proprie mappature: lo stesso indirizzo virtuale in due processi può quindi portare a dati fisici diversi. Per riprendere correttamente un processo, il sistema deve rendere nuovamente utilizzabili le sue corrispondenze.</p>
 
@@ -286,7 +373,16 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">All'interno dello spazio di indirizzamento servono organizzazioni adatte a durate diverse. Una chiamata di funzione deve ricordare come tornare al chiamante; un insieme di campioni può invece dover rimanere disponibile anche dopo il ritorno dalla funzione che lo ha allocato.</p>
 
-<p align="justify">Lo <strong>stack</strong> è organizzato come una pila: l'ultima chiamata aperta è la prima a concludersi. Nel modello usuale, ogni chiamata dispone di un <strong>record di attivazione</strong>, o <em>stack frame</em>, con informazioni utili alla sua esecuzione e al ritorno. Può contenere variabili locali, valori salvati e informazioni di collegamento; la disposizione concreta dipende dall'architettura, dalle convenzioni di chiamata e dalle ottimizzazioni. Alcuni valori possono restare nei registri.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Lo <strong>stack</strong> è organizzato come una pila: l'ultima chiamata aperta è la prima a concludersi. Nel modello usuale, ogni chiamata dispone di un <strong>record di attivazione</strong>, o <em>stack frame</em>, con informazioni utili alla sua esecuzione e al ritorno.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Può contenere variabili locali, valori salvati e informazioni di collegamento; la disposizione concreta dipende dall'architettura, dalle convenzioni di chiamata e dalle ottimizzazioni. Alcuni valori possono restare nei registri.</p>
 
 <!-- figure:01-stack-chiamate-annidate -->
 <p align="center">
@@ -296,7 +392,16 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Anche due chiamate ricorsive della stessa funzione devono conservare separatamente il proprio stato. Quando una funzione termina, i suoi oggetti locali automatici cessano di esistere: restituire l'indirizzo di uno di essi non ne prolunga la durata.</p>
 
-<p align="justify">L'<strong>heap</strong> indica, nel modello didattico, la memoria gestita con allocazioni dinamiche. Il programma chiede un blocco della dimensione necessaria, ottiene un puntatore e lo usa finché lo rilascia. In C si impiegano funzioni come <code>malloc</code> e <code>free</code>; l'allocatore gestisce blocchi occupati e liberi e richiede memoria al sistema quando serve. L'ordine di rilascio non deve seguire quello delle chiamate di funzione.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">L'<strong>heap</strong> indica, nel modello didattico, la memoria gestita con allocazioni dinamiche.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Il programma chiede un blocco della dimensione necessaria, ottiene un puntatore e lo usa finché lo rilascia. In C si impiegano funzioni come <code>malloc</code> e <code>free</code>; l'allocatore gestisce blocchi occupati e liberi e richiede memoria al sistema quando serve. L'ordine di rilascio non deve seguire quello delle chiamate di funzione.</p>
 
 ### Registri e memoria su Intel x86-64
 
@@ -355,7 +460,9 @@ f:
 </p>
 <p align="center"><em>I registri contengono valori e indirizzi; codice, stack e heap rimangono nella memoria del processo.</em></p>
 
-<p align="justify">Leggiamola partendo dai registri. Ogni registro è una piccola memoria interna alla CPU; quelli indicati qui possono contenere valori a 64 bit.</p>
+<p align="justify">Leggiamola partendo dai registri.</p>
+
+<p align="justify">Ogni <strong>registro</strong> è una piccola memoria interna alla CPU; quelli indicati qui possono contenere valori a 64 bit.</p>
 
 <ul>
   <li><strong>RIP — dove riprendere:</strong> individua il punto del codice da cui proseguire. Qui il prossimo lavoro è scrivere il risultato.</li>
@@ -411,7 +518,18 @@ int main(void)
 
 ### 5. File e altri oggetti aperti: riferimenti alle risorse
 
-<p align="justify">Per salvare una media, l'applicazione deve aprire <code>misure.txt</code>. In Linux un <strong>descrittore di file</strong> è un piccolo intero che seleziona una voce della tabella dei descrittori del processo. La voce rimanda a strutture del kernel che rappresentano l'apertura e, per un file ordinario, conservano informazioni come posizione corrente e modalità di accesso. Il contenuto del file non diventa automaticamente una parte della memoria privata del processo.</p>
+<p align="justify">Per salvare una media, l'applicazione deve aprire <code>misure.txt</code>.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">In Linux un <strong>descrittore di file</strong> è un piccolo intero che seleziona una voce della tabella dei descrittori del processo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">La voce rimanda a strutture del kernel che rappresentano l'apertura e, per un file ordinario, conservano informazioni come posizione corrente e modalità di accesso. Il contenuto del file non diventa automaticamente una parte della memoria privata del processo.</p>
 
 ```text
 processo A                    kernel                    risorsa
@@ -425,15 +543,44 @@ descrittore 3  ---------->  apertura del file  ------->  misure.txt
 
 ### 6. Credenziali e permessi: identità e autorizzazione
 
-<p align="justify">Il PID distingue un'esecuzione; non dice per conto di quale utente essa agisca. Le <strong>credenziali</strong> sono informazioni di identità associate al processo, fra cui identificatori di utente (<strong>UID</strong>) e gruppo (<strong>GID</strong>) e gruppi supplementari. Il kernel le usa nei controlli di accesso. Più processi dello stesso utente possono quindi avere PID diversi e le stesse credenziali.</p>
+<p align="justify">Il PID distingue un'esecuzione; non dice per conto di quale utente essa agisca.</p>
 
-<p align="justify">I <strong>permessi</strong> esprimono operazioni consentite sulle risorse. Per un file, per esempio, distinguiamo lettura, scrittura ed esecuzione per proprietario, gruppo e altri utenti. Il kernel confronta le credenziali con le regole applicabili all'operazione richiesta. I permessi di <code>misure.txt</code> sono proprietà della risorsa: non sono tutti contenuti nella scheda del processo.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Le <strong>credenziali</strong> sono informazioni di identità associate al processo, fra cui identificatori di utente (<strong>UID</strong>) e gruppo (<strong>GID</strong>) e gruppi supplementari.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Il kernel le usa nei controlli di accesso. Più processi dello stesso utente possono quindi avere PID diversi e le stesse credenziali.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">I <strong>permessi</strong> esprimono operazioni consentite sulle risorse.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Per un file, per esempio, distinguiamo lettura, scrittura ed esecuzione per proprietario, gruppo e altri utenti. Il kernel confronta le credenziali con le regole applicabili all'operazione richiesta. I permessi di <code>misure.txt</code> sono proprietà della risorsa: non sono tutti contenuti nella scheda del processo.</p>
 
 <p align="justify">Se l'applicazione può leggere il file ma non aprirlo in scrittura, conoscere il percorso non basta a ottenere il permesso. Linux distingue anche identità reali ed effettive; nei casi ordinari coincidono, mentre i dettagli dei controlli includono ulteriori meccanismi. Qui ci interessa la separazione: identificare il processo, identificare l'utente e autorizzare un'operazione sono tre problemi diversi.</p>
 
 ### 7. Stato di pianificazione: poter avanzare e ottenere la CPU
 
-<p align="justify">La <strong>pianificazione</strong>, o <em>scheduling</em>, decide quale attività pronta eseguire sulle CPU disponibili. Il kernel conserva lo stato dell'attività e informazioni utili alla scelta, come politica e priorità di pianificazione. Le attività pronte sono organizzate in strutture che permettono allo <strong>scheduler</strong>, il componente incaricato della scelta, di individuarle.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La <strong>pianificazione</strong>, o <em>scheduling</em>, decide quale attività pronta eseguire sulle CPU disponibili.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Il kernel conserva lo stato dell'attività e informazioni utili alla scelta, come politica e priorità di pianificazione. Le attività pronte sono organizzate in strutture che permettono allo <strong>scheduler</strong>, il componente incaricato della scelta, di individuarle.</p>
 
 <p align="justify">Riprendiamo l'applicazione: mentre calcola la media è <strong>in esecuzione</strong>; se potrebbe continuare ma la CPU esegue altro, è <strong>pronta</strong>; se una lettura bloccante aspetta un campione non ancora disponibile, è <strong>in attesa</strong>. Nel terzo caso assegnarle tempo di CPU non risolverebbe la mancanza del dato. All'arrivo del campione torna pronta e attende di essere selezionata.</p>
 
@@ -441,7 +588,18 @@ descrittore 3  ---------->  apertura del file  ------->  misure.txt
 
 ### 8. Relazioni con altri processi: origine e coordinamento
 
-<p align="justify">Quando avviamo l'applicazione da una shell, entra in gioco una relazione di creazione: un processo può creare un <strong>figlio</strong> e diventare il suo <strong>padre</strong>. Il <strong>PPID</strong> è l'identificatore del padre. Questi collegamenti permettono di rappresentare i processi come un albero; non indicano che la memoria del figlio sia contenuta in quella del padre.</p>
+<p align="justify">Quando avviamo l'applicazione da una shell, entra in gioco una relazione di creazione: un processo può creare un <strong>figlio</strong> e diventare il suo <strong>padre</strong>.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>PPID</strong> è l'identificatore del padre.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Questi collegamenti permettono di rappresentare i processi come un albero; non indicano che la memoria del figlio sia contenuta in quella del padre.</p>
 
 <p align="justify">Immaginiamo che l'applicazione affidi l'esportazione delle misure a un figlio. Il padre può continuare un'altra attività e poi raccoglierne l'esito con <code>wait</code> o <code>waitpid</code>. Il kernel deve ricordare la relazione per gestire questa attesa e conservare le informazioni di terminazione necessarie. La parentela non sincronizza automaticamente ogni operazione: se i due devono scambiarsi campioni, serve un meccanismo di comunicazione.</p>
 
@@ -488,6 +646,10 @@ descrittore 3  ---------->  apertura del file  ------->  misure.txt
 
 ## Stato e ciclo di vita di un processo
 
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">Per ragionare sul sistema operativo è utile un modello semplificato a stati:</p>
 
 <ul>
@@ -497,6 +659,9 @@ descrittore 3  ---------->  apertura del file  ------->  misure.txt
   <li><strong>In attesa</strong>: non può proseguire finché non avviene un evento, per esempio la disponibilità di dati.</li>
   <li><strong>Terminato</strong>: non esegue più istruzioni; alcune informazioni possono restare temporaneamente disponibili al padre.</li>
 </ul>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Nel diagramma, il completamento dell'evento riporta il processo in stato pronto; lo scheduler decide quando assegnargli la CPU. Il diagramma non descrive tutti i dettagli di un kernel reale. Serve a capire due idee:</p>
 
@@ -608,7 +773,14 @@ descrittore 3  ---------->  apertura del file  ------->  misure.txt
 
 ### Esecuzione sequenziale
 
-<p align="justify">Una sola attività logica avanza alla volta secondo un ordine determinato dal programma.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Nell'<strong>esecuzione sequenziale</strong> una sola attività logica avanza alla volta secondo un ordine determinato dal programma.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ```text
 A1 -> A2 -> A3 -> B1 -> B2
@@ -616,7 +788,16 @@ A1 -> A2 -> A3 -> B1 -> B2
 
 ### Esecuzione concorrente
 
-<p align="justify">Più attività sono in corso nello stesso intervallo di tempo. Su una sola CPU possono alternarsi:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Nell'<strong>esecuzione concorrente</strong> più attività sono in corso nello stesso intervallo di tempo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Su una sola CPU possono alternarsi:</p>
 
 ```text
 A1 -> B1 -> A2 -> B2 -> A3
@@ -626,7 +807,14 @@ A1 -> B1 -> A2 -> B2 -> A3
 
 ### Esecuzione parallela
 
-<p align="justify">Due o più attività eseguono realmente istruzioni nello stesso istante su unità di calcolo diverse.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Nell'<strong>esecuzione parallela</strong> due o più attività eseguono realmente istruzioni nello stesso istante su unità di calcolo diverse.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ```text
 CPU 1: A1 -> A2 -> A3
@@ -667,7 +855,16 @@ pstree -p
 
 ### `fork`
 
-<p align="justify"><code>fork()</code> crea un nuovo processo. Dopo la chiamata esistono due flussi che proseguono dall'istruzione successiva:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify"><strong><code>fork()</code></strong> crea un nuovo processo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Dopo la chiamata esistono due flussi che proseguono dall'istruzione successiva:</p>
 
 <ul>
   <li>nel padre, il valore di ritorno è il PID del figlio;</li>
@@ -679,11 +876,27 @@ pstree -p
 
 ### `exec`
 
-<p align="justify">La famiglia <code>exec</code> sostituisce il programma eseguito dal processo corrente. Se la chiamata riesce, il codice successivo alla <code>exec</code> non viene eseguito, perché il processo sta eseguendo un nuovo programma.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La famiglia <strong><code>exec</code></strong> sostituisce il programma eseguito dal processo corrente.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Se la chiamata riesce, il codice successivo alla <code>exec</code> non viene eseguito, perché il processo sta eseguendo un nuovo programma.</p>
 
 ### `wait` e `waitpid`
 
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">Il padre usa <code>wait</code> o <code>waitpid</code> per attendere o raccogliere lo stato di un figlio. Se il figlio termina e il padre non ne raccoglie lo stato, resta temporaneamente un record chiamato comunemente <strong>zombie</strong>.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Collegamenti:</p>
 
@@ -756,7 +969,16 @@ gcc -Wall -Wextra -Wpedantic -std=c17 process_wait.c -o process_wait
 
 ## Da processo a thread
 
-<p align="justify">Un thread è un flusso di esecuzione all'interno di un processo. Più thread possono lavorare sugli stessi oggetti in memoria.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>thread</strong> è un flusso di esecuzione all'interno di un processo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Più thread possono lavorare sugli stessi oggetti in memoria.</p>
 
 <p align="justify">Usare thread può essere conveniente quando:</p>
 
@@ -954,14 +1176,31 @@ B3: scrive x
 
 ### Proprietà di sicurezza e di progresso
 
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Due tipi di proprietà di un programma concorrente:</p>
 <ul>
   <li>Una proprietà di <strong>safety</strong> afferma che qualcosa di scorretto non deve accadere. Esempio: il saldo non deve diventare negativo.</li>
   <li>Una proprietà di <strong>liveness</strong> afferma che qualcosa di desiderato deve prima o poi accadere. Esempio: una richiesta accettata deve essere elaborata.</li>
 </ul>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ### Invariante
 
-<p align="justify">Un invariante è una proprietà che deve restare vera nei punti significativi dell'esecuzione. Per un buffer limitato di capacità <code>N</code>:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>invariante</strong> è una proprietà che deve restare vera nei punti significativi dell'esecuzione.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Per un buffer limitato di capacità <code>N</code>:</p>
 
 ```text
 0 <= elementi_presenti <= N

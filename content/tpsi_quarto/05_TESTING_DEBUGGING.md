@@ -105,10 +105,11 @@ Modulo originale; validator, runner e report della piattaforma. <a href="#fonti-
 
 ## Verifica e validazione
 
+<!-- definition -->
 <table align="center">
 <tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">
-<strong><span style="font-size: 1.15em;">&#128214;</span> Definizione:</strong>
 Una distinzione utile è:</p>
 
 <ul>
@@ -117,6 +118,7 @@ Una distinzione utile è:</p>
 </ul>
 </td></tr>
 </table>
+<!-- /definition -->
 
 ### Esempio
 
@@ -161,7 +163,16 @@ responsabile
 rischi e limiti
 ```
 
-<p align="justify">L'<strong>oracolo</strong> determina il risultato atteso. Può essere:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">L'<strong>oracolo</strong> determina il risultato atteso.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Può essere:</p>
 
 <ul>
   <li>una formula;</li>
@@ -174,7 +185,14 @@ rischi e limiti
 
 ## Verifica statica
 
-<p align="justify">La verifica statica analizza artefatti senza eseguire il programma nel normale scenario operativo.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La <strong>verifica statica</strong> analizza artefatti senza eseguire il programma nel normale scenario operativo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Comprende:</p>
 
@@ -232,7 +250,14 @@ python scripts/validate_activity.py activities/tpsi_quarto
 
 ## Verifica dinamica
 
-<p align="justify">La verifica dinamica esegue il programma o una sua parte.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La <strong>verifica dinamica</strong> esegue il programma o una sua parte.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Comprende:</p>
 
@@ -254,25 +279,53 @@ python scripts/validate_activity.py activities/tpsi_quarto
 
 ### Test unitario
 
-<p align="justify">Verifica una piccola unità con dipendenze controllate.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>test di unità</strong> verifica una piccola unità con dipendenze controllate.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempio: funzione che valida un identificatore o normalizza un output.</p>
 
 ### Test di integrazione
 
-<p align="justify">Verifica collaborazione tra componenti.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>test di integrazione</strong> verifica collaborazione tra componenti.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempio: servizio activity + storage + generazione scaffold.</p>
 
 ### Test di sistema
 
-<p align="justify">Verifica il prodotto completo in un ambiente rappresentativo.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>test di sistema</strong> verifica il prodotto completo in un ambiente rappresentativo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempio: docente crea activity, la assegna, lo studente esegue il runner e il report appare nella dashboard.</p>
 
 ### Test di accettazione
 
-<p align="justify">Verifica requisiti e bisogni concordati con gli stakeholder.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>test di accettazione</strong> verifica requisiti e bisogni concordati con gli stakeholder.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempio: il docente riesce a collegare più fonti alla stessa UDA conservando la provenienza.</p>
 
@@ -282,7 +335,14 @@ python scripts/validate_activity.py activities/tpsi_quarto
 
 ### Classi di equivalenza
 
-<p align="justify">Gli input vengono raggruppati quando si prevede un comportamento equivalente.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Nel <strong>partizionamento in classi di equivalenza</strong> gli input vengono raggruppati quando si prevede un comportamento equivalente.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempio: funzione che accetta un voto da 0 a 10.</p>
 
@@ -362,7 +422,14 @@ draft -> reviewed -> approved -> assigned -> closed
 
 ### Test basati su proprietà
 
-<p align="justify">Invece di elencare soltanto esempi, si verifica una proprietà generale.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Nel <strong>testing basato su proprietà</strong>, invece di elencare soltanto esempi, si verifica una proprietà generale.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempio per una funzione di ordinamento:</p>
 
@@ -406,11 +473,27 @@ ordinare due volte non cambia il risultato
 
 ### Test pubblico
 
-<p align="justify">Aiuta lo studente a comprendere il contratto e verificare progressi.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>test visibile</strong> aiuta lo studente a comprendere il contratto e verificare progressi.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ### Test nascosto
 
-<p align="justify">Controlla casi aggiuntivi senza fornire direttamente la soluzione. Non deve però introdurre requisiti assenti dalla consegna.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>test nascosto</strong> controlla casi aggiuntivi senza fornire direttamente la soluzione.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Non deve però introdurre requisiti assenti dalla consegna.</p>
 
 <p align="justify">Una buona prova combina:</p>
 
@@ -445,7 +528,14 @@ ordinare due volte non cambia il risultato
 
 ## Sanitizer
 
-<p align="justify">Gli sanitizer aggiungono controlli runtime.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Gli <strong>sanitizer</strong> aggiungono controlli runtime.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ### AddressSanitizer e UndefinedBehaviorSanitizer
 
@@ -645,7 +735,14 @@ Regressione: il normalizzatore deve trattare CRLF e LF come equivalenti.
 
 ## Continuous Integration
 
-<p align="justify">La CI esegue controlli su eventi come push o pull request.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La <strong>CI</strong> esegue controlli su eventi come push o pull request.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Può includere:</p>
 

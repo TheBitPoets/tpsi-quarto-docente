@@ -5,7 +5,7 @@ Il formato dei sei moduli segue due riferimenti letti il 14 settembre 2026:
 - [TPSI quinto — Web Platform e HTML moderno](https://github.com/TheBitPoets/tpsi-quinto-docente/blob/main/content/tpsi5/01_WEB_PLATFORM_HTML_MODERNO.md), per orientamento, icone e componenti editoriali;
 - [2cornot2c — Il processo di compilazione](https://github.com/TheBitPoets/2cornot2c/blob/main/README.md#il-processo-di-compilazione), per la cornice completa, i paragrafi giustificati e la convivenza di HTML e codice Markdown.
 
-La prosa delle dispense è normalizzata in HTML. Titoli, metadati, identificatori e blocchi di codice restano nel formato originale; immagini e didascalie mantengono i collegamenti del Visual System.
+Queste regole sono obbligatorie per tutte le lezioni del corso, presenti e future: pannello iniziale con icone canoniche, formattazione HTML e riquadri delle definizioni. La prosa delle dispense è normalizzata in HTML. Titoli, metadati, identificatori e blocchi di codice restano nel formato originale; immagini e didascalie mantengono i collegamenti del Visual System.
 
 ## Orientamento della sezione
 
@@ -101,26 +101,33 @@ I titoli restano Markdown per conservare gli anchor. Non trasformare un titolo d
 
 | Funzione | Icona | Entità |
 |---|---|---|
-| Definizione | 📖 | `&#128214;` |
+| Definizione: Importante | ❗ | `&#10071;` |
 | Idea chiave | 💡 | `&#128161;` |
 | Attenzione | ⚠ | `&#9888;` |
 | Laboratorio | 💻 | `&#128187;` |
 | Verifica rapida | ✅ | `&#9989;` |
 
-Una definizione necessaria resta visibile, dentro una tabella centrata:
+Ogni definizione usa il formato del [README di 2cornot2c](https://github.com/TheBitPoets/2cornot2c/blob/main/README.md), ricontrollato il 17 settembre 2026: tabella centrata, intestazione **❗ Importante**, testo giustificato e termine definito in grassetto. Il riquadro resta visibile, senza `details`. Usare questo template:
 
 ```html
+<!-- definition -->
 <table align="center">
 <tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">
-<strong><span style="font-size: 1.15em;">&#128214;</span> Definizione:</strong>
-Testo breve, autonomo e preciso.
+Un <strong>processo</strong> è un'esecuzione attiva di un programma,
+con uno stato che cambia nel tempo.
 </p>
 </td></tr>
 </table>
+<!-- /definition -->
 ```
 
-I sei moduli contengono una prima applicazione di questi riquadri ai concetti fondamentali. Usarli quando aiutano a riconoscere la funzione del testo, senza trasformare ogni paragrafo in un'avvertenza.
+I commenti `definition` non sono visibili al lettore: delimitano il riquadro per i controlli automatici. Il vecchio formato «📖 Definizione» è sostituito da questo template in tutto il corso.
+
+Isolare la frase che definisce il concetto; lasciare motivazioni, esempi, codice e approfondimenti nei paragrafi successivi. La definizione deve essere comprensibile anche nel riquadro: esplicitare il termine invece di iniziare soltanto con «È» o «Descrive». Definizioni strettamente collegate possono condividere un riquadro; un elenco HTML può restare dentro se completa la definizione. Non annidare altre tabelle.
+
+Applicare il riquadro quando si introduce o si formalizza un concetto. Un semplice richiamo, un esempio applicativo, una domanda o un riepilogo non richiedono un nuovo riquadro. Mantenere distinti i pannelli per idee chiave, avvertenze, laboratori e verifiche.
 
 ## Codice e immagini
 
@@ -142,7 +149,9 @@ Ogni immagine è registrata in [figure-index.json](../../assets/tpsi4/visual-sys
 
 ## Normalizzazione e verifica
 
-Il [normalizzatore](../../scripts/format_tpsi4_lessons.py) deriva da quello della quinta, adattato ai moduli 01–06. Conserva l'HTML già presente, comprese le cornici personalizzate; non genera il testo dell'orientamento e non modifica gli esempi di codice. Il suo ambito è il sottoinsieme Markdown delle dispense: prosa, liste semplici, citazioni e tabelle semplici. Per strutture più complesse usare direttamente HTML.
+Il [normalizzatore](../../scripts/format_tpsi4_lessons.py) deriva da quello della quinta e comprende tutte le lezioni con nome `NN_*.md` nella cartella del corso, incluse quelle future. Conserva l'HTML già presente, comprese le cornici personalizzate; non genera il testo dell'orientamento e non modifica gli esempi di codice. Il suo ambito è il sottoinsieme Markdown delle dispense: prosa, liste semplici, citazioni e tabelle semplici. Per strutture più complesse usare direttamente HTML.
+
+Il controllo verifica anche i marcatori e il template delle definizioni, il testo giustificato e la presenza di un termine in grassetto; segnala il vecchio formato «Definizione». Non può riconoscere semanticamente una definizione rimasta nella prosa: questa verifica resta parte della revisione editoriale.
 
 Per applicare intenzionalmente la formattazione:
 

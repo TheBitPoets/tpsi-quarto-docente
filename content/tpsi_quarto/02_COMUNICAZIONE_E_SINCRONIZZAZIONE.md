@@ -107,7 +107,14 @@ consumatore: estrae dato -> salva dato
 
 ## Comunicazione e sincronizzazione non sono la stessa cosa
 
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">La <strong>comunicazione</strong> trasferisce informazione. La <strong>sincronizzazione</strong> impone vincoli sull'ordine o sull'accesso.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempi:</p>
 
@@ -124,7 +131,16 @@ consumatore: estrae dato -> salva dato
 
 ### Memoria condivisa
 
-<p align="justify">Le attività accedono allo stesso stato. È necessario stabilire:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Nella <strong>memoria condivisa</strong> le attività accedono allo stesso stato.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">È necessario stabilire:</p>
 
 <ul>
   <li>quali dati sono condivisi;</li>
@@ -139,7 +155,16 @@ consumatore: estrae dato -> salva dato
 
 ### Scambio di messaggi
 
-<p align="justify">Un'attività invia un messaggio e un'altra lo riceve. Il canale può essere:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Nel <strong>passaggio di messaggi</strong> un'attività invia un messaggio e un'altra lo riceve.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Il canale può essere:</p>
 
 <ul>
   <li>unidirezionale o bidirezionale;</li>
@@ -155,7 +180,14 @@ consumatore: estrae dato -> salva dato
 
 ## Comunicazione tra processi con pipe
 
-<p align="justify">Una pipe POSIX ordinaria è un canale di byte con due estremità:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Una <strong>pipe POSIX ordinaria</strong> è un canale di byte con due estremità.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ```text
 fd[1] -> scrittura
@@ -266,7 +298,16 @@ int main(void) {
 
 ## Segnali: notifiche, non contenitori generici
 
-<p align="justify">Un segnale comunica principalmente che è avvenuto un evento. Non è il mezzo adatto per trasferire strutture dati complesse.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>segnale</strong> comunica principalmente che è avvenuto un evento.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Non è il mezzo adatto per trasferire strutture dati complesse.</p>
 
 <p align="justify">Collegamenti:</p>
 
@@ -280,7 +321,14 @@ int main(void) {
 
 ## Race condition
 
-<p align="justify">Una race condition esiste quando il risultato dipende da un ordine di esecuzione non controllato tra accessi concorrenti.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Una <strong>race condition</strong> esiste quando il risultato dipende da un ordine di esecuzione non controllato tra accessi concorrenti.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Consideriamo l'operazione apparente:</p>
 
@@ -312,13 +360,15 @@ scrivi il nuovo valore
 
 ## Sezione critica e invariante
 
+<!-- definition -->
 <table align="center">
 <tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">
-<strong><span style="font-size: 1.15em;">&#128214;</span> Definizione:</strong>
 Una <strong>sezione critica</strong> è una porzione di codice che accede a stato condiviso e deve rispettare una regola di coordinamento.</p>
 </td></tr>
 </table>
+<!-- /definition -->
 
 <p align="justify">Una progettazione corretta non parte dal mutex, ma dall'invariante.</p>
 
@@ -340,7 +390,16 @@ scrivi saldo
 
 ## Mutex
 
-<p align="justify">Un mutex rappresenta il possesso esclusivo di una risorsa logica. La regola essenziale è:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>mutex</strong> rappresenta il possesso esclusivo di una risorsa logica.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">La regola essenziale è:</p>
 
 ```text
 lock
@@ -447,12 +506,18 @@ final class SafeCounter {
 
 ## Semafori
 
-<p align="justify">Un semaforo contiene logicamente un contatore non negativo e due operazioni atomiche:</p>
-
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>semaforo</strong> contiene logicamente un contatore non negativo e due operazioni atomiche:</p>
 <ul>
   <li>acquisizione: attende una disponibilità e la consuma;</li>
   <li>rilascio: restituisce una disponibilità e può risvegliare un'attività.</li>
 </ul>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Un semaforo con valore iniziale <code>N</code> può rappresentare <code>N</code> risorse equivalenti, per esempio posti disponibili.</p>
 
@@ -500,7 +565,14 @@ final class ParkingLot {
 
 ## Variabili di condizione
 
-<p align="justify">Una variabile di condizione permette a un thread di attendere finché lo stato protetto da un mutex può soddisfare una proprietà.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Una <strong>variabile di condizione</strong> permette a un thread di attendere finché lo stato protetto da un mutex può soddisfare una proprietà.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Schema POSIX:</p>
 
@@ -601,7 +673,14 @@ unlock
 
 ## Deadlock
 
-<p align="justify">Un deadlock è una situazione in cui un insieme di attività resta bloccato perché ciascuna attende una risorsa o un evento che soltanto un'altra attività dell'insieme può produrre.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>deadlock</strong> è una situazione in cui un insieme di attività resta bloccato perché ciascuna attende una risorsa o un evento che soltanto un'altra attività dell'insieme può produrre.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Quattro condizioni classiche rendono possibile il deadlock:</p>
 
@@ -649,14 +728,20 @@ thread B: lock Y -> lock X
 
 ## Monitor
 
-<p align="justify">Un monitor combina:</p>
-
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>monitor</strong> combina:</p>
 <ul>
   <li>stato privato;</li>
   <li>operazioni che accedono a quello stato;</li>
   <li>mutua esclusione implicita o incapsulata;</li>
   <li>condizioni sulle quali le operazioni possono attendere.</li>
 </ul>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Il vantaggio concettuale è che l'invariante è protetto dentro un componente, invece di dipendere dalla disciplina di tutti i chiamanti.</p>
 

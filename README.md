@@ -102,6 +102,6 @@ python scripts/build_course_diagrams.py --check
 python -m unittest discover -s tests -p test_course_diagrams.py
 ```
 
-Le sei dispense seguono il template HTML della quinta e di 2cornot2c: orientamento con icone canoniche, paragrafi giustificati, liste e tabelle HTML. Il controllo `python scripts/format_tpsi4_lessons.py --check` verifica la formattazione; usare `--write` per applicarla intenzionalmente.
+Tutte le dispense, presenti e future, seguono il template HTML della quinta e di 2cornot2c: orientamento con icone canoniche, paragrafi giustificati, liste e tabelle HTML. Ogni definizione usa un riquadro centrato **❗ Importante**, con il termine in grassetto, secondo la [guida di formattazione](content/tpsi_quarto/STYLE_GUIDE.md#riquadri-didattici). Il controllo `python scripts/format_tpsi4_lessons.py --check` verifica la formattazione e il template dei riquadri marcati; usare `--write` per normalizzare intenzionalmente la prosa. L'individuazione delle definizioni resta una scelta editoriale.
 
 Modificare componenti o scene sorgente; gli SVG finali e i cataloghi vengono rigenerati. Il confronto con le figure interne del libro bSmart resta da completare: stato e fonti consultate sono indicati nell'audit.

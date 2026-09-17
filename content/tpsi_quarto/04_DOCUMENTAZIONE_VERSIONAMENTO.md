@@ -146,7 +146,16 @@ Modulo originale; documentazione e workflow del repository come esempi applicati
 
 ### README
 
-<p align="justify">È il punto di ingresso. Un README efficace risponde rapidamente a:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>README</strong> è il punto di ingresso.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Un README efficace risponde rapidamente a:</p>
 
 ```text
 che cos'è?
@@ -177,7 +186,16 @@ dove trovo dettagli e regole?
 
 ### Guida di avvio rapido
 
-<p align="justify">Descrive il percorso minimo riproducibile. Deve indicare:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La <strong>guida di installazione</strong> descrive il percorso minimo riproducibile.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Deve indicare:</p>
 
 <ul>
   <li>ambiente supportato;</li>
@@ -192,7 +210,14 @@ dove trovo dettagli e regole?
 
 ### Documentazione architetturale
 
-<p align="justify">Descrive componenti, responsabilità, confini e flussi.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La <strong>documentazione di architettura</strong> descrive componenti, responsabilità, confini e flussi.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempio:</p>
 
@@ -209,7 +234,14 @@ GUI docente
 
 ### ADR: Architecture Decision Record
 
-<p align="justify">Un ADR registra una decisione significativa.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>ADR</strong> registra una decisione significativa.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Template breve:</p>
 
@@ -227,8 +259,11 @@ Conseguenze negative: migrazione futura e doppio livello temporaneo
 
 ### Runbook
 
-<p align="justify">Un runbook descrive operazioni ripetibili:</p>
-
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>runbook</strong> descrive operazioni ripetibili:</p>
 <ul>
   <li>avvio e arresto;</li>
   <li>verifica salute;</li>
@@ -238,10 +273,22 @@ Conseguenze negative: migrazione futura e doppio livello temporaneo
   <li>rotazione di credenziali;</li>
   <li>pubblicazione di una release.</li>
 </ul>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ### Changelog e note di rilascio
 
-<p align="justify">Il changelog registra modifiche rilevanti per gli utenti o manutentori. Non deve essere la semplice copia dei messaggi di commit.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>changelog</strong> registra modifiche rilevanti per gli utenti o manutentori.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Non deve essere la semplice copia dei messaggi di commit.</p>
 
 <!-- figure:04-documentazione -->
 <p align="center">
@@ -459,7 +506,14 @@ git commit -m "content: add bounded-buffer lab"
 
 ### Branch
 
-<p align="justify">Un branch permette di sviluppare una modifica senza spostare immediatamente il ramo principale.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>branch</strong> permette di sviluppare una modifica senza spostare immediatamente il ramo principale.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ```bash
 git switch -c feature/bounded-buffer-lab
@@ -469,11 +523,29 @@ git switch -c feature/bounded-buffer-lab
 
 ### Merge
 
-<p align="justify">Il merge combina storie. Può produrre un commit di merge o un avanzamento lineare, in base alla situazione e alla policy.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>merge</strong> combina storie.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Può produrre un commit di merge o un avanzamento lineare, in base alla situazione e alla policy.</p>
 
 ### Rebase
 
-<p align="justify">Il rebase riposiziona commit su una nuova base e riscrive gli identificatori dei commit interessati. È utile per mantenere una storia lineare, ma non va applicato senza attenzione a commit già condivisi.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>rebase</strong> riposiziona commit su una nuova base e riscrive gli identificatori dei commit interessati.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">È utile per mantenere una storia lineare, ma non va applicato senza attenzione a commit già condivisi.</p>
 
 <!-- figure:04-git -->
 <p align="center">
@@ -483,7 +555,14 @@ git switch -c feature/bounded-buffer-lab
 
 ## Conflitti
 
-<p align="justify">Un conflitto non significa che Git sia guasto. Significa che non può decidere automaticamente come combinare modifiche concorrenti.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>conflitto</strong> non significa che Git sia guasto. Significa che non può decidere automaticamente come combinare modifiche concorrenti.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Flusso:</p>
 
@@ -500,8 +579,11 @@ git switch -c feature/bounded-buffer-lab
 
 ## GitHub, pull request e code review
 
-<p align="justify">Una pull request non è soltanto una richiesta di merge. È uno spazio per:</p>
-
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Una <strong>pull request</strong> non è soltanto una richiesta di merge. È uno spazio per:</p>
 <ul>
   <li>spiegare obiettivo e impatto;</li>
   <li>collegare issue e requisiti;</li>
@@ -510,6 +592,9 @@ git switch -c feature/bounded-buffer-lab
   <li>eseguire controlli automatici;</li>
   <li>registrare review e decisioni.</li>
 </ul>
+</td></tr>
+</table>
+<!-- /definition -->
 
 ### Descrizione di una PR
 
@@ -605,8 +690,11 @@ Codice brutto.
 
 ## Docs-as-code
 
-<p align="justify">La documentazione trattata come codice usa:</p>
-
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La <strong>documentazione trattata come codice</strong> (<em>docs as code</em>) usa:</p>
 <ul>
   <li>file testuali;</li>
   <li>repository;</li>
@@ -617,6 +705,9 @@ Codice brutto.
   <li>review;</li>
   <li>release.</li>
 </ul>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Controlli possibili:</p>
 

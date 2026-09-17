@@ -21,7 +21,6 @@ LESSON_DIR = ROOT / "content" / "tpsi_quarto"
 DEFAULT_LESSONS = tuple(
     path
     for path in sorted(LESSON_DIR.glob("[0-9][0-9]_*.md"))
-    if 1 <= int(path.name[:2]) <= 6
 )
 
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
@@ -87,10 +86,41 @@ def validation_errors(content: str) -> list[str]:
         errors.append("unclosed fenced code block")
     if sum(line.startswith("# ") for line in visible_lines) != 1:
         errors.append("the document must contain exactly one level-1 heading")
+    visible = html_outside_fences(content)
     parser = BalanceParser()
-    parser.feed(html_outside_fences(content))
+    parser.feed(visible)
     errors.extend(parser.errors)
     errors.extend(f"unclosed <{tag}>" for tag in reversed(parser.stack))
+    definition_open = False
+    definition_parts: list[str] = []
+    for line in visible.splitlines():
+        if line.strip() == "<!-- definition -->":
+            if definition_open:
+                errors.append("nested definition panel")
+            definition_open = True
+            definition_parts = []
+        elif line.strip() == "<!-- /definition -->":
+            if not definition_open:
+                errors.append("closing definition marker without opening marker")
+                continue
+            panel = "\n".join(definition_parts).strip()
+            header = '<table align="center">\n<tr><td>\n&#10071; <strong>Importante</strong>\n'
+            footer = '\n</td></tr>\n</table>'
+            if not panel.startswith(header) or not panel.endswith(footer):
+                errors.append("definition must use the centered Importante template")
+            else:
+                body = panel[len(header):-len(footer)]
+                if '<p align="justify">' not in body or '<strong>' not in body:
+                    errors.append("definition needs justified prose and a bold term")
+                if '<table' in body or '<details' in body:
+                    errors.append("definition must remain visible without nested tables")
+            definition_open = False
+        elif definition_open:
+            definition_parts.append(line)
+    if definition_open:
+        errors.append("unclosed definition marker")
+    if re.search(r'Definizione:\s*</strong>', visible):
+        errors.append("obsolete definition panel: use the Importante template")
     return errors
 
 

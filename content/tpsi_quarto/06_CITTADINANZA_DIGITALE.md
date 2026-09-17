@@ -104,7 +104,14 @@ Modulo originale; manifest del pacchetto e policy della piattaforma. <a href="#f
 
 ## Copyright, licenza e pubblico dominio
 
-<p align="justify">Il copyright protegge automaticamente molte opere creative. Una licenza concede alcuni diritti secondo condizioni definite.</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>copyright</strong> protegge automaticamente molte opere creative. Una <strong>licenza</strong> concede alcuni diritti secondo condizioni definite.</p>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Domande da porre prima di importare una risorsa:</p>
 
@@ -125,13 +132,15 @@ Modulo originale; manifest del pacchetto e policy della piattaforma. <a href="#f
 
 ## Provenienza
 
+<!-- definition -->
 <table align="center">
 <tr><td>
+&#10071; <strong>Importante</strong>
 <p align="justify">
-<strong><span style="font-size: 1.15em;">&#128214;</span> Definizione:</strong>
-La provenienza descrive da dove deriva un'informazione e come è stata trasformata.</p>
+La <strong>provenienza</strong> descrive da dove deriva un'informazione e come è stata trasformata.</p>
 </td></tr>
 </table>
+<!-- /definition -->
 
 <p align="justify">Campi utili:</p>
 
@@ -186,7 +195,16 @@ stato
 
 ## Dati personali nella scuola
 
-<p align="justify">Un dato personale può identificare direttamente o indirettamente una persona. In un contesto scolastico possono essere coinvolti:</p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>dato personale</strong> può identificare direttamente o indirettamente una persona.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">In un contesto scolastico possono essere coinvolti:</p>
 
 <ul>
   <li>nome e account;</li>
@@ -229,12 +247,18 @@ con accesso limitato
 
 ## Ruoli e autorizzazioni
 
-<p align="justify">Autenticazione e autorizzazione sono diverse:</p>
-
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify"><strong>Autenticazione</strong> e <strong>autorizzazione</strong> sono diverse:</p>
 <ul>
   <li>autenticazione: chi sei?</li>
   <li>autorizzazione: che cosa puoi fare?</li>
 </ul>
+</td></tr>
+</table>
+<!-- /definition -->
 
 <p align="justify">Esempio di matrice:</p>
 
