@@ -153,7 +153,17 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Lo stesso programma può essere eseguito in più processi. Se apriamo due terminali e avviamo due volte lo stesso comando, il codice del programma è lo stesso, ma le due esecuzioni hanno identificatori, memoria e risorse proprie.</p>
 
-<p align="justify">Diremo che <strong>il processo possiede</strong> un insieme di <strong>informazioni e risorse</strong> associate alla sua esecuzione. Per capire quali siano e a cosa servano, partiamo da otto domande a cui il sistema operativo deve poter rispondere. Gli elementi elencati qui sono una mappa del percorso: li costruiremo uno alla volta nella sezione <a href="#anatomia-di-un-processo">Anatomia di un processo</a>, precisando anche il significato di “possiede”.</p>
+<p align="justify">È il <strong>sistema operativo</strong> a gestire i processi: assegna loro tempo di <strong>CPU</strong> e <strong>memoria</strong>, controlla l'accesso a <strong>file e periferiche</strong> e tiene traccia delle risorse associate a ciascuna esecuzione. Deve sapere, per esempio, quale processo sta usando la CPU, quali aree di memoria può utilizzare e quali file ha aperto. Alcune risorse possono essere condivise: associarle a un processo non significa sempre riservarle esclusivamente a esso.</p>
+
+<p align="justify">Per svolgere questo lavoro, il sistema operativo conserva <strong>informazioni su ciascun processo</strong> e le aggiorna mentre l'esecuzione avanza. Diremo quindi che <strong>il processo possiede</strong> un insieme di <strong>informazioni e risorse</strong> associate alla sua esecuzione. Le risorse sono i mezzi con cui lavora; le informazioni permettono al sistema operativo di identificarlo, controllarlo e gestirne l'avanzamento.</p>
+
+<p align="justify">Pensiamo al <strong>multitasking</strong>: più attività avanzano nello stesso intervallo di tempo. Anche con una sola CPU logica, il sistema operativo può interrompere temporaneamente l'esecuzione di un processo e assegnare la CPU a un altro. Il primo processo non termina: dovrà poter riprendere più tardi dal punto in cui era stato sospeso. Per ora immaginiamo che ogni processo abbia un solo flusso di esecuzione.</p>
+
+<p align="justify">Che cosa bisogna ricordare per riprenderlo? Almeno <strong>il punto raggiunto nel codice e i valori che la CPU stava usando</strong>, per esempio un risultato parziale o l'indirizzo di un dato. Queste informazioni fanno parte del <strong>contesto di esecuzione</strong>. Il contesto è quindi una parte delle informazioni associate al processo, non l'insieme di tutte le sue risorse.</p>
+
+<p align="justify">Il passaggio da un'attività a un'altra richiede un <strong>cambio di contesto</strong>: il sistema conserva lo stato necessario dell'attività sospesa e ripristina quello dell'attività che deve proseguire. In questo modo la CPU può essere riutilizzata senza perdere il lavoro in corso. Nelle sezioni successive vedremo concretamente il ruolo dei registri e della memoria.</p>
+
+<p align="justify">Per ciascun processo che sta gestendo, anche quando non sta usando la CPU, il sistema operativo deve dunque mantenere informazioni aggiornate per poter rispondere in ogni momento a queste <strong>otto domande</strong>. Le approfondiremo nella sezione <a href="#anatomia-di-un-processo">Anatomia di un processo</a>:</p>
 
 <ul>
   <li><strong>Quale esecuzione?</strong> Un identificatore.</li>
