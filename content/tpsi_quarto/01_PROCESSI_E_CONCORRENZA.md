@@ -90,34 +90,56 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
 
 ## Problema iniziale: una sola attività o più attività coordinate?
 
-<p align="justify">Immaginiamo un'applicazione che deve acquisire dati da un sensore, salvarli e aggiornare una schermata. Una soluzione puramente sequenziale svolge le operazioni una dopo l'altra:</p>
+<p align="justify">Immaginiamo una stazione che misura la temperatura di un'aula. L'applicazione deve <strong>leggere un sensore</strong>, <strong>inviare le misure a un server attraverso un socket</strong> e <strong>aggiornare una schermata</strong> con temperatura, orario e pulsanti. Un socket è un punto di comunicazione usato dal programma per scambiare dati sulla rete. L'utente si aspetta che i comandi rispondano anche quando il sensore o la rete sono lenti.</p>
 
-```text
-leggi il sensore
-salva il dato
-aggiorna la schermata
-ripeti
-```
+### Una sola attività: prima leggi, poi invia, poi aggiorna
 
-<p align="justify">Questa soluzione è semplice, ma un'operazione lenta può bloccare le altre. Se il salvataggio richiede tempo, la lettura del sensore potrebbe avvenire in ritardo. Una soluzione concorrente separa le responsabilità:</p>
+<p align="justify">La soluzione iniziale usa un solo <strong>thread</strong>, cioè un unico flusso di esecuzione: legge una misura, la invia, aggiorna la schermata e ricomincia. Supponiamo che lettura e invio siano <strong>bloccanti</strong>: se l'operazione non può proseguire subito, il thread aspetta al suo interno e non esegue ancora le istruzioni successive.</p>
 
-```text
-attività A: acquisisce i dati
-attività B: salva i dati
-attività C: aggiorna l'interfaccia
-```
+<!-- figure:01-io-sequenziale -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-io-sequenziale.svg" alt="L&#x27;applicazione legge un sensore, invia il dato via socket al server e aggiorna la schermata in sequenza. Una lettura di 800 ms e un invio di 1200 ms rinviano l&#x27;aggiornamento a 2000 ms. Il pulsante premuto durante l&#x27;attesa non viene gestito dal thread occupato." width="960">
+</p>
+<p align="center"><em>Con un solo thread e I/O bloccante, le attese del sensore e della rete rinviano il lavoro successivo. Tempi inventati per mostrare l’effetto.</em></p>
 
-<p align="justify">La difficoltà non consiste soltanto nell'avviare più attività. Bisogna decidere:</p>
+<p align="justify">Nella figura le due attese hanno cause diverse:</p>
 
 <ul>
-  <li>quali dati possono essere condivisi;</li>
-  <li>quando una attività deve aspettarne un'altra;</li>
-  <li>come comunicano;</li>
-  <li>cosa accade se una termina o fallisce;</li>
-  <li>quali proprietà devono restare vere in qualunque ordine di esecuzione.</li>
+  <li><strong>Lettura del sensore:</strong> immaginiamo un sensore collegato attraverso un canale da cui il programma legge i campioni. Se un nuovo campione non è disponibile, la lettura bloccante può aspettare che arrivi. Non tutti i sensori funzionano così: questa è l'ipotesi del nostro esempio.</li>
+  <li><strong>Invio via socket:</strong> il sistema conserva temporaneamente i dati da spedire in un <em>buffer</em>. Se questo spazio si riempie perché la rete o il destinatario non tengono il passo, un invio bloccante può aspettare che si liberi spazio. Un invio riuscito non significa, da solo, che il server abbia già elaborato la misura.</li>
 </ul>
 
-<p align="justify">Questi problemi collegano il modello a processi, i thread e la sincronizzazione.</p>
+<p align="justify">Con le durate illustrative della figura, <strong>800 ms di attesa del sensore + 1200 ms di attesa della rete</strong> rinviano l'aggiornamento di circa due secondi, senza contare il resto del lavoro. Se l'utente preme un pulsante durante quelle attese, lo stesso thread non può ancora gestirlo. Anche la lettura della misura successiva viene ritardata dall'invio precedente.</p>
+
+<table align="center">
+<tr><td>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#128214;</span> Bloccato non significa che la CPU sta calcolando:</strong> il thread può essere sospeso dal sistema operativo finché l'I/O non consente di proseguire. La CPU può eseguire altre attività. In questo progetto è l'applicazione a sembrare ferma, perché tutto il suo lavoro, interfaccia compresa, dipende dall'unico thread in attesa.</p>
+</td></tr>
+</table>
+
+### Attività concorrenti: separare le attese e scambiarsi i dati
+
+<p align="justify">Una possibile soluzione usa tre thread: <strong>A acquisisce</strong>, <strong>B invia</strong>, <strong>C gestisce l'interfaccia</strong>. Non basta però disegnare tre frecce: dobbiamo stabilire come passano i dati e quali attività possono procedere senza aspettare le altre.</p>
+
+<!-- figure:01-io-concorrente -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-io-concorrente.svg" alt="L&#x27;attività A legge il sensore e pubblica misure in una coda per B e nell&#x27;ultimo valore per C. B invia i dati via socket al server. C legge l&#x27;ultimo valore e gestisce lo schermo. Se B aspetta la rete, A può proseguire finché la coda ha spazio e C può rispondere ai comandi." width="960">
+</p>
+<p align="center"><em>Le attività scambiano dati attraverso strutture coordinate. Il blocco dell’invio non impedisce di gestire l’interfaccia; l’acquisizione può continuare finché c’è spazio in coda.</em></p>
+
+<ol>
+  <li><strong>A pubblica ogni misura:</strong> la inserisce in una coda per B e aggiorna una copia dell'ultimo valore per C. La coda è un contenitore ordinato di misure in attesa di invio.</li>
+  <li><strong>B preleva e invia:</strong> se la rete lo blocca, le misure già acquisite restano in coda. A può continuare ad acquisire finché trova spazio.</li>
+  <li><strong>C resta disponibile:</strong> mostra l'ultima misura con il suo orario e gestisce i comandi. Se A aspetta il sensore, C non inventa nuovi dati: può mostrare che il valore non è ancora aggiornato. Se B aspetta la rete, C può segnalare l'invio in ritardo.</li>
+</ol>
+
+<p align="justify">Questa è <strong>concorrenza</strong>: più attività possono avanzare nello stesso intervallo, anche alternandosi su un solo core. Durante l'attesa di B, il sistema può eseguire A o C. La concorrenza non rende più rapida la rete: permette alle attività che non dipendono dal suo completamento di fare altro lavoro utile.</p>
+
+<p align="justify">La soluzione richiede coordinamento. La coda e l'ultimo valore devono essere letti e aggiornati in modo sicuro; una protezione condivisa non deve essere trattenuta durante una lunga attesa di rete, altrimenti bloccherebbe di nuovo gli altri thread. Inoltre la coda ha una capacità limitata: se le misure arrivano più rapidamente di quanto B le invii, prima o poi si riempie. Occorre scegliere se rallentare l'acquisizione, scartare alcune misure oppure conservarle altrove, mantenendo l'interfaccia disponibile.</p>
+
+<p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Leggi le due figure:</strong> se l'invio rimane fermo per cinque secondi, chi può gestire un clic? Dove aspettano le misure già lette? Che cosa cambia quando la coda è piena? Queste domande introducono processi, thread, comunicazione e sincronizzazione.</p>
+
+<p align="justify">Riferimenti tecnici sulle operazioni bloccanti: <a href="https://man7.org/linux/man-pages/man2/read.2.html">read(2)</a> e <a href="https://man7.org/linux/man-pages/man2/send.2.html">send(2)</a>. L'esempio illustra una soluzione a thread; la gestione dell'I/O non bloccante è un'altra possibilità, che qui non approfondiamo.</p>
 
 ## Dal programma al processo
 

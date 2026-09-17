@@ -20,7 +20,7 @@ Aprire le tavole per scegliere un oggetto e leggere il suo ID:
 | [tokens.json](tokens.json) | Palette, tipografia e dimensioni di riferimento. |
 | [component-inventory.json](component-inventory.json) | Nomi e origine degli oggetti. |
 | [scenes/](scenes/) | Scene SVG sorgente: posizioni, testi e relazioni. |
-| [figure-index.json](figure-index.json) | Registro delle 27 figure e delle collocazioni nelle dispense. |
+| [figure-index.json](figure-index.json) | Registro delle 29 figure e delle collocazioni nelle dispense. |
 | [catalog/](catalog/) | Tre tavole generate; non modificarle a mano. |
 | [Generatore](../../../scripts/build_course_diagrams.py) | Incorpora i simboli e risolve i token in SVG autonomi. |
 

@@ -2,6 +2,40 @@
   "version": 1,
   "figures": [
     {
+      "id": "01-io-sequenziale",
+      "title": "Un solo flusso: l’attesa rinvia tutto ciò che segue",
+      "alt": "L'applicazione legge un sensore, invia il dato via socket al server e aggiorna la schermata in sequenza. Una lettura di 800 ms e un invio di 1200 ms rinviano l'aggiornamento a 2000 ms. Il pulsante premuto durante l'attesa non viene gestito dal thread occupato.",
+      "caption": "Con un solo thread e I/O bloccante, le attese del sensore e della rete rinviano il lavoro successivo. Tempi inventati per mostrare l’effetto.",
+      "components": [
+        "tpsi-cpu",
+        "tpsi-server",
+        "tpsi-terminal"
+      ],
+      "section": "Problema iniziale: una sola attività o più attività coordinate?",
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "scene": "assets/tpsi4/visual-system/scenes/01-io-sequenziale.scene.svg",
+      "output": "assets/tpsi4/01-io-sequenziale.svg",
+      "status": "composed",
+      "book_visual_comparison": "pending-access"
+    },
+    {
+      "id": "01-io-concorrente",
+      "title": "Tre attività: la rete aspetta, l’interfaccia risponde",
+      "alt": "L'attività A legge il sensore e pubblica misure in una coda per B e nell'ultimo valore per C. B invia i dati via socket al server. C legge l'ultimo valore e gestisce lo schermo. Se B aspetta la rete, A può proseguire finché la coda ha spazio e C può rispondere ai comandi.",
+      "caption": "Le attività scambiano dati attraverso strutture coordinate. Il blocco dell’invio non impedisce di gestire l’interfaccia; l’acquisizione può continuare finché c’è spazio in coda.",
+      "components": [
+        "tpsi-cpu",
+        "tpsi-server",
+        "tpsi-terminal"
+      ],
+      "section": "Problema iniziale: una sola attività o più attività coordinate?",
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "scene": "assets/tpsi4/visual-system/scenes/01-io-concorrente.scene.svg",
+      "output": "assets/tpsi4/01-io-concorrente.svg",
+      "status": "composed",
+      "book_visual_comparison": "pending-access"
+    },
+    {
       "id": "01-programma-processi",
       "title": "Un programma, due processi",
       "section": "Dal programma al processo",

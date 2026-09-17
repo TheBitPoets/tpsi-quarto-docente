@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-io-sequenziale.svg"><title id="scene-title">Un solo flusso: l’attesa rinvia tutto ciò che segue</title><desc id="scene-desc">L'applicazione legge un sensore, invia il dato via socket al server e aggiorna la schermata in sequenza. Una lettura di 800 ms e un invio di 1200 ms rinviano l'aggiornamento a 2000 ms. Il pulsante premuto durante l'attesa non viene gestito dal thread occupato.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="20" fill="{{canvas}}"/>
+<text x="64" y="83" fill="{{surface}}" font-size="46" font-weight="700">Un solo flusso: l’attesa rinvia tutto ciò che segue</text>
+<text x="64" y="140" fill="{{muted}}" font-size="28" font-weight="400">Stazione di temperatura · lettura → invio al server → schermata → nuova lettura</text>
+<rect x="64" y="200" width="552" height="310" rx="20" fill="{{surface}}"/>
+<rect x="684" y="200" width="552" height="310" rx="20" fill="{{surface}}"/>
+<rect x="1304" y="200" width="552" height="310" rx="20" fill="{{surface}}"/>
+<text x="90" y="248" fill="{{ink}}" font-size="32" font-weight="700">1. Leggi il sensore</text>
+<use href="#tpsi-cpu" x="102" y="278" width="110" height="100"/>
+<text x="232" y="306" fill="{{ink}}" font-size="26" font-weight="400">La misura non è pronta.</text>
+<text x="232" y="344" fill="{{ink}}" font-size="26" font-weight="400">La lettura attende.</text>
+<text x="232" y="382" fill="{{ink}}" font-size="26" font-weight="400">Esempio: 800 ms</text>
+<text x="710" y="248" fill="{{ink}}" font-size="32" font-weight="700">2. Invia via socket</text>
+<use href="#tpsi-server" x="722" y="278" width="110" height="100"/>
+<text x="852" y="306" fill="{{ink}}" font-size="25" font-weight="400">Il buffer di invio è pieno.</text>
+<text x="852" y="344" fill="{{ink}}" font-size="25" font-weight="400">L’invio attende spazio.</text>
+<text x="852" y="382" fill="{{ink}}" font-size="25" font-weight="400">Esempio: 1200 ms</text>
+<text x="1330" y="248" fill="{{ink}}" font-size="30" font-weight="700">3. Aggiorna la schermata</text>
+<use href="#tpsi-terminal" x="1342" y="278" width="110" height="100"/>
+<text x="1472" y="306" fill="{{ink}}" font-size="26" font-weight="400">Mostra la misura.</text>
+<text x="1472" y="344" fill="{{ink}}" font-size="26" font-weight="400">Gestisce i comandi.</text>
+<text x="1472" y="382" fill="{{ink}}" font-size="26" font-weight="400">Solo dopo l’invio.</text>
+<rect x="90" y="421" width="498" height="59" rx="20" fill="#fef3c7"/>
+<text x="108" y="459" fill="{{ink}}" font-size="25" font-weight="400">ATTESA: nessun dato ancora pronto</text>
+<rect x="710" y="421" width="498" height="59" rx="20" fill="#fef3c7"/>
+<text x="728" y="459" fill="{{ink}}" font-size="24" font-weight="400">ATTESA: il buffer non si svuota subito</text>
+<rect x="1330" y="421" width="498" height="59" rx="20" fill="#fee2e2"/>
+<text x="1348" y="459" fill="{{ink}}" font-size="24" font-weight="400">INTERFACCIA: aggiornamento rinviato</text>
+<path d="M620 351 H676" stroke="{{line}}" fill="none" stroke-width="5" marker-end="url(#arrow)"/>
+<path d="M1240 351 H1296" stroke="{{line}}" fill="none" stroke-width="5" marker-end="url(#arrow)"/>
+<rect x="64" y="550" width="1792" height="348" rx="20" fill="{{surface}}"/>
+<text x="92" y="602" fill="{{ink}}" font-size="32" font-weight="700">Il tempo passa, ma il thread non può proseguire oltre l’I/O bloccante</text>
+<rect x="120" y="657" width="608" height="84" rx="20" fill="#fef3c7"/>
+<rect x="738" y="657" width="912" height="84" rx="20" fill="#fde68a"/>
+<rect x="1660" y="657" width="150" height="84" rx="20" fill="#ccfbf1"/>
+<text x="144" y="709" fill="{{ink}}" font-size="29" font-weight="400">Aspetta il sensore: 800 ms</text>
+<text x="772" y="709" fill="{{ink}}" font-size="29" font-weight="400">Aspetta spazio nel socket: 1200 ms</text>
+<text x="1680" y="709" fill="{{ink}}" font-size="26" font-weight="400">Schermo</text>
+<text x="120" y="786" fill="{{ink}}" font-size="25" font-weight="400">0 ms</text>
+<text x="724" y="786" fill="{{ink}}" font-size="25" font-weight="400">800 ms</text>
+<text x="1610" y="786" fill="{{ink}}" font-size="25" font-weight="400">2000 ms</text>
+<text x="120" y="849" fill="{{ink}}" font-size="28" font-weight="400">Un clic durante le attese resta da gestire; anche la prossima lettura parte in ritardo.</text>
+<rect x="64" y="938" width="1792" height="80" rx="20" fill="{{panel}}"/>
+<text x="90" y="987" fill="{{surface}}" font-size="26" font-weight="400">Ambra = attesa di I/O, non calcolo della CPU. Il resto del computer può continuare a lavorare.</text>
+<text x="64" y="1055" fill="{{muted}}" font-size="24" font-weight="400">TPSI 4 · Attesa di I/O e concorrenza · Schema didattico</text></g></svg>
