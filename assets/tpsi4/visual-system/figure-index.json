@@ -392,7 +392,7 @@
     {
       "id": "01-registri-memoria",
       "title": "I registri indicano dove lavorare",
-      "alt": "RIP indica la prossima istruzione, RSP la cima dello stack e RDI il blocco dati nell'esempio. RAX contiene il risultato temporaneo 23, mentre il blocco nell'heap contiene ancora 20.",
+      "alt": "RIP indica la scrittura ancora da eseguire; RAX contiene 23 e RDI punta al blocco heap che contiene ancora 20. RSP vale 0x0FE8: la variabile locale incremento contiene 3 nella cella a RSP più 8, cioè 0x0FF0. Il ritorno si trova a RSP più 16.",
       "caption": "I registri contengono valori e indirizzi; codice, stack e heap rimangono nella memoria del processo.",
       "section": "Anatomia di un processo",
       "components": [

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-registri-memoria.svg"><title id="scene-title">I registri indicano dove lavorare</title><desc id="scene-desc">RIP indica la prossima istruzione, RSP la cima dello stack e RDI il blocco dati nell'esempio. RAX contiene il risultato temporaneo 23, mentre il blocco nell'heap contiene ancora 20.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="24" fill="{{canvas}}"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-registri-memoria.svg"><title id="scene-title">I registri indicano dove lavorare</title><desc id="scene-desc">RIP indica la scrittura ancora da eseguire; RAX contiene 23 e RDI punta al blocco heap che contiene ancora 20. RSP vale 0x0FE8: la variabile locale incremento contiene 3 nella cella a RSP più 8, cioè 0x0FF0. Il ritorno si trova a RSP più 16.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="24" fill="{{canvas}}"/>
 <text x="64" y="85" font-size="48" fill="{{surface}}" font-weight="700">I registri indicano dove lavorare</text>
 <text x="64" y="143" font-size="28" fill="{{muted}}" font-weight="400">Un programma deve aggiungere 3 a un dato: ha calcolato 23, ma deve ancora scriverlo.</text>
 <rect x="64" y="210" width="760" height="650" rx="24" fill="{{surface}}"/>
@@ -9,7 +9,7 @@
 <text x="260" y="382" font-size="28" fill="{{ink}}" font-weight="400">dove riprendere</text>
 <rect x="100" y="445" width="680" height="85" rx="24" fill="#dbeafe"/>
 <text x="126" y="497" font-size="32" fill="{{ink}}" font-weight="700">RSP</text>
-<text x="260" y="497" font-size="28" fill="{{ink}}" font-weight="400">cima dello stack</text>
+<text x="260" y="497" font-size="28" fill="{{ink}}" font-weight="400">RSP = 0x0FE8</text>
 <rect x="100" y="560" width="680" height="85" rx="24" fill="#dbeafe"/>
 <text x="126" y="612" font-size="32" fill="{{ink}}" font-weight="700">RDI</text>
 <text x="260" y="612" font-size="28" fill="{{ink}}" font-weight="400">indirizzo del dato (qui)</text>
@@ -21,9 +21,9 @@
 <rect x="1036" y="320" width="784" height="100" rx="24" fill="#dbeafe"/>
 <text x="1060" y="358" font-size="28" fill="{{ink}}" font-weight="700">CODICE</text>
 <text x="1060" y="398" font-size="28" fill="{{ink}}" font-weight="400">Prossima azione: scrivere il risultato</text>
-<rect x="1036" y="440" width="784" height="100" rx="24" fill="#ccfbf1"/>
-<text x="1060" y="478" font-size="28" fill="{{ink}}" font-weight="700">STACK</text>
-<text x="1060" y="518" font-size="28" fill="{{ink}}" font-weight="400">Chiamate aperte e punto di ritorno</text>
+<rect x="1036" y="440" width="784" height="110" rx="24" fill="#ccfbf1"/>
+<text x="1060" y="478" font-size="28" fill="{{ink}}" font-weight="700">STACK · incremento = 3</text>
+<text x="1060" y="518" font-size="28" fill="{{ink}}" font-weight="400">[rsp + 8] = 3 · ritorno a [rsp + 16]</text>
 <rect x="1036" y="560" width="784" height="100" rx="24" fill="#e0e7ff"/>
 <text x="1060" y="598" font-size="28" fill="{{ink}}" font-weight="700">HEAP</text>
 <text x="1060" y="638" font-size="28" fill="{{ink}}" font-weight="400">Blocco dati: contiene ancora 20</text>

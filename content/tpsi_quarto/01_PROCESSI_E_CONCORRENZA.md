@@ -427,46 +427,64 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 #### Un esempio minimo: dal C ai registri della figura
 
-<p align="justify">La funzione riceve il puntatore <code>p</code>, scrive 20 nel blocco indicato e poi aggiunge 3 al valore che vi trova. Il chiamante deve passarle un indirizzo valido e scrivibile; per collegarci alla figura, immaginiamo che il blocco sia già stato allocato nell'heap. La funzione non lo alloca e non lo libera.</p>
+<p align="justify">La funzione riceve il puntatore <code>p</code> e usa una variabile locale, <code>incremento</code>. Scrive 20 nel blocco indicato da <code>p</code>, poi vi aggiunge il valore di <code>incremento</code>. Il chiamante deve passare un indirizzo valido e scrivibile; per collegarci alla figura, immaginiamo che il blocco sia già stato allocato nell'heap. La funzione non lo alloca e non lo libera.</p>
 
 ```c
 void f(long *p)
 {
+    long incremento = 3;
     *p = 20;
-    *p = *p + 3;
+    *p = *p + incremento;
 }
 ```
 
-<p align="justify"><code>p</code> è l'indirizzo; <code>*p</code> è il dato a quell'indirizzo. Usiamo <code>long</code> perché, nel riferimento <strong>Linux x86-64</strong>, occupa 64 bit: possiamo così usare direttamente <code>RAX</code>, come nella figura. Passando <code>p</code> come parametro rendiamo esplicita la sua provenienza; con <code>void f(void)</code> il puntatore dovrebbe essere disponibile in altro modo, per esempio come variabile globale.</p>
+<p align="justify"><code>p</code> è l'indirizzo; <code>*p</code> è il dato a quell'indirizzo; <code>incremento</code> è una variabile locale della chiamata a <code>f</code>. Nel riferimento <strong>Linux x86-64</strong>, un <code>long</code> occupa 8 byte. Per rendere visibile lo stack scegliamo una traduzione didattica che conserva <code>incremento</code> in memoria, nella posizione <code>RSP + 8</code>.</p>
 
-<p align="justify">All'ingresso della funzione, la <a href="https://gitlab.com/x86-psABIs/x86-64-ABI">convenzione System V AMD64 delle chiamate Linux x86-64</a> prevede che il primo parametro puntatore sia in <strong>RDI</strong>. Leggiamo questa traduzione didattica in sintassi Intel: prima la destinazione, poi la sorgente. Le parentesi quadre in <code>[rdi]</code> significano <strong>“la memoria all'indirizzo contenuto in RDI”</strong>.</p>
+<p align="justify"><strong>Perché prima RSP non compariva nelle istruzioni?</strong> Il precedente esempio modificava soltanto <code>*p</code> e usava RAX come valore temporaneo: non avevamo riservato spazio per variabili locali. Lo stack era comunque usato implicitamente dal ritorno. Aggiungere una variabile locale in C non obbliga il compilatore a metterla nello stack: può tenerla in un registro o sostituirla con il valore costante 3. Qui scegliamo esplicitamente di mostrarne la collocazione nello stack.</p>
+
+<p align="justify">All'ingresso della funzione, la <a href="https://gitlab.com/x86-psABIs/x86-64-ABI">convenzione System V AMD64 delle chiamate Linux x86-64</a> prevede che il primo parametro puntatore sia in <strong>RDI</strong>. La chiamata ha già salvato l'indirizzo di ritorno in cima allo stack. Leggiamo questa traduzione didattica in sintassi Intel: prima la destinazione, poi la sorgente.</p>
 
 ```asm
 f:
-    mov rax, 20       # 1. Metti 20 nel registro RAX
-    mov [rdi], rax    # 2. Scrivi 20 nella memoria puntata da p
-    mov rax, [rdi]    # 3. Rileggi quel dato e mettilo in RAX
-    add rax, 3        # 4. Aggiungi 3: RAX ora contiene 23
-    mov [rdi], rax    # 5. Scrivi 23 nella memoria puntata da p
-    ret              # 6. Torna al chiamante
+    sub rsp, 16          # 1. Riserva 16 byte nello stack
+    mov rax, 3           # 2. Prepara il valore di incremento
+    mov [rsp + 8], rax   # 3. Salva incremento nella sua cella di 8 byte
+    mov rax, 20          # 4. Prepara il valore iniziale
+    mov [rdi], rax       # 5. Scrivi 20 nella memoria puntata da p
+    mov rax, [rdi]       # 6. Rileggi il dato: RAX contiene 20
+    add rax, [rsp + 8]   # 7. Leggi incremento dallo stack: RAX diventa 23
+    mov [rdi], rax       # 8. Scrivi 23 nella memoria puntata da p
+    add rsp, 16          # 9. Rilascia lo spazio riservato
+    ret                 # 10. Recupera il ritorno dallo stack e torna
 ```
 
-<p align="justify">Le prime due istruzioni realizzano <code>*p = 20</code>; le tre successive realizzano <code>*p = *p + 3</code>. <code>mov</code> copia un valore senza cancellare la sorgente. <code>add rax, 3</code> mette il risultato nello stesso <code>RAX</code>: non serve un altro registro per conservare la somma. <strong>RDI mantiene l'indirizzo del blocco durante tutti questi passaggi.</strong></p>
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Nell'indirizzamento <strong>base + scostamento</strong>, l'indirizzo si ottiene sommando al valore di un registro un numero di byte. In <code>[rsp + 8]</code>, la base è RSP e lo scostamento, o <em>offset</em>, è 8 byte. Le parentesi quadre indicano il contenuto della memoria a quell'indirizzo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify"><code>mov [rsp + 8], rax</code> scrive nella cella della variabile locale; <code>add rax, [rsp + 8]</code> legge da quella cella il valore 3 e lo somma a RAX. <strong>Nessuna delle due istruzioni modifica RSP.</strong> Al contrario, <code>sub rsp, 16</code> e <code>add rsp, 16</code> cambiano il valore del registro per riservare e rilasciare spazio. La dimensione di 8 byte degli accessi in questo esempio è determinata dall'operando RAX.</p>
+
+<p align="justify">Usiamo indirizzi illustrativi: all'ingresso RSP vale <code>0x0FF8</code> e lì si trova l'indirizzo di ritorno. Dopo <code>sub rsp, 16</code>, RSP vale <code>0x0FE8</code>. La cella di <code>incremento</code> si trova quindi a <code>0x0FE8 + 8 = 0x0FF0</code>. I 16 byte sono una scelta semplice del nostro layout, non la dimensione della variabile: 8 byte contengono <code>incremento</code> e gli altri 8 restano inutilizzati.</p>
 
 <table align="center">
-<thead><tr><th>Dopo il passaggio</th><th>RAX: valore di lavoro</th><th>Memoria puntata da RDI</th></tr></thead>
+<thead><tr><th>Rispetto a RSP, dopo la riserva</th><th>Indirizzo illustrativo</th><th>Contenuto</th></tr></thead>
 <tbody>
-<tr><td>1. Preparare il valore</td><td>20</td><td>Non ancora inizializzata dalla funzione.</td></tr>
-<tr><td>2. Scrivere il valore iniziale</td><td>20</td><td>20</td></tr>
-<tr><td>3. Rileggere il dato</td><td>20</td><td>20</td></tr>
-<tr><td>4. Calcolare la somma</td><td><strong>23</strong></td><td><strong>Ancora 20: è il momento della figura.</strong></td></tr>
-<tr><td>5. Scrivere il risultato</td><td>23</td><td>23</td></tr>
+<tr><td><code>[rsp]</code>, 8 byte</td><td><code>0x0FE8</code></td><td>Spazio riservato ma non usato nell'esempio.</td></tr>
+<tr><td><code>[rsp + 8]</code>, 8 byte</td><td><code>0x0FF0</code></td><td><code>incremento = 3</code>, dopo il passaggio 3.</td></tr>
+<tr><td><code>[rsp + 16]</code>, 8 byte</td><td><code>0x0FF8</code></td><td>Indirizzo di ritorno, già salvato dalla chiamata.</td></tr>
 </tbody>
 </table>
 
-<p align="justify"><strong>RIP</strong> permette di seguire il punto di esecuzione: subito dopo il passaggio 4 indica la scrittura ancora da eseguire. <strong>RSP</strong> individua la cima dello stack; alla fine <code>ret</code> recupera da lì l'indirizzo di ritorno salvato dalla chiamata. Nel corpo semplificato non occorrono altri registri o un nuovo spazio per variabili locali.</p>
+<p align="justify">RDI mantiene l'indirizzo del blocco nell'heap; RSP permette di raggiungere la variabile locale nello stack. Dopo il passaggio 7, <strong>RAX contiene 23, <code>incremento</code> contiene ancora 3 e <code>*p</code> contiene ancora 20</strong>: è il momento mostrato dalla figura. RIP indica la successiva scrittura <code>mov [rdi], rax</code>.</p>
 
-<p align="justify">Questa sequenza è scelta per rendere visibile ogni passaggio, non è l'output di una specifica compilazione. Un compilatore può evitare la rilettura o riconoscere che il risultato finale è sempre 23. Qui la rilettura serve a distinguere chiaramente <strong>il dato in memoria</strong> dal <strong>valore nel registro</strong>.</p>
+<p align="justify">Prima di <code>ret</code>, <code>add rsp, 16</code> riporta RSP a <code>0x0FF8</code>, dove si trova il ritorno. <code>ret</code> recupera quell'indirizzo e avanza RSP di altri 8 byte. Saltare il rilascio dello spazio farebbe cercare il ritorno nella posizione sbagliata. Lo scostamento <code>+8</code> resta valido per <code>incremento</code> finché RSP non cambia: non è una proprietà del nome C, ma della disposizione scelta per questa chiamata.</p>
+
+<p align="justify">Questa sequenza è scritta per mostrare registri e memoria, non è l'output di una specifica compilazione. Un compilatore può scegliere un altro layout o ridurre il corpo alla scrittura del risultato costante 23. In questo esempio non servono RBP né ulteriori chiamate: la distinzione importante è fra <strong>RSP, che contiene un indirizzo</strong>, e <strong>la variabile locale, conservata nella memoria raggiunta con quell'indirizzo più lo scostamento</strong>.</p>
 
 #### Primo passo: dove si trova il lavoro in corso?
 
@@ -474,7 +492,7 @@ f:
 
 <!-- figure:01-registri-memoria -->
 <p align="center">
-  <img src="../../assets/tpsi4/01-registri-memoria.svg" alt="RIP indica la prossima istruzione, RSP la cima dello stack e RDI il blocco dati nell&#x27;esempio. RAX contiene il risultato temporaneo 23, mentre il blocco nell&#x27;heap contiene ancora 20." width="960">
+  <img src="../../assets/tpsi4/01-registri-memoria.svg" alt="RIP indica la scrittura ancora da eseguire; RAX contiene 23 e RDI punta al blocco heap che contiene ancora 20. RSP vale 0x0FE8: la variabile locale incremento contiene 3 nella cella a RSP più 8, cioè 0x0FF0. Il ritorno si trova a RSP più 16." width="960">
 </p>
 <p align="center"><em>I registri contengono valori e indirizzi; codice, stack e heap rimangono nella memoria del processo.</em></p>
 
@@ -484,7 +502,7 @@ f:
 
 <ul>
   <li><strong>RIP — dove riprendere:</strong> individua il punto del codice da cui proseguire. Qui il prossimo lavoro è scrivere il risultato.</li>
-  <li><strong>RSP — dove si trova la cima dello stack:</strong> permette di continuare a usare lo stack della chiamata in corso.</li>
+  <li><strong>RSP — dove si trova la cima dello stack:</strong> qui vale <code>0x0FE8</code>; aggiungendo 8 raggiungiamo la cella di <code>incremento</code>, che contiene 3.</li>
   <li><strong>RAX — un risultato temporaneo:</strong> nel nostro esempio contiene 23. È un registro generale: il suo contenuto dipende dalle istruzioni eseguite.</li>
   <li><strong>RDI — un indirizzo:</strong> qui indica il blocco da aggiornare nell'heap. Anche questo è un registro generale, non un registro riservato all'heap.</li>
 </ul>
@@ -530,7 +548,7 @@ int main(void)
   <li><strong>La funzione termina:</strong> il valore 5 viene predisposto nel registro di risultato (la parte a 32 bit di RAX). Si rilasciano i 12 byte locali e si recupera l'indirizzo di ritorno; RSP torna a <code>0x1000</code>. <code>main</code> riprende e assegna il valore ricevuto a <code>risultato</code>.</li>
 </ol>
 
-<p align="justify"><strong>Quando lo stack cresce, RSP diminuisce; quando si riduce, RSP aumenta.</strong> Le celle grigie non sono più attive: possono essere riutilizzate senza cancellare prima i vecchi byte. La figura mostra una possibile organizzazione semplificata; il compilatore può cambiare ordine, riservare spazio aggiuntivo o tenere le variabili nei registri. Il precedente esempio con il puntatore non richiedeva questo spazio per tre variabili locali.</p>
+<p align="justify"><strong>Quando lo stack cresce, RSP diminuisce; quando si riduce, RSP aumenta.</strong> Le celle grigie non sono più attive: possono essere riutilizzate senza cancellare prima i vecchi byte. La figura mostra una possibile organizzazione semplificata; il compilatore può cambiare ordine, riservare spazio aggiuntivo o tenere le variabili nei registri. Nel precedente esempio abbiamo scelto 16 byte riservati per una sola variabile <code>long</code>; qui seguiamo invece tre variabili <code>int</code>, ciascuna di 4 byte.</p>
 
 <p align="justify">In questo passaggio il processo e il thread rimangono gli stessi. Una chiamata di funzione cambia il punto del programma in esecuzione. Il <a href="#cambio-di-contesto">cambio di contesto</a>, invece, permette di sospendere un'attività e farne avanzare un'altra.</p>
 
