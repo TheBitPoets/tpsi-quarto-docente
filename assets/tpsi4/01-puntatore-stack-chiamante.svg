@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc">
   <title id="scene-title">Un puntatore collega due frame dello stesso stack</title>
-  <desc id="scene-desc">Durante f, valore nel frame di main si trova a 0x1000 e contiene 20. Il parametro p nel frame di f si trova a 0x0FE8 e contiene 0x1000: una freccia collega questa cella a valore. incremento si trova a 0x0FF0 e contiene 3. Il ritorno a main è conservato a 0x0FF8. La chiamata f(&amp;valore) passa l’indirizzo 0x1000.</desc>
+  <desc id="scene-desc">Durante f, prima di *p = 20, valore nel frame di main si trova a 0x1000 e contiene ancora 10. Il parametro p nel frame di f si trova a 0x0FE8 e contiene 0x1000: una freccia collega questa cella a valore. incremento si trova a 0x0FF0 e contiene 3. Il ritorno a main è conservato a 0x0FF8. La chiamata f(&amp;valore) passa l’indirizzo 0x1000.</desc>
   <defs>
     <style>.tpsi-line{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:8}.tpsi-thin{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:5}</style>
     <symbol id="tpsi-user" viewBox="0 0 240 260">
@@ -168,7 +168,7 @@
   <g font-family="Arial, sans-serif">
     <rect width="1920" height="1080" rx="24" fill="#08192c" />
     <text x="64" y="88" font-size="56" fill="#f8fafc" font-weight="700">Passare un indirizzo: da main a f</text>
-    <text x="64" y="148" font-size="32" fill="#b9ccdf" font-weight="400">Durante f, prima della somma · indirizzi illustrativi · celle di 8 byte</text>
+    <text x="64" y="148" font-size="32" fill="#b9ccdf" font-weight="400">Durante f, prima di *p = 20 · indirizzi illustrativi · celle di 8 byte</text>
     <rect x="64" y="190" width="1792" height="744" rx="20" fill="#f8fafc" />
     <text x="110" y="257" font-size="44" fill="#102a43" font-weight="700">UN SOLO STACK · due frame attivi</text>
     <use href="#tpsi-memory" x="1720" y="212" width="86" height="72" />
@@ -178,7 +178,7 @@
     <text x="125" y="424" font-size="44" fill="#102a43" font-weight="700">0x1000</text>
     <text x="425" y="424" font-size="40" fill="#102a43" font-weight="700">main</text>
     <rect x="720" y="360" width="690" height="100" rx="20" fill="#dbeafe" />
-    <text x="760" y="425" font-size="46" fill="#102a43" font-weight="700">valore = 20</text>
+    <text x="760" y="425" font-size="46" fill="#102a43" font-weight="700">valore = 10</text>
     <text x="125" y="556" font-size="44" fill="#102a43" font-weight="700">0x0FF8</text>
     <text x="425" y="556" font-size="40" fill="#102a43" font-weight="700">chiamata</text>
     <rect x="720" y="492" width="690" height="100" rx="20" fill="#fef3c7" />

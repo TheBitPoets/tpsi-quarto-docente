@@ -427,7 +427,7 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 #### Un esempio minimo: dal C ai registri della figura
 
-<p align="justify">Il chiamante <code>main</code> crea la variabile locale <code>valore</code>, inizializzata a 20, e chiama <code>f(&amp;valore)</code>: passa l'indirizzo della propria variabile. La funzione riceve quell'indirizzo nel parametro puntatore <code>p</code> e usa la variabile locale <code>incremento</code> per aggiornare il dato del chiamante.</p>
+<p align="justify">Il chiamante <code>main</code> crea la variabile locale <code>valore</code>, inizializzata a 10, e chiama <code>f(&amp;valore)</code>: passa l'indirizzo della propria variabile. La funzione riceve quell'indirizzo nel parametro puntatore <code>p</code> e usa la variabile locale <code>incremento</code> per aggiornare il dato del chiamante.</p>
 
 ```c
 void f(long *p)
@@ -439,23 +439,23 @@ void f(long *p)
 
 int main(void)
 {
-    long valore = 20;
-    f(&valore);          // Passa l'indirizzo, non una copia del numero 20
+    long valore = 10;
+    f(&valore);          // Passa l'indirizzo, non una copia del numero 10
     // Ora valore contiene 23
     return 0;
 }
 ```
 
-<p align="justify">Seguiamo una disposizione didattica della memoria durante <code>f</code>, dopo l'inizializzazione di <code>incremento</code> e prima della somma. <strong>I frame di main e di f sono porzioni dello stesso stack del thread</strong>: il frame del chiamante resta presente mentre la funzione chiamata lavora. In questo esempio anche il dato puntato è nello stack; non usiamo l'heap.</p>
+<p align="justify">Seguiamo una disposizione didattica della memoria durante <code>f</code>, dopo l'inizializzazione di <code>incremento</code> e prima di <code>*p = 20</code>. La variabile del chiamante contiene ancora 10. La prima scrittura attraverso il puntatore la porta a 20; la somma successiva la porta a 23. <strong>I frame di main e di f sono porzioni dello stesso stack del thread</strong>: il frame del chiamante resta presente mentre la funzione chiamata lavora. In questo esempio anche il dato puntato è nello stack; non usiamo l'heap.</p>
 
 <!-- figure:01-puntatore-stack-chiamante -->
 <p align="center">
-  <img src="../../assets/tpsi4/01-puntatore-stack-chiamante.svg" alt="Durante f, valore nel frame di main si trova a 0x1000 e contiene 20. Il parametro p nel frame di f si trova a 0x0FE8 e contiene 0x1000: una freccia collega questa cella a valore. incremento si trova a 0x0FF0 e contiene 3. Il ritorno a main è conservato a 0x0FF8. La chiamata f(&amp;valore) passa l’indirizzo 0x1000." width="960">
+  <img src="../../assets/tpsi4/01-puntatore-stack-chiamante.svg" alt="Durante f, prima di *p = 20, valore nel frame di main si trova a 0x1000 e contiene ancora 10. Il parametro p nel frame di f si trova a 0x0FE8 e contiene 0x1000: una freccia collega questa cella a valore. incremento si trova a 0x0FF0 e contiene 3. Il ritorno a main è conservato a 0x0FF8. La chiamata f(&amp;valore) passa l’indirizzo 0x1000." width="960">
 </p>
 <p align="center"><em>p contiene l’indirizzo di valore, mentre &amp;p è l’indirizzo del puntatore stesso. Scrivere attraverso *p modifica valore nel frame del chiamante.</em></p>
 
 <ul>
-  <li><strong><code>&amp;valore = 0x1000</code>:</strong> è l'indirizzo della variabile di <code>main</code>; il suo contenuto iniziale è 20.</li>
+  <li><strong><code>&amp;valore = 0x1000</code>:</strong> è l'indirizzo della variabile di <code>main</code>; il suo contenuto iniziale è 10.</li>
   <li><strong><code>p = 0x1000</code>:</strong> il parametro contiene una copia di quell'indirizzo. <code>*p</code> raggiunge quindi la stessa cella di <code>valore</code>; scrivere <code>*p = 23</code> modifica proprio la variabile del chiamante.</li>
   <li><strong><code>&amp;p = 0x0FE8</code>:</strong> è l'indirizzo della cella che contiene il puntatore nel nostro layout. È diverso da <code>p</code>: la freccia parte dalla cella di <code>p</code> e raggiunge la cella indicata dall'indirizzo che essa contiene.</li>
 </ul>
@@ -470,8 +470,8 @@ f:
     mov [rsp], rdi       # 2. Salva p: la cella contiene l'indirizzo di valore
     mov rax, 3           # 3. Prepara il valore di incremento
     mov [rsp + 8], rax   # 4. Salva incremento nella sua cella di 8 byte
-    mov rax, 20          # 5. Prepara il valore iniziale
-    mov [rdi], rax       # 6. Scrivi 20 in valore, nello stack di main
+    mov rax, 20          # 5. Prepara 20 per *p = 20 (main aveva scritto 10)
+    mov [rdi], rax       # 6. Sovrascrivi valore: da 10 a 20
     mov rax, [rdi]       # 7. Rileggi valore: RAX contiene 20
     add rax, [rsp + 8]   # 8. Leggi incremento dallo stack: RAX diventa 23
     mov [rdi], rax       # 9. Scrivi 23 in valore, tramite il puntatore
@@ -501,7 +501,7 @@ f:
 </tbody>
 </table>
 
-<p align="justify">RDI mantiene l'indirizzo di <code>valore</code> nel frame di <code>main</code>; RSP permette di raggiungere <code>p</code> e <code>incremento</code> nel frame di <code>f</code>. Dopo il passaggio 8, <strong>RAX contiene 23, <code>incremento</code> contiene ancora 3 e <code>*p</code> contiene ancora 20</strong>: è il momento mostrato dalla figura. RIP indica la successiva scrittura <code>mov [rdi], rax</code>.</p>
+<p align="justify">RDI mantiene l'indirizzo di <code>valore</code> nel frame di <code>main</code>; RSP permette di raggiungere <code>p</code> e <code>incremento</code> nel frame di <code>f</code>. Dopo il passaggio 8, <strong>RAX contiene 23, <code>incremento</code> contiene ancora 3 e <code>*p</code> contiene ancora 20</strong>: è il momento mostrato dalla successiva figura dei registri, diverso da quello della prima figura dello stack. RIP indica la successiva scrittura <code>mov [rdi], rax</code>.</p>
 
 <p align="justify">Prima di <code>ret</code>, <code>add rsp, 16</code> riporta RSP a <code>0x0FF8</code>, dove si trova il ritorno. <code>ret</code> recupera quell'indirizzo e avanza RSP di altri 8 byte. Saltare il rilascio dello spazio farebbe cercare il ritorno nella posizione sbagliata. Lo scostamento <code>+8</code> resta valido per <code>incremento</code> finché RSP non cambia: non è una proprietà del nome C, ma della disposizione scelta per questa chiamata.</p>
 
