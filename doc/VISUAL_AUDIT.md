@@ -58,7 +58,7 @@ Server, database, lucchetto di sicurezza e badge C/POSIX/Java restano disponibil
 
 ## Piano delle figure e collocazione
 
-Aggiornamento: il registro comprende ora **29 figure**. La figura [Dalle pagine virtuali alle pagine fisiche](../assets/tpsi4/01-indirizzi-virtuali-mmu.svg) è inserita nella lezione 1, in “Anatomia di un processo”, nel paragrafo sullo spazio di indirizzamento. Usa pannelli e frecce della grammatica visiva esistente, senza nuovi simboli.
+Aggiornamento: il registro comprende ora **30 figure**. La figura [Dalle pagine virtuali alle pagine fisiche](../assets/tpsi4/01-indirizzi-virtuali-mmu.svg) è inserita nella lezione 1, in “Anatomia di un processo”, nel paragrafo sullo spazio di indirizzamento. Usa pannelli e frecce della grammatica visiva esistente, senza nuovi simboli.
 
 La versione semplificata mette al centro quattro elementi: spazio virtuale diviso in pagine, kernel con tabelle di corrispondenza e gestione dei frame, MMU, RAM suddivisa in frame. Colori e sigle permettono di seguire V1/F4, V2/F1 e V3/F6. Sono stati rimossi dalla figura e dal percorso introduttivo i dettagli su TLB, page fault, indirizzi esadecimali e strutture specifiche di Linux. Riferimenti tecnici restano [Linux Page Tables](https://docs.kernel.org/mm/page_tables.html) e [Physical Memory](https://docs.kernel.org/mm/physical_memory.html).
 
@@ -146,3 +146,7 @@ La figura `01-chiamata-stack` accompagna la funzione C `somma`, chiamata da `mai
 Due figure sostituiscono gli schemi ASCII: [I/O sequenziale](../assets/tpsi4/01-io-sequenziale.svg) mostra una linea temporale con attese illustrative di 800 e 1200 ms; [I/O concorrente](../assets/tpsi4/01-io-concorrente.svg) separa acquisizione, invio e interfaccia, con coda di misure e ultimo valore disponibile. Le attese dipendono da dati non ancora disponibili o dal buffer di invio pieno. Il testo distingue attesa da calcolo, spiega la concorrenza anche su un core e introduce il limite della coda. Riutilizzati pannelli, frecce e simboli del sistema grafico.
 
 Entrambe le immagini sono state renderizzate con Chrome e ispezionate. Build deterministica, sette test grafici e cinque test di formattazione superati; i test grafici hanno richiesto una riesecuzione fuori dalla sandbox per accesso negato alla cartella temporanea. Riferimenti tecnici: [read(2)](https://man7.org/linux/man-pages/man2/read.2.html) e [send(2)](https://man7.org/linux/man-pages/man2/send.2.html).
+
+## PCB e introduzione alla paginazione
+
+La figura [PCB](../assets/tpsi4/01-pcb.svg) mostra una scheda concettuale con identificatori, pianificazione, contesto salvato, credenziali e riferimenti a relazioni, memoria e descrittori. Le frecce distinguono i riferimenti dalle strutture collegate. Il testo precisa che non si tratta del layout di Linux e distingue le risorse del processo dal contesto dei thread. Il paragrafo sullo spazio di indirizzamento parte dalla scheda e introduce le tabelle delle pagine e la paginazione. Riferimento: [Linux Page Tables](https://docs.kernel.org/mm/page_tables.html). Nessun nuovo simbolo necessario. Rendering ispezionato; build e 12 test superati.

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-pcb.svg"><title id="scene-title">PCB: la scheda con cui il kernel gestisce il processo</title><desc id="scene-desc">Schema concettuale del PCB: identificatori, stato e priorità, contesto salvato, credenziali e riferimenti a relazioni, memoria e file aperti. Le frecce collegano la scheda a strutture separate del kernel, fra cui le tabelle delle pagine; i dati di stack e heap non sono contenuti nel PCB.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="20" fill="{{canvas}}"/>
+<text x="64" y="83" fill="{{surface}}" font-size="46" font-weight="700">PCB: la scheda con cui il kernel gestisce il processo</text>
+<text x="64" y="140" fill="{{muted}}" font-size="28" font-weight="400">Valori e riferimenti conservati dal sistema operativo · modello semplificato di un processo con un thread</text>
+<rect x="64" y="198" width="960" height="705" rx="20" fill="{{surface}}"/>
+<text x="92" y="251" fill="{{ink}}" font-size="36" font-weight="700">PCB · Processo A</text>
+<text x="92" y="290" fill="{{ink}}" font-size="26" font-weight="400">Informazioni proprie oppure riferimenti a strutture collegate</text>
+<rect x="88" y="315" width="910" height="64" rx="20" fill="#dbeafe"/>
+<text x="110" y="355" fill="{{ink}}" font-size="27" font-weight="700">Identificatori</text>
+<text x="375" y="355" fill="{{ink}}" font-size="25" font-weight="400">PID di A e PID del padre</text>
+<rect x="88" y="393" width="910" height="64" rx="20" fill="#dbeafe"/>
+<text x="110" y="433" fill="{{ink}}" font-size="27" font-weight="700">Pianificazione</text>
+<text x="375" y="433" fill="{{ink}}" font-size="25" font-weight="400">Stato: pronto · priorità</text>
+<rect x="88" y="471" width="910" height="64" rx="20" fill="#dbeafe"/>
+<text x="110" y="511" fill="{{ink}}" font-size="27" font-weight="700">Contesto salvato</text>
+<text x="375" y="511" fill="{{ink}}" font-size="25" font-weight="400">Punto di ripresa e valori dei registri</text>
+<rect x="88" y="549" width="910" height="64" rx="20" fill="#dbeafe"/>
+<text x="110" y="589" fill="{{ink}}" font-size="27" font-weight="700">Credenziali</text>
+<text x="375" y="589" fill="{{ink}}" font-size="25" font-weight="400">Utente e gruppi per i controlli di accesso</text>
+<rect x="88" y="627" width="910" height="64" rx="20" fill="#e0e7ff"/>
+<text x="110" y="667" fill="{{ink}}" font-size="27" font-weight="700">Relazioni</text>
+<text x="375" y="667" fill="{{ink}}" font-size="25" font-weight="400">Riferimenti a padre, figli e gruppi</text>
+<rect x="88" y="705" width="910" height="64" rx="20" fill="#e0e7ff"/>
+<text x="110" y="745" fill="{{ink}}" font-size="27" font-weight="700">Memoria</text>
+<text x="375" y="745" fill="{{ink}}" font-size="25" font-weight="400">Riferimento alla gestione dello spazio virtuale</text>
+<rect x="88" y="783" width="910" height="64" rx="20" fill="#e0e7ff"/>
+<text x="110" y="823" fill="{{ink}}" font-size="27" font-weight="700">Risorse aperte</text>
+<text x="375" y="823" fill="{{ink}}" font-size="25" font-weight="400">Riferimento alla tabella dei descrittori</text>
+<rect x="1174" y="198" width="682" height="210" rx="20" fill="{{surface}}"/>
+<text x="1202" y="250" fill="{{ink}}" font-size="32" font-weight="700">Strutture del kernel</text>
+<text x="1202" y="301" fill="{{ink}}" font-size="27" font-weight="400">La scheda permette di ritrovare</text>
+<text x="1202" y="339" fill="{{ink}}" font-size="27" font-weight="400">le informazioni senza contenere</text>
+<text x="1202" y="377" fill="{{ink}}" font-size="27" font-weight="400">una copia di tutte le risorse.</text>
+<rect x="1174" y="446" width="682" height="121" rx="20" fill="#ccfbf1"/>
+<text x="1202" y="490" fill="{{ink}}" font-size="30" font-weight="700">Relazioni fra processi</text>
+<text x="1202" y="535" fill="{{ink}}" font-size="27" font-weight="400">Collegamenti alle altre schede</text>
+<rect x="1174" y="610" width="682" height="140" rx="20" fill="#e0e7ff"/>
+<text x="1202" y="654" fill="{{ink}}" font-size="30" font-weight="700">Memoria del processo</text>
+<text x="1202" y="699" fill="{{ink}}" font-size="27" font-weight="400">Regioni virtuali e tabelle delle pagine</text>
+<rect x="1174" y="793" width="682" height="110" rx="20" fill="#fef3c7"/>
+<text x="1202" y="836" fill="{{ink}}" font-size="30" font-weight="700">Tabella dei descrittori</text>
+<text x="1202" y="876" fill="{{ink}}" font-size="27" font-weight="400">Riferimenti a file, socket e pipe</text>
+<path d="M998 659 H1080 V507 H1166" stroke="{{line}}" fill="none" stroke-width="5" marker-end="url(#arrow)"/>
+<path d="M998 737 H1120 V697 H1166" stroke="{{line}}" fill="none" stroke-width="5" marker-end="url(#arrow)"/>
+<path d="M998 815 H1060 V850 H1166" stroke="{{line}}" fill="none" stroke-width="5" marker-end="url(#arrow)"/>
+<rect x="64" y="938" width="1792" height="80" rx="20" fill="{{panel}}"/>
+<text x="90" y="987" fill="{{surface}}" font-size="26" font-weight="400">PCB e strutture collegate stanno nella memoria gestita dal kernel; stack e heap del programma non sono dentro il PCB.</text>
+<text x="64" y="1055" fill="{{muted}}" font-size="24" font-weight="400">TPSI 4 · PCB e gestione del processo · Schema didattico</text></g></svg>

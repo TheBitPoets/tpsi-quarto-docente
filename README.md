@@ -92,7 +92,7 @@ La dispensa integrativa [LINUX_PROGRAMMING.md](https://github.com/TheBitPoets/2c
 - [Audit delle figure e degli oggetti ricorrenti](doc/VISUAL_AUDIT.md).
 - [Visual System e cataloghi dei 27 oggetti](assets/tpsi4/visual-system/README.md).
 - [Guida di formattazione delle dispense](content/tpsi_quarto/STYLE_GUIDE.md).
-- [Registro delle 29 figure](assets/tpsi4/visual-system/figure-index.json).
+- [Registro delle 30 figure](assets/tpsi4/visual-system/figure-index.json).
 
 Le immagini sono composte da simboli SVG riutilizzabili e inserite nei sei moduli con testo alternativo e didascalia. Per rigenerare e verificare gli SVG dalla root del repository:
 

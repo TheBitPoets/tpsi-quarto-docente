@@ -442,6 +442,19 @@
       "output": "assets/tpsi4/01-stack-chiamate-annidate.svg",
       "status": "composed",
       "book_visual_comparison": "pending-access"
+    },
+    {
+      "id": "01-pcb",
+      "title": "PCB: la scheda con cui il kernel gestisce il processo",
+      "alt": "Schema concettuale del PCB: identificatori, stato e priorità, contesto salvato, credenziali e riferimenti a relazioni, memoria e file aperti. Le frecce collegano la scheda a strutture separate del kernel, fra cui le tabelle delle pagine; i dati di stack e heap non sono contenuti nel PCB.",
+      "caption": "Il PCB raccoglie informazioni di controllo e riferimenti. Le tabelle delle pagine e le altre strutture collegate restano distinte dai dati del programma.",
+      "section": "Anatomia di un processo",
+      "components": [],
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "scene": "assets/tpsi4/visual-system/scenes/01-pcb.scene.svg",
+      "output": "assets/tpsi4/01-pcb.svg",
+      "status": "composed",
+      "book_visual_comparison": "pending-access"
     }
   ]
 }

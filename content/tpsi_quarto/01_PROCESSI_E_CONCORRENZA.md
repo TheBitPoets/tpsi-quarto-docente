@@ -192,6 +192,25 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 </td></tr>
 </table>
 
+<p align="justify">Possiamo immaginare il <strong>PCB come una scheda strutturata</strong>, con campi numerici e collegamenti ad altre strutture. Il sistema operativo la usa per riconoscere il processo, decidere quando eseguirlo, sospenderlo e ritrovare le sue risorse. Nel modello didattico vi troviamo, direttamente o tramite riferimenti:</p>
+
+<ul>
+  <li><strong>Identificatori e relazioni:</strong> il PID, il padre e i collegamenti con altri processi.</li>
+  <li><strong>Informazioni di pianificazione:</strong> lo stato, come pronto o in attesa, e informazioni come la priorità.</li>
+  <li><strong>Contesto di esecuzione salvato:</strong> il punto del codice da cui riprendere e i valori dei registri necessari.</li>
+  <li><strong>Credenziali:</strong> l'identità dell'utente e dei gruppi usata nei controlli di accesso.</li>
+  <li><strong>Riferimenti alla memoria:</strong> le strutture che descrivono lo spazio virtuale e permettono di ritrovare le tabelle delle pagine.</li>
+  <li><strong>Riferimenti alle risorse aperte:</strong> le strutture per gestire file, socket e altri oggetti usati dal processo.</li>
+</ul>
+
+<!-- figure:01-pcb -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-pcb.svg" alt="Schema concettuale del PCB: identificatori, stato e priorità, contesto salvato, credenziali e riferimenti a relazioni, memoria e file aperti. Le frecce collegano la scheda a strutture separate del kernel, fra cui le tabelle delle pagine; i dati di stack e heap non sono contenuti nel PCB." width="960">
+</p>
+<p align="center"><em>Il PCB raccoglie informazioni di controllo e riferimenti. Le tabelle delle pagine e le altre strutture collegate restano distinte dai dati del programma.</em></p>
+
+<p align="justify">Nella figura, le frecce indicano riferimenti: la scheda permette di raggiungere un'altra struttura, non contiene tutta quella struttura. <strong>Il PCB non contiene il programma, l'intero stack o l'intero heap.</strong> Questa è una rappresentazione concettuale, non la disposizione esatta dei campi in Linux; inoltre, con più thread, il contesto di ciascun thread va distinto dalle risorse comuni del processo. Le sezioni seguenti spiegano uno alla volta gli elementi della scheda.</p>
+
 <p align="justify">Distinguiamo quindi tre posti:</p>
 
 <ul>
@@ -223,6 +242,12 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 <p align="justify">Dopo aver chiarito spazio di indirizzamento, stack e heap, renderemo concreto questo modello con <a href="#registri-e-memoria-su-intel-x86-64">un percorso per immagini su Intel x86-64</a>. Vedremo i nomi dei registri e seguiremo una sospensione fra due istruzioni.</p>
 
 ### 3. Spazio di indirizzamento: gli indirizzi che il programma vede
+
+<p align="justify">Il sistema operativo tiene traccia delle informazioni già introdotte attraverso il <strong>PCB e le strutture a esso collegate</strong>. Ma sapere quale processo sta eseguendo e da dove deve riprendere non basta: bisogna anche sapere <strong>dove si trovano i suoi dati in memoria</strong>.</p>
+
+<p align="justify">Per questo, oltre alla scheda di controllo, il kernel mantiene per lo spazio di memoria del processo le <strong>tabelle delle pagine</strong>. Le ritrova attraverso i riferimenti alla gestione della memoria associati al processo. Sono strutture distinte dal PCB: registrano le corrispondenze che la MMU usa per tradurre gli indirizzi.</p>
+
+<p align="justify">Questa organizzazione della memoria in blocchi si chiama <strong>paginazione</strong>. Permette al programma di usare i propri indirizzi virtuali, mentre il sistema operativo colloca le pagine nei frame disponibili della RAM. Vediamo nella figura come si collegano le varie parti.</p>
 
 <p align="justify">Un indirizzo indica una posizione di memoria. Il processo usa un proprio <strong>spazio di indirizzi virtuali</strong>, suddiviso in blocchi chiamati <strong>pagine virtuali</strong>. La RAM è organizzata in blocchi corrispondenti, le <strong>pagine fisiche</strong> o <strong>frame</strong>. Per trovare un dato, bisogna collegare la pagina vista dal programma alla sua posizione nella RAM.</p>
 
@@ -1090,6 +1115,7 @@ tpsi4-activity-c-fork-pipe-square-001
   <li>Contesto e chiamate di funzione: manuale GDB, <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Registers.html">Registers</a> e <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Frames.html">Stack Frames</a>.</li>
   <li>Architettura di riferimento: <a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html">Intel 64 and IA-32 Architectures Software Developer's Manuals</a>, volume 1 per registri e chiamate, volume 2 per istruzioni e volume 3 per memoria e interruzioni. Gli schemi selezionano gli elementi utili alla lezione.</li>
   <li>Contesto nel kernel: <a href="https://docs.kernel.org/arch/x86/kernel-stacks.html">Linux, Kernel Stacks</a> e <a href="https://github.com/torvalds/linux/blob/master/arch/x86/entry/entry_64.S">codice di ingresso e cambio del contesto x86-64</a>. La sequenza descrive il comportamento complessivo senza riprodurre l'implementazione del kernel.</li>
+  <li>Collegamento fra strutture del processo e tabelle delle pagine: <a href="https://docs.kernel.org/mm/page_tables.html">Linux, Page Tables</a>.</li>
   <li>Memoria e allocazioni: <a href="https://man7.org/linux/man-pages/man5/proc_pid_maps.5.html">proc_pid_maps(5)</a> e <a href="https://man7.org/linux/man-pages/man3/malloc.3.html">malloc(3)</a>. La descrizione di stack e heap è un modello didattico, non una disposizione universale della memoria.</li>
   <li>Risorse aperte: <a href="https://man7.org/linux/man-pages/man2/open.2.html">open(2)</a> e <a href="https://man7.org/linux/man-pages/man5/proc_pid_fd.5.html">proc_pid_fd(5)</a>.</li>
   <li>Stato e distinzione processo/thread: <a href="https://man7.org/linux/man-pages/man5/proc_pid_status.5.html">proc_pid_status(5)</a> e <a href="https://man7.org/linux/man-pages/man7/pthreads.7.html">pthreads(7)</a>.</li>
