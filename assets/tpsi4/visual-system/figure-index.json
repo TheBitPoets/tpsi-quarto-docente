@@ -456,5 +456,45 @@
       "status": "composed",
       "book_visual_comparison": "pending-access"
     }
+  ],
+  "animations": [
+    {
+      "id": "01-io-sequenziale-animazione",
+      "title": "Un solo thread: la GUI resta ferma durante le attese",
+      "alt": "Animazione di dodici secondi: il thread aspetta il sensore fino a t=4, poi l'invio fino a t=9. La GUI resta a 19 gradi e accumula clic in attesa. Solo a t=9 mostra la misura di 20 gradi e gestisce i clic.",
+      "caption": "Osserva i clic in attesa e l'indicatore della GUI fermo. La misura arriva a t = 4 s, ma compare sullo schermo soltanto a t = 9 s, dopo l'invio. Tempi simulati; riproduzione ciclica.",
+      "duration_seconds": 12,
+      "section": "Una sola attività: prima leggi, poi invia, poi aggiorna",
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "output": "assets/tpsi4/01-io-sequenziale-animazione.gif",
+      "generator": "scripts/build_course_animations.py",
+      "components": [
+        "tpsi-cpu",
+        "tpsi-server",
+        "tpsi-terminal"
+      ],
+      "width": 1200,
+      "height": 675,
+      "loop": true
+    },
+    {
+      "id": "01-io-concorrente-animazione",
+      "title": "Tre thread: coda in movimento e GUI disponibile",
+      "alt": "Animazione di ventidue secondi: mentre B aspetta l'invio, A acquisisce valori da 20 a 24 gradi e la coda raggiunge quattro elementi. Da t=9 a t=16 il sensore non produce nuove misure: la GUI mostra ancora 24 gradi e segnala il dato non aggiornato, continuando a rispondere ai clic. La coda si svuota in ordine e, quando il sensore riparte, la GUI mostra 25 e 26 gradi.",
+      "caption": "Osserva insieme coda, ultimo valore e clic gestiti. La rete lenta fa crescere la coda; il sensore fermo lascia invariato il valore. In entrambi i casi la GUI risponde. Tempi simulati; riproduzione ciclica.",
+      "duration_seconds": 22,
+      "section": "Attività concorrenti: separare le attese e scambiarsi i dati",
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "output": "assets/tpsi4/01-io-concorrente-animazione.gif",
+      "generator": "scripts/build_course_animations.py",
+      "components": [
+        "tpsi-cpu",
+        "tpsi-server",
+        "tpsi-terminal"
+      ],
+      "width": 1200,
+      "height": 675,
+      "loop": true
+    }
   ]
 }

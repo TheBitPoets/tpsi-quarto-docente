@@ -113,6 +113,14 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
 </p>
 <p align="center"><em>Con un solo thread e I/O bloccante, le attese del sensore e della rete rinviano il lavoro successivo. Tempi inventati per mostrare l’effetto.</em></p>
 
+<p align="justify"><strong>Segui l'animazione:</strong> il pulsante viene premuto ogni due secondi. I clic arrivano, ma il thread può gestirli soltanto dopo la lettura e l'invio. I tempi sono rallentati e diversi da quelli della figura statica, per rendere visibili le attese.</p>
+
+<!-- figure:01-io-sequenziale-animazione -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-io-sequenziale-animazione.gif" alt="Animazione di dodici secondi: il thread aspetta il sensore fino a t=4, poi l&#x27;invio fino a t=9. La GUI resta a 19 gradi e accumula clic in attesa. Solo a t=9 mostra la misura di 20 gradi e gestisce i clic." width="960">
+</p>
+<p align="center"><em>Osserva i clic in attesa e l&#x27;indicatore della GUI fermo. La misura arriva a t = 4 s, ma compare sullo schermo soltanto a t = 9 s, dopo l&#x27;invio. Tempi simulati; riproduzione ciclica.</em></p>
+
 <p align="justify">Nella figura le due attese hanno cause diverse:</p>
 
 <ul>
@@ -137,6 +145,16 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
   <img src="../../assets/tpsi4/01-io-concorrente.svg" alt="L&#x27;attività A legge il sensore e pubblica misure in una coda per B e nell&#x27;ultimo valore per C. B invia i dati via socket al server. C legge l&#x27;ultimo valore e gestisce lo schermo. Se B aspetta la rete, A può proseguire finché la coda ha spazio e C può rispondere ai comandi." width="960">
 </p>
 <p align="center"><em>Le attività scambiano dati attraverso strutture coordinate. Il blocco dell’invio non impedisce di gestire l’interfaccia; l’acquisizione può continuare finché c’è spazio in coda.</em></p>
+
+<p align="justify"><strong>Segui l'animazione in tre momenti:</strong> prima il server lento ostacola l'invio e le misure riempiono la coda; poi il sensore smette temporaneamente di fornire dati; infine riparte. La GUI legge una copia dell'ultima misura acquisita, indipendente dalla coda di invio. Se manca un campione nuovo, mostra l'ultimo valore noto e il tempo trascorso: essere reattiva non significa avere sempre dati nuovi.</p>
+
+<!-- figure:01-io-concorrente-animazione -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-io-concorrente-animazione.gif" alt="Animazione di ventidue secondi: mentre B aspetta l&#x27;invio, A acquisisce valori da 20 a 24 gradi e la coda raggiunge quattro elementi. Da t=9 a t=16 il sensore non produce nuove misure: la GUI mostra ancora 24 gradi e segnala il dato non aggiornato, continuando a rispondere ai clic. La coda si svuota in ordine e, quando il sensore riparte, la GUI mostra 25 e 26 gradi." width="960">
+</p>
+<p align="center"><em>Osserva insieme coda, ultimo valore e clic gestiti. La rete lenta fa crescere la coda; il sensore fermo lascia invariato il valore. In entrambi i casi la GUI risponde. Tempi simulati; riproduzione ciclica.</em></p>
+
+<p align="justify">La coda ha quattro posti, oltre al dato già prelevato da B e ancora in invio. Qui raggiunge la capacità senza perdere misure; se arrivasse un altro dato prima che si liberi spazio, servirebbe la politica di gestione della coda piena descritta sotto. L'animazione assume che il rallentamento del server abbia già riempito i buffer di invio: un server lento non blocca immediatamente ogni chiamata al socket.</p>
 
 <ol>
   <li><strong>A pubblica ogni misura:</strong> la inserisce in una coda per B e aggiorna una copia dell'ultimo valore per C. La coda è un contenitore ordinato di misure in attesa di invio.</li>

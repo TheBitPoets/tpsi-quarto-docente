@@ -20,7 +20,7 @@ Aprire le tavole per scegliere un oggetto e leggere il suo ID:
 | [tokens.json](tokens.json) | Palette, tipografia e dimensioni di riferimento. |
 | [component-inventory.json](component-inventory.json) | Nomi e origine degli oggetti. |
 | [scenes/](scenes/) | Scene SVG sorgente: posizioni, testi e relazioni. |
-| [figure-index.json](figure-index.json) | Registro delle 30 figure e delle collocazioni nelle dispense. |
+| [figure-index.json](figure-index.json) | Registro delle 30 figure statiche, delle 2 animazioni e delle collocazioni nelle dispense. |
 | [catalog/](catalog/) | Tre tavole generate; non modificarle a mano. |
 | [Generatore](../../../scripts/build_course_diagrams.py) | Incorpora i simboli e risolve i token in SVG autonomi. |
 
@@ -66,3 +66,45 @@ Per un nuovo oggetto: aggiungere il symbol in `components.svg`, registrarlo nell
 Riferimento letto il 14 settembre 2026: [Visual System TPSI5](https://github.com/TheBitPoets/tpsi-quinto-docente/tree/main/assets/tpsi5/visual-system). Riutilizzati i simboli user, document, terminal, repository, lock, test, artifact, server e database. I restanti 18 simboli e tutte le scene della quarta sono nuovi. Il generatore riprende il contratto scene/defs della quinta con controlli aggiuntivi.
 
 L'[audit](../../../doc/VISUAL_AUDIT.md) distingue le fonti consultate dal confronto ancora pendente con le immagini interne del libro bSmart.
+
+
+## Animazioni di I/O e concorrenza
+
+Le due GIF della lezione 01 affiancano le figure statiche. Usano palette e simboli
+del kit, testo italiano, didascalia e descrizione alternativa. Sono registrate
+nella chiave `animations` di [figure-index.json](figure-index.json); la chiave
+`figures` continua a descrivere le scene SVG statiche.
+
+Il [generatore delle animazioni](../../../scripts/build_course_animations.py)
+contiene una sequenza di eventi deterministica e il disegno dei fotogrammi.
+Rasterizza i simboli `tpsi-cpu`, `tpsi-server` e `tpsi-terminal` direttamente
+da `components.svg`, usando Chrome/Chromium locale. I testi usano Arial, oppure
+Liberation Sans/DejaVu Sans se Arial non è disponibile. La resa binaria può
+variare con browser e font; gli eventi e i tempi restano gli stessi.
+
+| Animazione | Sequenza |
+|---|---|
+| Un solo thread, 12 s | Attesa sensore fino a 4 s; attesa invio fino a 9 s; poi aggiornamento GUI e gestione dei clic accumulati. |
+| Tre thread, 22 s | Un dato in invio e coda di quattro posti; nuove misure ogni 2 s fino a 8 s; sensore in attesa da 9 a 16 s; invii completati ogni 2 s da 10 s; nuove misure a 16 e 18 s. |
+
+La GUI concorrente usa una copia dell'ultimo campione, distinta dalla coda.
+Durante la pausa del sensore segnala l'età del dato, mentre continua a gestire
+i clic. La coda non perde né duplica misure. Lo scenario raggiunge la capacità
+senza superarla: la scelta di cosa fare in caso di ulteriore arrivo è discussa
+nel testo. L'invio completato non equivale all'elaborazione completata sul server.
+
+Per rigenerare, con Python 3.11 o successivo e Chrome/Chromium installato:
+
+```bash
+python -m pip install -r scripts/requirements-animations.txt
+python scripts/build_course_animations.py
+python -m unittest discover -s tests -p test_course_animations.py
+```
+
+Il generatore accetta `--browser PERCORSO` e `--font-dir CARTELLA` se necessari.
+Pillow serve soltanto alla generazione; i test del modello e del registro usano
+la libreria standard. Le GIF sono 1200 × 675, a 8 fotogrammi al secondo:
+durate di 120 e 130 ms alternate rispettano i tempi del formato GIF.
+La riproduzione è ciclica e i tempi sono didattici, diversi da quelli degli SVG
+statici. Le figure statiche e il testo restano disponibili per una lettura senza
+movimento. Versionare le GIF come file binari.

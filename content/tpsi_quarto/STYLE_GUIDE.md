@@ -147,6 +147,8 @@ Le immagini rimangono locali, centrate, con testo alternativo e didascalia:
 
 Ogni immagine è registrata in [figure-index.json](../../assets/tpsi4/visual-system/figure-index.json). Gli oggetti e le scene sono descritti nel [Visual System](../../assets/tpsi4/visual-system/README.md). Non introdurre CSS o font remoti nelle dispense.
 
+Le animazioni GIF possono affiancare le figure statiche quando il tempo o il movimento sono parte della spiegazione. Usare lo stesso pannello centrato, alt descrittivo e didascalia; dichiarare tempi simulati e ripetizione. Conservare una figura statica e una spiegazione testuale della sequenza. Registrare le GIF nella chiave `animations` del registro e mantenerne il generatore nel repository.
+
 ## Normalizzazione e verifica
 
 Il [normalizzatore](../../scripts/format_tpsi4_lessons.py) deriva da quello della quinta e comprende tutte le lezioni con nome `NN_*.md` nella cartella del corso, incluse quelle future. Conserva l'HTML già presente, comprese le cornici personalizzate; non genera il testo dell'orientamento e non modifica gli esempi di codice. Il suo ambito è il sottoinsieme Markdown delle dispense: prosa, liste semplici, citazioni e tabelle semplici. Per strutture più complesse usare direttamente HTML.
