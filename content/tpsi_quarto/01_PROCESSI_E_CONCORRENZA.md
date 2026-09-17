@@ -462,8 +462,6 @@ int main(void)
 
 <p align="justify">Nel riferimento <strong>Linux x86-64</strong>, sia <code>long</code> sia questo puntatore occupano 8 byte. Per rendere visibile la memoria scegliamo una traduzione che salva <code>p</code> in <code>[rsp]</code> e <code>incremento</code> in <code>[rsp + 8]</code>. Gli indirizzi sono illustrativi e il layout non è imposto dal C: un compilatore può tenere il parametro in un registro o disporre diversamente le variabili.</p>
 
-<p align="justify"><strong>Perché prima RSP non compariva nelle istruzioni?</strong> Il precedente esempio modificava soltanto <code>*p</code> e usava RAX come valore temporaneo: non avevamo riservato spazio per variabili locali. Lo stack era comunque usato implicitamente dal ritorno. Aggiungere una variabile locale in C non obbliga il compilatore a metterla nello stack: può tenerla in un registro o sostituirla con il valore costante 3. Qui scegliamo esplicitamente di mostrarne la collocazione nello stack.</p>
-
 <p align="justify">All'ingresso della funzione, la <a href="https://gitlab.com/x86-psABIs/x86-64-ABI">convenzione System V AMD64 delle chiamate Linux x86-64</a> prevede che il primo parametro puntatore sia in <strong>RDI</strong>. La chiamata ha già salvato l'indirizzo di ritorno in cima allo stack. <strong>Il parametro arriva in RDI; è il corpo di f a copiarlo nella cella dello stack disegnata per p</strong>, con <code>mov [rsp], rdi</code>. Conserviamo anche la copia in RDI per gli accessi al dato. Leggiamo questa traduzione didattica in sintassi Intel: prima la destinazione, poi la sorgente.</p>
 
 ```asm
