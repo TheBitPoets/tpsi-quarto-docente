@@ -150,3 +150,8 @@ Entrambe le immagini sono state renderizzate con Chrome e ispezionate. Build det
 ## PCB e introduzione alla paginazione
 
 La figura [PCB](../assets/tpsi4/01-pcb.svg) mostra una scheda concettuale con identificatori, pianificazione, contesto salvato, credenziali e riferimenti a relazioni, memoria e descrittori. Le frecce distinguono i riferimenti dalle strutture collegate. Il testo precisa che non si tratta del layout di Linux e distingue le risorse del processo dal contesto dei thread. Il paragrafo sullo spazio di indirizzamento parte dalla scheda e introduce le tabelle delle pagine e la paginazione. Riferimento: [Linux Page Tables](https://docs.kernel.org/mm/page_tables.html). Nessun nuovo simbolo necessario. Rendering ispezionato; build e 12 test superati.
+
+
+### Puntatore al dato del chiamante
+
+La figura [01-puntatore-stack-chiamante.svg](../assets/tpsi4/01-puntatore-stack-chiamante.svg) affianca il codice C completo di main e f. Mostra due frame nello stesso stack, valore, p, incremento, indirizzi e ritorno. La freccia da p a valore distingue contenuto del puntatore, indirizzo del puntatore e dato puntato. La figura dei registri e l’assembly usano lo stesso layout; il dato di questo esempio è nello stack di main.

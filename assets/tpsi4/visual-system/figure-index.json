@@ -390,10 +390,25 @@
       "book_visual_comparison": "pending-access"
     },
     {
+      "id": "01-puntatore-stack-chiamante",
+      "title": "Un puntatore collega due frame dello stesso stack",
+      "section": "Anatomia di un processo",
+      "alt": "Durante f, valore nel frame di main si trova a 0x1000 e contiene 20. Il parametro p nel frame di f si trova a 0x0FE8 e contiene 0x1000: una freccia collega questa cella a valore. incremento si trova a 0x0FF0 e contiene 3. Il ritorno a main è conservato a 0x0FF8. La chiamata f(&valore) passa l’indirizzo 0x1000.",
+      "caption": "p contiene l’indirizzo di valore, mentre &p è l’indirizzo del puntatore stesso. Scrivere attraverso *p modifica valore nel frame del chiamante.",
+      "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
+      "scene": "assets/tpsi4/visual-system/scenes/01-puntatore-stack-chiamante.scene.svg",
+      "output": "assets/tpsi4/01-puntatore-stack-chiamante.svg",
+      "components": [
+        "tpsi-memory"
+      ],
+      "status": "composed",
+      "book_visual_comparison": "pending-access"
+    },
+    {
       "id": "01-registri-memoria",
       "title": "I registri indicano dove lavorare",
-      "alt": "RIP indica la scrittura ancora da eseguire; RAX contiene 23 e RDI punta al blocco heap che contiene ancora 20. RSP vale 0x0FE8: la variabile locale incremento contiene 3 nella cella a RSP più 8, cioè 0x0FF0. Il ritorno si trova a RSP più 16.",
-      "caption": "I registri contengono valori e indirizzi; codice, stack e heap rimangono nella memoria del processo.",
+      "alt": "RIP indica la scrittura ancora da eseguire; RAX contiene 23 e RDI punta a valore nel frame di main, che contiene ancora 20. RSP vale 0x0FE8: la variabile locale incremento contiene 3 nella cella a RSP più 8, cioè 0x0FF0. Il ritorno si trova a RSP più 16.",
+      "caption": "RDI punta a valore nel frame di main; RSP individua il frame di f. Dopo la somma RAX contiene 23, ma valore contiene ancora 20.",
       "section": "Anatomia di un processo",
       "components": [
         "tpsi-cpu"

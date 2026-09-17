@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-registri-memoria.svg"><title id="scene-title">I registri indicano dove lavorare</title><desc id="scene-desc">RIP indica la scrittura ancora da eseguire; RAX contiene 23 e RDI punta al blocco heap che contiene ancora 20. RSP vale 0x0FE8: la variabile locale incremento contiene 3 nella cella a RSP più 8, cioè 0x0FF0. Il ritorno si trova a RSP più 16.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="24" fill="{{canvas}}"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-registri-memoria.svg"><title id="scene-title">I registri indicano dove lavorare</title><desc id="scene-desc">RIP indica la scrittura ancora da eseguire; RAX contiene 23 e RDI punta a valore nel frame di main, che contiene ancora 20. RSP vale 0x0FE8: la variabile locale incremento contiene 3 nella cella a RSP più 8, cioè 0x0FF0. Il ritorno si trova a RSP più 16.</desc><defs id="visual-kit-components"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{{line}}"/></marker></defs><g font-family="{{family}}"><rect x="0" y="0" width="1920" height="1080" rx="24" fill="{{canvas}}"/>
 <text x="64" y="85" font-size="48" fill="{{surface}}" font-weight="700">I registri indicano dove lavorare</text>
 <text x="64" y="143" font-size="28" fill="{{muted}}" font-weight="400">Un programma deve aggiungere 3 a un dato: ha calcolato 23, ma deve ancora scriverlo.</text>
 <rect x="64" y="210" width="760" height="650" rx="24" fill="{{surface}}"/>
@@ -22,16 +22,16 @@
 <text x="1060" y="358" font-size="28" fill="{{ink}}" font-weight="700">CODICE</text>
 <text x="1060" y="398" font-size="28" fill="{{ink}}" font-weight="400">Prossima azione: scrivere il risultato</text>
 <rect x="1036" y="440" width="784" height="110" rx="24" fill="#ccfbf1"/>
-<text x="1060" y="478" font-size="28" fill="{{ink}}" font-weight="700">STACK · incremento = 3</text>
-<text x="1060" y="518" font-size="28" fill="{{ink}}" font-weight="400">[rsp + 8] = 3 · ritorno a [rsp + 16]</text>
+<text x="1060" y="478" font-size="28" fill="{{ink}}" font-weight="700">STACK · frame di f</text>
+<text x="1060" y="518" font-size="28" fill="{{ink}}" font-weight="400">[rsp] = 0x1000 · [rsp + 8] = 3</text>
 <rect x="1036" y="560" width="784" height="100" rx="24" fill="#e0e7ff"/>
-<text x="1060" y="598" font-size="28" fill="{{ink}}" font-weight="700">HEAP</text>
-<text x="1060" y="638" font-size="28" fill="{{ink}}" font-weight="400">Blocco dati: contiene ancora 20</text>
+<text x="1060" y="598" font-size="28" fill="{{ink}}" font-weight="700">STACK · frame di main</text>
+<text x="1060" y="638" font-size="28" fill="{{ink}}" font-weight="400">valore a 0x1000: contiene ancora 20</text>
 <text x="1040" y="735" font-size="28" fill="{{ink}}" font-weight="400">Il risultato 23 è ancora nella CPU.</text>
-<text x="1040" y="777" font-size="28" fill="{{ink}}" font-weight="400">Il blocco in memoria cambierà alla scrittura.</text>
+<text x="1040" y="777" font-size="28" fill="{{ink}}" font-weight="400">valore cambierà alla scrittura tramite RDI.</text>
 <path d="M780 372 H1026" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
 <path d="M780 487 H1026" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
 <path d="M780 602 H1026" fill="none" stroke="{{line}}" stroke-width="5" marker-end="url(#arrow)"/>
 <rect x="64" y="920" width="1792" height="94" rx="24" fill="{{panel}}"/>
-<text x="94" y="977" font-size="28" fill="{{surface}}" font-weight="400">RDI è un registro generale: in questo esempio contiene un indirizzo dell’heap; non è un “registro heap”.</text>
+<text x="94" y="977" font-size="28" fill="{{surface}}" font-weight="400">RDI e la cella di p contengono lo stesso indirizzo: 0x1000, dove si trova valore nel frame di main.</text>
 <text x="64" y="1054" font-size="24" fill="{{muted}}" font-weight="400">TPSI 4 · Intel x86-64 · Modello didattico semplificato</text></g></svg>
