@@ -256,6 +256,31 @@ class Renderer:
         return self.im
 
 
+
+def build_player():
+    """Embed existing GIFs and still posters in a single offline HTML file."""
+    import base64
+    import io
+    from PIL import Image
+    data = {}
+    for mode, duration in DURATION.items():
+        payload = (OUT / f"01-io-{mode}-animazione.gif").read_bytes()
+        with Image.open(io.BytesIO(payload)) as gif:
+            poster = io.BytesIO()
+            gif.seek(0)
+            gif.convert("RGB").save(poster, format="PNG")
+        data[mode] = {
+            "gif": base64.b64encode(payload).decode("ascii"),
+            "poster": "data:image/png;base64," + base64.b64encode(poster.getvalue()).decode("ascii"),
+            "duration": duration,
+        }
+    template = (KIT / "io-player.template.html").read_text(encoding="utf-8")
+    page = template.replace("{{ANIMATION_DATA}}", json.dumps(data, ensure_ascii=True))
+    target = OUT / "01-io-animazioni.html"
+    target.write_text(page, encoding="utf-8", newline="\n")
+    print(target.relative_to(ROOT), target.stat().st_size, "bytes")
+
+
 def build(browser=None,font_dir=None):
     from PIL import Image
     colors=json.loads((KIT/"tokens.json").read_text(encoding="utf-8"))["colors"]
@@ -283,5 +308,8 @@ if __name__ == "__main__":
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--browser")
     parser.add_argument("--font-dir")
+    parser.add_argument("--player-only", action="store_true", help="rebuild only the offline HTML player from existing GIFs")
     args=parser.parse_args()
-    build(args.browser,args.font_dir)
+    if not args.player_only:
+        build(args.browser,args.font_dir)
+    build_player()

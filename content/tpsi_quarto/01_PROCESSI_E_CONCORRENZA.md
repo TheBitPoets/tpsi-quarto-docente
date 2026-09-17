@@ -115,6 +115,8 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
 
 <p align="justify"><strong>Segui l'animazione:</strong> il pulsante viene premuto ogni due secondi. I clic arrivano, ma il thread può gestirli soltanto dopo la lettura e l'invio. I tempi sono rallentati e diversi da quelli della figura statica, per rendere visibili le attese.</p>
 
+<p align="justify"><strong>Controlli Avvia e Reset:</strong> disponibili nella <a href="../../assets/tpsi4/01-io-animazioni.html#sequenziale">versione interattiva delle due animazioni</a>. Su GitHub scarica il file HTML con il pulsante di download e aprilo nel browser: funziona anche senza connessione.</p>
+
 <!-- figure:01-io-sequenziale-animazione -->
 <p align="center">
   <img src="../../assets/tpsi4/01-io-sequenziale-animazione.gif" alt="Animazione di dodici secondi: il thread aspetta il sensore fino a t=4, poi l&#x27;invio fino a t=9. La GUI resta a 19 gradi e accumula clic in attesa. Solo a t=9 mostra la misura di 20 gradi e gestisce i clic." width="960">
@@ -147,6 +149,8 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
 <p align="center"><em>Le attività scambiano dati attraverso strutture coordinate. Il blocco dell’invio non impedisce di gestire l’interfaccia; l’acquisizione può continuare finché c’è spazio in coda.</em></p>
 
 <p align="justify"><strong>Segui l'animazione in tre momenti:</strong> prima il server lento ostacola l'invio e le misure riempiono la coda; poi il sensore smette temporaneamente di fornire dati; infine riparte. La GUI legge una copia dell'ultima misura acquisita, indipendente dalla coda di invio. Se manca un campione nuovo, mostra l'ultimo valore noto e il tempo trascorso: essere reattiva non significa avere sempre dati nuovi.</p>
+
+<p align="justify"><strong>Controlli Avvia e Reset:</strong> disponibili nella <a href="../../assets/tpsi4/01-io-animazioni.html#concorrente">versione interattiva delle due animazioni</a>. Su GitHub scarica il file HTML con il pulsante di download e aprilo nel browser: funziona anche senza connessione.</p>
 
 <!-- figure:01-io-concorrente-animazione -->
 <p align="center">
@@ -423,7 +427,7 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 ### Registri e memoria su Intel x86-64
 
-<p align="justify">Usiamo una CPU Intel x86-64 come riferimento e seguiamo un gesto semplice: <strong>leggere il numero 20, aggiungere 3 e scrivere 23 al suo posto</strong>. Un programma scritto in C viene tradotto in istruzioni macchina; l'assembly è un modo leggibile di rappresentarle. Per capire il contesto basta seguire ciò che queste istruzioni fanno ai registri e alla memoria.</p>
+<p align="justify">Usiamo una CPU Intel x86-64 come riferimento e seguiamo un gesto semplice: <strong>sovrascrivere con 20 il valore iniziale 10 della variabile del chiamante, poi incrementarlo di 3 per ottenere 23</strong>. Un programma scritto in C viene tradotto in istruzioni macchina; l'assembly è un modo leggibile di rappresentarle. Per capire il contesto basta seguire ciò che queste istruzioni fanno ai registri e alla memoria.</p>
 
 #### Un esempio minimo: dal C ai registri della figura
 

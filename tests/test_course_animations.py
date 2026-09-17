@@ -1,4 +1,6 @@
 """Check the teaching timeline and published GIF references without Pillow."""
+import base64
+import re
 import html
 import importlib.util
 import json
@@ -46,6 +48,22 @@ class AnimationTests(unittest.TestCase):
             outstanding = ([state["sending"]] if state["sending"] is not None else []) + state["queue"]
             self.assertEqual(state["delivered"] + outstanding, acquired)
             self.assertLessEqual(len(state["queue"]), 4)
+
+    def test_offline_player_embeds_current_gifs_and_matches_template(self):
+        page = (ROOT / "assets/tpsi4/01-io-animazioni.html").read_text(encoding="utf-8")
+        match = re.search(r'<script type="application/json" id="animation-data">(.*?)</script>', page)
+        self.assertIsNotNone(match)
+        data = json.loads(match[1])
+        self.assertEqual(set(data), set(animations.DURATION))
+        for mode, duration in animations.DURATION.items():
+            self.assertEqual(base64.b64decode(data[mode]["gif"]),
+                             (ROOT / f"assets/tpsi4/01-io-{mode}-animazione.gif").read_bytes())
+            poster = base64.b64decode(data[mode]["poster"].split(",", 1)[1])
+            self.assertEqual(poster[:8], b"\x89PNG\r\n\x1a\n")
+            self.assertEqual(struct.unpack(">II", poster[16:24]), animations.SIZE)
+            self.assertEqual(data[mode]["duration"], duration)
+        template = (ROOT / "assets/tpsi4/visual-system/io-player.template.html").read_text(encoding="utf-8")
+        self.assertEqual(page, template.replace("{{ANIMATION_DATA}}", match[1]))
 
     def test_registered_gifs_are_linked_in_the_correct_subsections(self):
         items = json.loads((ROOT / "assets/tpsi4/visual-system/figure-index.json").read_text(encoding="utf-8"))["animations"]

@@ -108,3 +108,26 @@ durate di 120 e 130 ms alternate rispettano i tempi del formato GIF.
 La riproduzione è ciclica e i tempi sono didattici, diversi da quelli degli SVG
 statici. Le figure statiche e il testo restano disponibili per una lettura senza
 movimento. Versionare le GIF come file binari.
+
+
+### Versione con Avvia e Reset
+
+[01-io-animazioni.html](../01-io-animazioni.html) contiene entrambe le GIF e i
+fotogrammi iniziali, incorporati nel file. Non parte nulla automaticamente.
+Ogni animazione ha controlli indipendenti: Avvia parte dall'inizio; Reset
+interrompe la riproduzione e torna al fotogramma zero. Un nuovo avvio usa un
+nuovo URL Blob per evitare che la cache riprenda la GIF da un punto precedente.
+
+Il file è utilizzabile offline: da GitHub scaricarlo e aprirlo nel browser.
+La vista dei file su GitHub non esegue JavaScript; i pulsanti non possono
+essere inseriti direttamente nella GIF o attivati nella dispensa Markdown.
+
+La sorgente dell'interfaccia è [io-player.template.html](io-player.template.html).
+La build delle GIF rigenera anche il file HTML. Per aggiornare solo il player:
+
+```bash
+python scripts/build_course_animations.py --player-only
+```
+
+Questo comando richiede Pillow, ma non Chrome. I dati incorporati devono
+corrispondere alle GIF versionate; i test verificano tale corrispondenza.

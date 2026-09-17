@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I/O e concorrenza · animazioni controllabili</title>
+<style>
+:root{color-scheme:dark;font-family:Arial,sans-serif;background:#08192c;color:#f8fafc}
+*{box-sizing:border-box}body{margin:0}main{max-width:1200px;margin:auto;padding:32px 20px 48px}
+h1{font-size:clamp(26px,4vw,40px);margin:8px 0 16px}h2{font-size:24px;margin:0 0 12px}
+p{line-height:1.6;color:#b9ccdf;max-width:85ch}
+nav{display:flex;gap:20px;flex-wrap:wrap;margin:24px 0}a{color:#7dd3fc}
+section{margin-top:36px;scroll-margin-top:20px}.player{overflow:hidden;border:1px solid #35516d;border-radius:16px;background:#132b45}
+img{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#08192c}
+.controls{display:flex;align-items:center;gap:12px;padding:16px;flex-wrap:wrap}
+button{font:700 18px Arial,sans-serif;border:2px solid transparent;border-radius:9px;padding:12px 24px;cursor:pointer;background:#0d9488;color:white;min-height:48px}
+button[data-action="reset"]{background:#244462}button:disabled{opacity:.45;cursor:default}
+button:focus-visible,a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.status{color:#b9ccdf;margin-left:8px}.note{font-size:16px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<p>TPSI 4 · Processi e concorrenza</p>
+<h1>L'attesa dell'I/O ferma anche la GUI?</h1>
+<p>Confronta le due animazioni. Premi <strong>Avvia</strong> per riprodurre; <strong>Reset</strong> ferma l'animazione e torna al primo fotogramma. I controlli delle due immagini sono indipendenti.</p>
+<nav aria-label="Animazioni"><a href="#sequenziale">Un solo thread</a><a href="#concorrente">Tre thread</a></nav>
+</header>
+<section id="sequenziale" aria-labelledby="title-sequenziale">
+<h2 id="title-sequenziale">1. Un solo thread: la GUI aspetta</h2>
+<div class="player">
+<img width="1200" height="675" alt="Il thread aspetta sensore e invio. I clic si accumulano; solo dopo l'I/O la GUI aggiorna il valore e risponde.">
+<div class="controls">
+<button type="button" data-action="start" disabled aria-label="Avvia l'animazione con un solo thread">▶ Avvia</button>
+<button type="button" data-action="reset" disabled aria-label="Reset dell'animazione con un solo thread">↺ Reset</button>
+<span class="status" role="status" aria-live="polite">Pronta · 12 secondi, in ciclo</span>
+</div>
+</div>
+<p class="note">Segui i clic in attesa: la misura arriva a 4 secondi, ma la GUI la mostra solo a 9 secondi, dopo l'invio.</p>
+</section>
+<section id="concorrente" aria-labelledby="title-concorrente">
+<h2 id="title-concorrente">2. Tre thread: la GUI continua a rispondere</h2>
+<div class="player">
+<img width="1200" height="675" alt="La coda si riempie durante l'invio lento. Se il sensore si ferma, la GUI mostra l'ultima misura e la sua età, continuando a gestire i clic.">
+<div class="controls">
+<button type="button" data-action="start" disabled aria-label="Avvia l'animazione con tre thread">▶ Avvia</button>
+<button type="button" data-action="reset" disabled aria-label="Reset dell'animazione con tre thread">↺ Reset</button>
+<span class="status" role="status" aria-live="polite">Pronta · 22 secondi, in ciclo</span>
+</div>
+</div>
+<p class="note">Osserva coda, ultimo valore e clic gestiti. Da 9 a 16 secondi il sensore non produce nuove misure: il dato resta a 24 °C, ma l'interfaccia funziona.</p>
+</section>
+<p class="note">Tempi simulati a scopo didattico. Nessuna animazione parte automaticamente. Il file funziona anche senza connessione.</p>
+<noscript><p>Per usare Avvia e Reset occorre abilitare JavaScript nel browser. Le figure statiche e le GIF sono disponibili nella dispensa.</p></noscript>
+</main>
+<script type="application/json" id="animation-data">{{ANIMATION_DATA}}</script>
+<script>
+"use strict";
+const animations = JSON.parse(document.getElementById("animation-data").textContent);
+for (const [mode, data] of Object.entries(animations)) {
+  const section = document.getElementById(mode);
+  const image = section.querySelector("img");
+  const start = section.querySelector('[data-action="start"]');
+  const reset = section.querySelector('[data-action="reset"]');
+  const status = section.querySelector(".status");
+  const bytes = Uint8Array.from(atob(data.gif), char => char.charCodeAt(0));
+  const blob = new Blob([bytes], {type: "image/gif"});
+  let activeUrl = null;
+  let generation = 0;
+  image.src = data.poster;
+  start.disabled = false;
+
+  function restore(message) {
+    generation++;
+    const oldUrl = activeUrl;
+    activeUrl = null;
+    image.onload = null;
+    image.onerror = null;
+    image.src = data.poster;
+    if (oldUrl) URL.revokeObjectURL(oldUrl);
+    start.disabled = false;
+    reset.disabled = true;
+    status.textContent = message;
+    section.dataset.state = "ready";
+  }
+  section.dataset.state = "ready";
+  start.addEventListener("click", () => {
+    if (activeUrl) return;
+    const current = ++generation;
+    // A fresh URL creates a fresh GIF decoder: every start begins at frame zero.
+    activeUrl = URL.createObjectURL(blob);
+    start.disabled = true;
+    reset.disabled = false;
+    status.textContent = "Avvio…";
+    section.dataset.state = "loading";
+    image.onload = () => {
+      if (current !== generation || !activeUrl) return;
+      status.textContent = "In riproduzione · " + data.duration + " secondi, in ciclo";
+      section.dataset.state = "playing";
+    };
+    image.onerror = () => {
+      if (current === generation) restore("Avvio non riuscito. Premi Avvia per riprovare.");
+    };
+    image.src = activeUrl;
+  });
+  reset.addEventListener("click", () => restore("Pronta · riparte dall'inizio"));
+  window.addEventListener("pagehide", () => {
+    if (activeUrl) restore("Pronta · riparte dall'inizio");
+  });
+}
+</script>
+</body>
+</html>
