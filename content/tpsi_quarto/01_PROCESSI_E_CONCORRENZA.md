@@ -221,12 +221,12 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify">Nella figura, le frecce indicano riferimenti: la scheda permette di raggiungere un'altra struttura, non contiene tutta quella struttura. <strong>Il PCB non contiene il programma, l'intero stack o l'intero heap.</strong> Questa è una rappresentazione concettuale, non la disposizione esatta dei campi in Linux; inoltre, con più thread, il contesto di ciascun thread va distinto dalle risorse comuni del processo. Le sezioni seguenti spiegano uno alla volta gli elementi della scheda.</p>
 
-<p align="justify">Distinguiamo quindi tre posti:</p>
+<p align="justify">Dove si trovano il codice, i dati e le informazioni necessarie a gestire l'esecuzione di un processo? Non sono tutti nel PCB. Per capire chi li usa e a cosa servono, distinguiamo <strong>tre sedi con ruoli diversi</strong>:</p>
 
 <ul>
-  <li><strong>la memoria accessibile al programma;</strong></li>
-  <li><strong>le strutture protette del kernel;</strong></li>
-  <li><strong>i registri fisici della CPU.</strong></li>
+  <li><strong>La memoria accessibile al programma:</strong> contiene il codice da eseguire e i dati su cui lavora, comprese le aree di stack e heap.</li>
+  <li><strong>Le strutture protette del kernel:</strong> conservano le informazioni con cui il sistema operativo gestisce il processo e le sue risorse, come il PCB e le tabelle delle pagine. Sono anch'esse in memoria, ma il programma non può modificarle direttamente.</li>
+  <li><strong>I registri fisici della CPU:</strong> contengono i valori e gli indirizzi usati mentre le istruzioni vengono eseguite. Quando l'esecuzione viene sospesa, il sistema salva in memoria lo stato necessario per poterla riprendere.</li>
 </ul>
 
 <p align="justify">Per ora immaginiamo un processo con un solo flusso di esecuzione. Quando introdurremo i thread, distingueremo le risorse del processo dal contesto e dallo stack di ciascun thread.</p>
