@@ -391,6 +391,34 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
 
 <p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Leggi l'immagine:</strong> in quale frame si trova V2? Chi prepara la corrispondenza e chi la usa per tradurre l'indirizzo?</p>
 
+#### Quali vantaggi offre la paginazione?
+
+<p align="justify">Il vantaggio fondamentale è che <strong>il programma può usare indirizzi virtuali consecutivi anche quando i suoi dati occupano frame separati nella RAM</strong>. Riprendiamo la figura: supponiamo che ogni pagina occupi 4 KiB. Per un'area virtuale di 12 KiB bastano tre frame liberi, anche lontani tra loro:</p>
+
+<table align="center">
+<thead><tr><th>Pagine consecutive viste dal programma</th><th>Frame assegnati nella RAM</th></tr></thead>
+<tbody>
+<tr><td>V1</td><td>F4</td></tr>
+<tr><td>V2</td><td>F1</td></tr>
+<tr><td>V3</td><td>F6</td></tr>
+</tbody>
+</table>
+
+<p align="justify">Questa organizzazione, insieme alla gestione della memoria virtuale, permette al sistema operativo di ottenere diversi vantaggi:</p>
+
+<ul>
+  <li><strong>Assegnare memoria senza cercare un grande blocco contiguo:</strong> nell'esempio non servono 12 KiB fisicamente consecutivi. Il kernel può utilizzare tre frame disponibili senza spostare altri processi per riunirli.</li>
+  <li><strong>Isolare e proteggere i processi:</strong> ogni spazio di indirizzamento ha le proprie mappature. I permessi delle pagine consentono di controllare lettura, scrittura ed esecuzione e di proteggere la memoria del kernel dagli accessi del programma.</li>
+  <li><strong>Assegnare RAM quando serve:</strong> il sistema può predisporre o caricare una pagina al primo accesso, invece di occupare subito memoria fisica per tutto lo spazio virtuale del processo.</li>
+  <li><strong>Condividere memoria in modo controllato:</strong> pagine virtuali di processi diversi possono riferirsi agli stessi frame, per esempio per condividere codice di libreria o dati.</li>
+  <li><strong>Evitare copie non necessarie:</strong> con il meccanismo <em>copy-on-write</em>, alcune pagine possono essere inizialmente condivise; il kernel ne crea una copia quando occorre modificarle separatamente.</li>
+  <li><strong>Recuperare RAM per altri usi:</strong> alcune pagine poco utilizzate possono essere trasferite nello swap. Pagine recuperabili da un file possono invece essere rimosse dalla RAM e ricaricate quando servono.</li>
+</ul>
+
+<p align="justify">La paginazione ha anche dei costi: <strong>le tabelle occupano memoria, tradurre gli indirizzi richiede lavoro e recuperare pagine dal disco può rallentare l'esecuzione</strong>. Inoltre una pagina assegnata può restare parzialmente inutilizzata. Non rende quindi infinita la RAM: permette di gestirla con maggiore flessibilità.</p>
+
+<p align="justify">Riferimenti: <a href="https://docs.kernel.org/admin-guide/mm/concepts.html">concetti della gestione della memoria in Linux</a> e <a href="https://docs.kernel.org/mm/page_tables.html">tabelle delle pagine e page fault</a>.</p>
+
 ### 4. Stack e heap: due esigenze diverse nella stessa memoria
 
 <p align="justify">All'interno dello spazio di indirizzamento servono organizzazioni adatte a durate diverse. Una chiamata di funzione deve ricordare come tornare al chiamante; un insieme di campioni può invece dover rimanere disponibile anche dopo il ritorno dalla funzione che lo ha allocato.</p>
