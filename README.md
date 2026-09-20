@@ -14,6 +14,8 @@ Come nel corso di quinta, ciascun docente conduce le lezioni assegnate, comprend
 
 Sono proposte **87 ore di lezioni e attività**, **4 ore per due compiti da 2 ore**, uno per quadrimestre, e **8 ore di riserva** per recupero, consolidamento, ulteriori verifiche o imprevisti. Compiti e riserva sono già inclusi nei totali delle UDA.
 
+### Distribuzione delle ore per UDA
+
 | UDA | Settimane | Lezioni e attività | Compiti | Riserva flessibile | Totale UDA | Antonio Caristia | Antonino Pirri |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | UDA-10 — Avvio del percorso, strumenti e fonti | 2 | 6 | 0 | 0 | 6 | 3 | 3 |
@@ -35,7 +37,7 @@ La colonna del consuntivo resta vuota (`—`) finché non vengono comunicate le 
 |---|---|---|---:|---|---|
 | UDA-10 | [00 — Presentazione del percorso, fonti e metodo](content/tpsi_quarto/README.md) | Orientamento fra moduli, obiettivi e [matrice di copertura](content/tpsi_quarto/COVERAGE.md). | 3 | Antonio Caristia | — |
 | UDA-10 | [01 — Ripartenza C/Linux e strumenti](content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md#prerequisiti) | Ripasso di compilazione, terminale, memoria e gestione degli errori; controllo dei prerequisiti. | 3 | Antonino Pirri | — |
-| UDA-11 | [02 — Processi, risorse e concorrenza](content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md) | Ciclo di vita, gerarchia, `fork`/`exec`/`wait`, tracce di esecuzione ed esercizi del modulo. | 9 | Antonio Caristia | — |
+| UDA-11 | [02 — Processi, risorse e concorrenza](content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md) | Ciclo di vita, gerarchia, `fork`/`exec`/`wait`, tracce di esecuzione ed esercizi del modulo. | 9 | Antonio Caristia | 15/09/2026 (martedì) — 2 ore<br>18/09/2026 (venerdì) — 1 ora<br>Totale: 3/9 ore, in corso |
 | UDA-11 | [03 — Thread POSIX e confronto Java](content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md#da-processo-a-thread) | Thread, `Runnable`, `join`, esercizi e avvio del [laboratorio fork/pipe](activities/tpsi_quarto/fork_pipe_square/student/README.md). | 8 | Antonino Pirri | — |
 | UDA-12 | [04 — Comunicazione fra processi e pipe](content/tpsi_quarto/02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md#comunicazione-tra-processi-con-pipe) | Messaggi, segnali e completamento del [laboratorio fork/pipe](activities/tpsi_quarto/fork_pipe_square/student/README.md). | 7 | Antonino Pirri | — |
 | UDA-12 | [05 — Sincronizzazione e problemi classici](content/tpsi_quarto/02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md#race-condition) | Race condition, mutex, semafori, condition, deadlock e produttore/consumatore; confronto POSIX/Java. | 8 | Antonio Caristia | — |
@@ -47,7 +49,7 @@ La colonna del consuntivo resta vuota (`—`) finché non vengono comunicate le 
 | UDA-15 | [11 — Debugging e collaudo del laboratorio](content/tpsi_quarto/05_TESTING_DEBUGGING.md#debugging-come-ciclo-di-ipotesi) | Debugger, sanitizer, bug concorrenti e test del [programma fork/pipe](activities/tpsi_quarto/fork_pipe_square/student/README.md). | 6 | Antonino Pirri | — |
 | UDA-16 | [12 — Cittadinanza digitale per chi progetta software](content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md) | Provenienza, licenze, dati, segreti, accessibilità e uso responsabile dell'AI. | 7 | Antonio Caristia | — |
 | UDA-16 | [13 — Progetto finale integrato](content/tpsi_quarto/06_CITTADINANZA_DIGITALE.md#progetto-finale-suggerito) | Progetto concorrente con requisiti, repository documentato, test, demo e relazione finale. | 8 | Antonino Pirri | — |
-| **Totale** | | | **87** | | |
+| **Totale** | | | **87** | | **3 ore svolte** |
 
 Il laboratorio `fork_pipe_square` è un'unica attività, ripresa con obiettivi diversi nelle UDA-11, UDA-12 e UDA-15. È attualmente l'unica activity con bundle autonomo nel repository; gli altri esercizi e laboratori si trovano nelle dispense.
 
@@ -69,11 +71,15 @@ La collocazione dei compiti nelle UDA è indicativa; le date saranno stabilite i
 
 ## Ripartizione complessiva fra i docenti
 
-| Docente | Lezioni e attività | Compiti | Riserva flessibile | Totale annuale |
-|---|---:|---:|---:|---:|
-| prof. Antonio Caristia | 44 | 2 | 4 | **50** |
-| ITP Antonino Pirri | 43 | 2 | 4 | **49** |
-| **Totale** | **87** | **4** | **8** | **99** |
+| Docente | Lezioni e attività | Compiti | Riserva flessibile | Totale annuale | Ore svolte registrate | Ore residue sul preventivo |
+|---|---:|---:|---:|---:|---:|---:|
+| prof. Antonio Caristia | 44 | 2 | 4 | **50** | 3 | 47 |
+| ITP Antonino Pirri | 43 | 2 | 4 | **49** | 0 | 49 |
+| **Totale** | **87** | **4** | **8** | **99** | **3** | **96** |
+
+<p align="justify">
+Il consuntivo comunicato al 20 settembre 2026 comprende <strong>3 ore svolte da Antonio Caristia</strong> sulla dispensa <a href="content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md">01 — Processi e concorrenza</a>: 2 ore martedì e 1 ora venerdì. Le date sono interpretate come 15 e 18 settembre 2026. Le ore rientrano nel blocco «02 — Processi, risorse e concorrenza» dell'UDA-11, di cui restano <strong>6 delle 9 ore previste</strong>. I numeri dei blocchi della pianificazione sono distinti dai numeri dei file delle dispense. Per Pirri non sono ancora state comunicate ore svolte: lo zero indica l'assenza di registrazioni. Le ore residue sono calcolate rispetto al solo consuntivo disponibile.
+</p>
 
 Gli scostamenti dal preventivo vanno riportati nel consuntivo e compensati aggiornando insieme la tabella delle lezioni, quella delle UDA e il riepilogo dei docenti.
 
