@@ -155,3 +155,11 @@ La figura [PCB](../assets/tpsi4/01-pcb.svg) mostra una scheda concettuale con id
 ### Puntatore al dato del chiamante
 
 La figura [01-puntatore-stack-chiamante.svg](../assets/tpsi4/01-puntatore-stack-chiamante.svg) affianca il codice C completo di main e f. Mostra due frame nello stesso stack, valore, p, incremento, indirizzi e ritorno. La freccia da p a valore distingue contenuto del puntatore, indirizzo del puntatore e dato puntato. La figura dei registri e l’assembly usano lo stesso layout; il dato di questo esempio è nello stack di main.
+
+## Tabella dei descrittori — 21 settembre 2026
+
+Aggiunta la [figura dei descrittori](../assets/tpsi4/01-tabella-descrittori.svg) alla sezione 5 di Anatomia di un processo. La scena riusa terminale e documento del kit e porta il registro a 32 figure statiche. Separa tre livelli: tabella del processo gestita dal kernel, descrizioni delle aperture con modalità e posizione, risorse con dati e metadati.
+
+I descrittori 0, 1 e 2 hanno i ruoli standard di ingresso, risultati e diagnosi. Nello scenario illustrato condividono un'apertura del terminale; questa condivisione è esplicitamente un esempio. Le altre aperture usano 3 e 4, mentre 5 è libero. La dispensa chiarisce la regola del numero libero più basso, il riuso dopo close e le redirezioni. I pannelli inferiori distinguono il controllo dei permessi all'apertura dalla verifica del descrittore e della modalità durante l'uso. Le frecce indicano riferimenti e le posizioni sono illustrative.
+
+Riscontri tecnici: [open(2)](https://man7.org/linux/man-pages/man2/open.2.html), [stdin(3)](https://man7.org/linux/man-pages/man3/stdin.3.html), [write(2)](https://man7.org/linux/man-pages/man2/write.2.html), [dup(2)](https://man7.org/linux/man-pages/man2/dup.2.html), [close(2)](https://man7.org/linux/man-pages/man2/close.2.html) e [chmod(2)](https://man7.org/linux/man-pages/man2/chmod.2.html). Il confronto con le immagini del libro resta pendente.

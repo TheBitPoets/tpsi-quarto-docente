@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-tabella-descrittori.svg">
+  <title id="scene-title">Descrittori: dal numero alla risorsa</title>
+  <desc id="scene-desc">La tabella del processo è gestita dal kernel. In questo esempio 0, 1 e 2 condividono un'apertura del terminale; 3 si riferisce a misure.txt in sola scrittura, 4 a config.txt in sola lettura e 5 è libero. Le aperture conservano modalità e posizione; i metadati dei file contengono i permessi. All'apertura il kernel verifica credenziali e permessi, poi durante l'uso verifica descrittore e modalità. Le frecce rappresentano riferimenti, non flussi di dati.</desc>
+  <defs id="visual-kit-components"/>
+  <defs>
+    <marker id="fd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="{{process}}"/></marker>
+    <marker id="resource-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="{{data}}"/></marker>
+  </defs>
+  <g font-family="{{family}}">
+    <rect width="1920" height="1080" rx="24" fill="{{canvas}}"/>
+    <text x="64" y="88" fill="{{surface}}" font-size="48" font-weight="700">Descrittori: dal numero alla risorsa</text>
+    <text x="64" y="142" fill="{{muted}}" font-size="28">Un processo usa numeri interi. Il kernel conserva e controlla i collegamenti.</text>
+
+    <rect x="64" y="182" width="1232" height="588" rx="22" fill="{{panel}}" stroke="{{line}}" stroke-width="2"/>
+    <text x="90" y="224" fill="{{muted}}" font-size="24" font-weight="700">STRUTTURE NEL KERNEL</text>
+    <text x="92" y="274" fill="{{surface}}" font-size="32" font-weight="700">Tabella del processo A</text>
+    <text x="680" y="274" fill="{{surface}}" font-size="32" font-weight="700">Descrizioni delle aperture</text>
+    <text x="1376" y="224" fill="{{muted}}" font-size="24" font-weight="700">RISORSE RAGGIUNTE</text>
+
+    <rect x="88" y="300" width="452" height="372" rx="14" fill="{{surface}}"/>
+    <path d="M88 362H540 M88 424H540 M88 486H540 M88 548H540 M88 610H540 M176 300V672" stroke="#cbd5e1" stroke-width="2"/>
+    <g font-size="36" font-weight="700" fill="{{process}}" text-anchor="middle">
+      <text x="132" y="344">0</text><text x="132" y="406">1</text><text x="132" y="468">2</text><text x="132" y="530">3</text><text x="132" y="592">4</text><text x="132" y="654" fill="{{runtime}}">5</text>
+    </g>
+    <g font-size="28" fill="{{ink}}">
+      <text x="200" y="343">stdin · ingresso</text>
+      <text x="200" y="405">stdout · risultati</text>
+      <text x="200" y="467">stderr · diagnosi</text>
+      <text x="200" y="529">file delle misure</text>
+      <text x="200" y="591">file di configurazione</text>
+      <text x="200" y="653" fill="#92400e">voce libera</text>
+    </g>
+    <text x="100" y="709" font-size="26" fill="{{surface}}">0, 1 e 2: ruoli standard.</text>
+    <text x="100" y="746" font-size="26" fill="{{surface}}">Il primo file aggiuntivo usa 3.</text>
+
+    <rect x="676" y="300" width="592" height="186" rx="14" fill="{{surface}}"/>
+    <text x="702" y="342" font-size="30" font-weight="700" fill="{{ink}}">Apertura del terminale</text>
+    <text x="702" y="386" font-size="28" fill="{{ink}}">Lettura e scrittura</text>
+    <text x="702" y="429" font-size="26" fill="{{ink}}">Qui è condivisa da 0, 1 e 2:</text>
+    <text x="702" y="464" font-size="26" fill="{{ink}}">uno scenario possibile.</text>
+    <rect x="676" y="502" width="592" height="108" rx="14" fill="{{surface}}"/>
+    <text x="702" y="545" font-size="28" font-weight="700" fill="{{ink}}">O_WRONLY · sola scrittura</text>
+    <text x="702" y="584" font-size="26" fill="{{ink}}">Posizione corrente nel file: 128 byte</text>
+    <rect x="676" y="626" width="592" height="108" rx="14" fill="{{surface}}"/>
+    <text x="702" y="669" font-size="28" font-weight="700" fill="{{ink}}">O_RDONLY · sola lettura</text>
+    <text x="702" y="708" font-size="26" fill="{{ink}}">Posizione corrente nel file: 0 byte</text>
+
+    <g stroke="{{process}}" stroke-width="4" fill="none" marker-end="url(#fd-arrow)">
+      <path d="M540 331H668"/><path d="M540 393H668"/><path d="M540 455H668"/>
+      <path d="M540 517H598V556H668"/><path d="M540 579H572V680H668"/>
+    </g>
+
+    <rect x="1372" y="300" width="484" height="186" rx="14" fill="{{surface}}"/>
+    <use href="#tpsi-terminal" x="1400" y="325" width="110" height="90"/>
+    <text x="1540" y="361" font-size="32" font-weight="700" fill="{{ink}}">Terminale</text>
+    <text x="1400" y="454" font-size="26" fill="{{ink}}">Input, risultati e messaggi</text>
+    <rect x="1372" y="502" width="484" height="108" rx="14" fill="{{surface}}"/>
+    <use href="#tpsi-document" x="1390" y="519" width="72" height="72"/>
+    <text x="1480" y="545" font-size="30" font-weight="700" fill="{{ink}}">misure.txt</text>
+    <text x="1480" y="583" font-size="26" fill="{{ink}}">Dati + metadati / permessi</text>
+    <rect x="1372" y="626" width="484" height="108" rx="14" fill="{{surface}}"/>
+    <use href="#tpsi-document" x="1390" y="643" width="72" height="72"/>
+    <text x="1480" y="669" font-size="30" font-weight="700" fill="{{ink}}">config.txt</text>
+    <text x="1480" y="707" font-size="26" fill="{{ink}}">Dati + metadati / permessi</text>
+    <g stroke="{{data}}" stroke-width="4" fill="none" marker-end="url(#resource-arrow)">
+      <path d="M1268 393H1364"/><path d="M1268 556H1364"/><path d="M1268 680H1364"/>
+    </g>
+
+    <text x="64" y="818" fill="{{muted}}" font-size="24">Le frecce indicano riferimenti, non il verso dei dati. Le posizioni nei file sono illustrative.</text>
+    <rect x="64" y="850" width="866" height="158" rx="18" fill="{{surface}}"/>
+    <rect x="64" y="850" width="10" height="158" rx="5" fill="{{security}}"/>
+    <text x="98" y="895" font-size="30" font-weight="700" fill="{{ink}}">1 · ALL’APERTURA</text>
+    <text x="98" y="941" font-size="28" fill="{{ink}}">Credenziali + permessi della risorsa:</text>
+    <text x="98" y="981" font-size="28" fill="{{ink}}">il processo può ottenere l’accesso richiesto?</text>
+    <rect x="954" y="850" width="902" height="158" rx="18" fill="{{surface}}"/>
+    <rect x="954" y="850" width="10" height="158" rx="5" fill="{{process}}"/>
+    <text x="988" y="895" font-size="30" font-weight="700" fill="{{ink}}">2 · DURANTE L’USO</text>
+    <text x="988" y="941" font-size="28" fill="{{ink}}">Descrittore valido + modalità compatibile:</text>
+    <text x="988" y="981" font-size="28" fill="{{ink}}">scrivere su 4 → EBADF (aperto in sola lettura).</text>
+    <text x="64" y="1050" fill="{{muted}}" font-size="24">TPSI 4 · File e risorse aperte · La tabella appartiene al processo; i permessi appartengono alla risorsa.</text>
+  </g>
+</svg>

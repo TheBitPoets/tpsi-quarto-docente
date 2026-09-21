@@ -607,28 +607,96 @@ int main(void)
 
 ### 5. File e altri oggetti aperti: riferimenti alle risorse
 
-<p align="justify">Per salvare una media, l'applicazione deve aprire <code>misure.txt</code>.</p>
+<p align="justify">Per salvare una media, l'applicazione del sensore apre <code>misure.txt</code>. Dopo l'apertura non deve ripetere il percorso a ogni scrittura: usa un numero restituito dal sistema operativo. Vediamo che cosa rappresenta quel numero e come il kernel lo usa.</p>
 
 <!-- definition -->
 <table align="center">
 <tr><td>
 &#10071; <strong>Importante</strong>
-<p align="justify">In Linux un <strong>descrittore di file</strong> è un piccolo intero che seleziona una voce della tabella dei descrittori del processo.</p>
+<p align="justify">In Linux un <strong>descrittore di file</strong>, o <em>file descriptor</em> (<code>fd</code>), è un intero non negativo che seleziona una voce della <strong>tabella dei descrittori del processo</strong>. Questa tabella, gestita dal kernel, collega i numeri usati dal programma alle risorse aperte.</p>
 </td></tr>
 </table>
 <!-- /definition -->
 
-<p align="justify">La voce rimanda a strutture del kernel che rappresentano l'apertura e, per un file ordinario, conservano informazioni come posizione corrente e modalità di accesso. Il contenuto del file non diventa automaticamente una parte della memoria privata del processo.</p>
+#### Dal numero alla risorsa: tre livelli
 
-```text
-processo A                    kernel                    risorsa
-descrittore 3  ---------->  apertura del file  ------->  misure.txt
-                           posizione, modalità
+<ol>
+  <li><strong>Tabella del processo:</strong> il descrittore è l'indice di una voce occupata oppure libera. Una voce occupata contiene un riferimento all'apertura e informazioni proprie del descrittore, per esempio se chiuderlo quando viene caricato un nuovo programma con <code>exec</code>.</li>
+  <li><strong>Descrizione dell'apertura nel kernel:</strong> conserva la modalità di accesso, come sola lettura o sola scrittura, e lo stato dell'apertura; per un file ordinario conserva anche la posizione corrente, cioè da quale byte proseguire.</li>
+  <li><strong>Risorsa:</strong> il file con i suoi dati e metadati, oppure un terminale, una pipe o un socket. I permessi del file appartengono ai suoi metadati, non al numero del descrittore.</li>
+</ol>
+
+<p align="justify">La tabella è associata al processo, ma si trova nel kernel: il programma non può modificarne direttamente le voci come quelle di un proprio array. Usa chiamate di sistema quali <code>open</code>, <code>read</code>, <code>write</code> e <code>close</code>. Il contenuto di un file aperto non viene automaticamente copiato nella memoria privata del processo.</p>
+
+<!-- figure:01-tabella-descrittori -->
+<p align="center">
+  <img src="../../assets/tpsi4/01-tabella-descrittori.svg" alt="Nel kernel, la tabella del processo collega 0, 1 e 2 a un terminale, 3 a misure.txt aperto in scrittura e 4 a config.txt aperto in lettura; 5 è libero. Le descrizioni delle aperture conservano modalità e posizione. I permessi appartengono ai file: vengono verificati all&#x27;apertura, mentre le operazioni successive devono rispettare la modalità dell&#x27;apertura." width="960">
+</p>
+<p align="center"><em>Il descrittore seleziona un riferimento: modalità e posizione appartengono all&#x27;apertura, dati e permessi al file. Le frecce rappresentano riferimenti, non il verso dei dati.</em></p>
+
+#### I tre descrittori standard: 0, 1 e 2
+
+<p align="justify">Un programma avviato normalmente dalla shell trova già predisposti tre canali. Il loro ruolo convenzionale è distinto:</p>
+
+<table align="center">
+<thead>
+<tr><th>Descrittore</th><th>Flusso standard</th><th>Uso dal punto di vista del programma</th><th>In un terminale, senza redirezioni</th></tr>
+</thead>
+<tbody>
+<tr><td><code>0</code></td><td><code>stdin</code> — ingresso standard</td><td>Ricevere i dati in ingresso.</td><td>Leggere il testo digitato dall'utente.</td></tr>
+<tr><td><code>1</code></td><td><code>stdout</code> — uscita standard</td><td>Produrre risultati e output ordinario.</td><td>Mostrare i risultati nel terminale.</td></tr>
+<tr><td><code>2</code></td><td><code>stderr</code> — uscita standard degli errori</td><td>Produrre messaggi diagnostici, anche quando i risultati vengono salvati altrove.</td><td>Mostrare i messaggi nel terminale.</td></tr>
+</tbody>
+</table>
+
+<p align="justify">In C/POSIX, <code>&lt;unistd.h&gt;</code> fornisce le costanti <code>STDIN_FILENO</code>, <code>STDOUT_FILENO</code> e <code>STDERR_FILENO</code>, rispettivamente <code>0</code>, <code>1</code> e <code>2</code>. Invece <code>stdin</code>, <code>stdout</code> e <code>stderr</code> di <code>&lt;stdio.h&gt;</code> sono flussi di tipo <code>FILE *</code>: oggetti della libreria C costruiti sopra i descrittori, con gestione del buffering. Anche <code>fopen</code> restituisce un <code>FILE *</code>, mentre <code>open</code> restituisce un intero.</p>
+
+<p align="justify">I numeri indicano ruoli convenzionali, non dispositivi fissi: <code>0</code> non significa necessariamente tastiera e <code>1</code> non significa necessariamente schermo. La shell può collegarli a file o pipe prima di avviare il programma. Supponiamo di avere un programma <code>analizza</code> che legge da <code>stdin</code>, scrive i risultati su <code>stdout</code> e le diagnosi su <code>stderr</code>:</p>
+
+```bash
+./analizza < dati.txt > risultati.txt 2> errori.txt
 ```
 
-<p align="justify">Lo stesso meccanismo permette di riferirsi anche a pipe, terminali e socket. Per convenzione, <code>0</code>, <code>1</code> e <code>2</code> sono ingresso standard, uscita standard ed errori standard; possono essere rediretti. Il numero <code>3</code> in due processi non identifica necessariamente la stessa risorsa, perché ogni numero va interpretato nella relativa tabella. Viceversa, due descrittori possono riferirsi alla stessa apertura. Chiudere un descrittore rimuove quel riferimento: non significa cancellare il file.</p>
+<p align="justify">Il programma continua a usare gli stessi tre canali: <code>0</code> riceve i dati da <code>dati.txt</code>, <code>1</code> invia i risultati a <code>risultati.txt</code>, <code>2</code> invia le diagnosi a <code>errori.txt</code>. Qui <code>&gt;</code> e <code>2&gt;</code> creano o svuotano i rispettivi file di uscita. Tenere separati risultati e messaggi permette, per esempio, di elaborare successivamente i risultati senza confonderli con una segnalazione d'errore.</p>
 
-<p align="justify">Nell'esempio del sensore, ricordare il descrittore consente di continuare a scrivere sul file già aperto dopo una sospensione. Quando usiamo <code>fopen</code> in C, lavoriamo invece con un <code>FILE *</code>: un oggetto della libreria che aggiunge gestione del flusso e buffering sopra il descrittore.</p>
+#### Dopo i tre canali standard: 3, 4 e riuso dei numeri
+
+<p align="justify"><strong>Il primo descrittore aggiuntivo è normalmente 3, non 4:</strong> la numerazione parte da zero. La regola esatta di <code>open</code> è scegliere <strong>il numero libero più basso</strong>. Nella sequenza seguente assumiamo che inizialmente siano occupati soltanto <code>0</code>, <code>1</code> e <code>2</code>, che tutte le aperture riescano e che nessun'altra attività apra risorse nel frattempo.</p>
+
+<table align="center">
+<thead>
+<tr><th>Operazione</th><th>Effetto nella tabella</th></tr>
+</thead>
+<tbody>
+<tr><td>Aprire <code>misure.txt</code> in scrittura.</td><td>Viene assegnato <code>3</code>.</td></tr>
+<tr><td>Aprire <code>config.txt</code> in lettura.</td><td>Viene assegnato <code>4</code>: è la situazione della figura.</td></tr>
+<tr><td>Chiudere <code>3</code> con <code>close(3)</code>.</td><td>La voce <code>3</code> torna libera; <code>4</code> resta occupata.</td></tr>
+<tr><td>Aprire <code>archivio.txt</code>.</td><td>Viene riutilizzato <code>3</code>, che ora indica un'altra apertura.</td></tr>
+</tbody>
+</table>
+
+<p align="justify">Non bisogna quindi scrivere un programma supponendo che il proprio file sia sempre <code>3</code>: occorre conservare il valore restituito e controllare se l'apertura fallisce. Altri descrittori possono essere già occupati; se uno dei canali standard è stato chiuso, persino <code>0</code>, <code>1</code> o <code>2</code> può essere assegnato a una nuova apertura.</p>
+
+#### Che cosa può controllare il kernel?
+
+<p align="justify">La tabella dà al kernel il collegamento necessario per verificare un'operazione. Distinguiamo due momenti:</p>
+
+<ul>
+  <li><strong>All'apertura:</strong> il kernel confronta la richiesta con le credenziali del processo e le regole di accesso alla risorsa. Se manca il permesso richiesto, l'apertura viene rifiutata. Per esempio, un accesso negato può produrre <code>-1</code> con <code>errno</code> impostato a <code>EACCES</code>.</li>
+  <li><strong>Durante l'uso:</strong> il kernel verifica che il descrittore sia valido e che l'apertura consenta l'operazione richiesta. Un file aperto con <code>O_RDONLY</code> non può essere scritto attraverso quel descrittore: <code>write</code> fallisce con <code>EBADF</code>, anche se l'utente avrebbe il permesso di aprire lo stesso file in scrittura. <code>O_WRONLY</code> abilita la sola scrittura; <code>O_RDWR</code> lettura e scrittura.</li>
+</ul>
+
+<p align="justify">I permessi del file e la modalità dell'apertura rispondono dunque a domande diverse: <strong>«questo processo può ottenere l'accesso richiesto?»</strong> e <strong>«questa apertura consente l'operazione?»</strong>. Cambiare i normali permessi del file con <code>chmod</code> non revoca, in generale, l'accesso già ottenuto attraverso un descrittore aperto. Le credenziali e i permessi vengono ripresi nella sezione successiva.</p>
+
+#### Un numero locale, una risorsa eventualmente condivisa
+
+<p align="justify">Il descrittore <code>3</code> del processo A può indicare un file diverso dal <code>3</code> del processo B: il numero va interpretato nella tabella corretta. Viceversa, due descrittori possono riferirsi alla stessa apertura, per esempio dopo una duplicazione con <code>dup</code>. In questo caso condividono anche la posizione corrente del file. Nella figura i canali standard condividono un'apertura del terminale: è uno scenario possibile, non un requisito.</p>
+
+<p align="justify"><code>close</code> libera il riferimento, senza cancellare il nome del file dal filesystem. Se altri descrittori fanno riferimento alla stessa apertura, questa rimane utilizzabile attraverso di essi. Nell'applicazione del sensore, conservare un descrittore valido permette di riprendere a scrivere su <code>misure.txt</code> dopo una sospensione, mantenendo lo stato dell'apertura.</p>
+
+<p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Controlla di avere capito:</strong> nella figura, quale descrittore useresti per salvare una misura? Perché una scrittura su <code>4</code> fallirebbe? Dopo aver chiuso <code>3</code>, quale numero potrebbe restituire la prossima apertura?</p>
+
+<p align="justify">Riferimenti tecnici: <a href="https://man7.org/linux/man-pages/man2/open.2.html">open(2)</a>, <a href="https://man7.org/linux/man-pages/man3/stdin.3.html">stdin(3)</a>, <a href="https://man7.org/linux/man-pages/man2/write.2.html">write(2)</a>, <a href="https://man7.org/linux/man-pages/man2/dup.2.html">dup(2)</a>, <a href="https://man7.org/linux/man-pages/man2/close.2.html">close(2)</a> e <a href="https://man7.org/linux/man-pages/man2/chmod.2.html">chmod(2)</a>.</p>
 
 ### 6. Credenziali e permessi: identità e autorizzazione
 
