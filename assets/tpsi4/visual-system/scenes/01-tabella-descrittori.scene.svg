@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="scene-title scene-desc" data-output="../../01-tabella-descrittori.svg">
   <title id="scene-title">Descrittori: dal numero alla risorsa</title>
-  <desc id="scene-desc">La tabella del processo è gestita dal kernel. In questo esempio 0, 1 e 2 condividono un'apertura del terminale; 3 si riferisce a misure.txt in sola scrittura, 4 a config.txt in sola lettura e 5 è libero. Le aperture conservano modalità e posizione; i metadati dei file contengono i permessi. All'apertura il kernel verifica credenziali e permessi, poi durante l'uso verifica descrittore e modalità. Le frecce rappresentano riferimenti, non flussi di dati.</desc>
+  <desc id="scene-desc">La tabella del processo è gestita dal kernel. In questo esempio 0, 1 e 2 raggiungono il terminale attraverso tre aperture distinte: stdin in lettura, stdout e stderr in scrittura. Il descrittore 3 si riferisce a misure.txt in sola scrittura, 4 a config.txt in sola lettura e 5 è libero. Le aperture dei file conservano modalità e posizione; i metadati dei file contengono i permessi. All'apertura il kernel verifica credenziali e permessi, poi durante l'uso verifica descrittore e modalità. Le frecce rappresentano riferimenti, non flussi di dati.</desc>
   <defs id="visual-kit-components"/>
   <defs>
     <marker id="fd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="{{process}}"/></marker>
@@ -33,11 +33,12 @@
     <text x="100" y="709" font-size="26" fill="{{surface}}">0, 1 e 2: ruoli standard.</text>
     <text x="100" y="746" font-size="26" fill="{{surface}}">Il primo file aggiuntivo usa 3.</text>
 
-    <rect x="676" y="300" width="592" height="186" rx="14" fill="{{surface}}"/>
-    <text x="702" y="342" font-size="30" font-weight="700" fill="{{ink}}">Apertura del terminale</text>
-    <text x="702" y="386" font-size="28" fill="{{ink}}">Lettura e scrittura</text>
-    <text x="702" y="429" font-size="26" fill="{{ink}}">Qui è condivisa da 0, 1 e 2:</text>
-    <text x="702" y="464" font-size="26" fill="{{ink}}">uno scenario possibile.</text>
+    <rect x="676" y="304" width="592" height="54" rx="10" fill="{{surface}}"/>
+    <text x="702" y="341" font-size="28" font-weight="700" fill="{{ink}}">stdin · sola lettura</text>
+    <rect x="676" y="366" width="592" height="54" rx="10" fill="{{surface}}"/>
+    <text x="702" y="403" font-size="28" font-weight="700" fill="{{ink}}">stdout · sola scrittura</text>
+    <rect x="676" y="428" width="592" height="54" rx="10" fill="{{surface}}"/>
+    <text x="702" y="465" font-size="28" font-weight="700" fill="{{ink}}">stderr · sola scrittura</text>
     <rect x="676" y="502" width="592" height="108" rx="14" fill="{{surface}}"/>
     <text x="702" y="545" font-size="28" font-weight="700" fill="{{ink}}">O_WRONLY · sola scrittura</text>
     <text x="702" y="584" font-size="26" fill="{{ink}}">Posizione corrente nel file: 128 byte</text>
@@ -63,10 +64,12 @@
     <text x="1480" y="669" font-size="30" font-weight="700" fill="{{ink}}">config.txt</text>
     <text x="1480" y="707" font-size="26" fill="{{ink}}">Dati + metadati / permessi</text>
     <g stroke="{{data}}" stroke-width="4" fill="none" marker-end="url(#resource-arrow)">
-      <path d="M1268 393H1364"/><path d="M1268 556H1364"/><path d="M1268 680H1364"/>
+      <path d="M1268 331H1364"/><path d="M1268 393H1364"/><path d="M1268 455H1364"/>
+      <path d="M1268 556H1364"/><path d="M1268 680H1364"/>
     </g>
 
-    <text x="64" y="818" fill="{{muted}}" font-size="24">Le frecce indicano riferimenti, non il verso dei dati. Le posizioni nei file sono illustrative.</text>
+    <text x="64" y="805" fill="{{muted}}" font-size="24">Le frecce indicano riferimenti, non il verso dei dati. Le posizioni nei file sono illustrative.</text>
+    <text x="64" y="836" fill="{{muted}}" font-size="24">In questo esempio anche i tre canali standard hanno aperture distinte.</text>
     <rect x="64" y="850" width="866" height="158" rx="18" fill="{{surface}}"/>
     <rect x="64" y="850" width="10" height="158" rx="5" fill="{{security}}"/>
     <text x="98" y="895" font-size="30" font-weight="700" fill="{{ink}}">1 · ALL’APERTURA</text>

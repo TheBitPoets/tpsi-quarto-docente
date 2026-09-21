@@ -618,6 +618,39 @@ int main(void)
 </table>
 <!-- /definition -->
 
+<!-- c-reference:open -->
+<table align="center">
+<tr><td>
+<details>
+<summary>&#128187; <strong>C</strong> — <code>int open(const char *path, int flags, ...);</code></summary>
+
+<p align="justify"><strong>Header:</strong> <code>#include &lt;fcntl.h&gt;</code>. È un'interfaccia POSIX disponibile in C su Linux. Apre il file indicato e restituisce il descrittore da conservare.</p>
+
+<ul>
+  <li><code>path</code>: percorso del file, per esempio <code>"misure.txt"</code>.</li>
+  <li><code>flags</code>: comprende una modalità, <code>O_RDONLY</code>, <code>O_WRONLY</code> o <code>O_RDWR</code>, ed eventuali opzioni.</li>
+  <li><code>...</code>: indica argomenti aggiuntivi. Se si usa <code>O_CREAT</code> per creare un file mancante, occorre passare anche i permessi iniziali, che il sistema può restringere. L'esempio apre un file esistente e usa due argomenti.</li>
+</ul>
+
+<p align="justify"><strong>Risultato:</strong> un intero non negativo è il descrittore ottenuto; <code>-1</code> segnala un errore, descritto da <code>errno</code>. Per esempio, <code>ENOENT</code> può indicare un percorso inesistente e <code>EACCES</code> un accesso negato. Anche <code>0</code> può essere un risultato valido.</p>
+
+<p align="justify"><strong>Esempio:</strong> frammento da inserire nel corpo di <code>main</code>, con <code>misure.txt</code> già esistente. Per le stampe serve anche <code>#include &lt;stdio.h&gt;</code>; <code>perror</code> mostra una descrizione dell'errore. La chiusura finale è illustrata nel riquadro di <code>close</code>.</p>
+
+<pre lang="c"><code>int fd = open(&quot;misure.txt&quot;, O_RDONLY);
+if (fd == -1) {
+    perror(&quot;open&quot;);
+    return 1;
+}
+printf(&quot;Descrittore ottenuto: %d\n&quot;, fd);
+/* Ora fd puo essere usato per leggere. */</code></pre>
+
+<p align="justify">Nell'esempio di Antonio, il kernel verifica il permesso di lettura e registra un'apertura in sola lettura. <a href="https://man7.org/linux/man-pages/man2/open.2.html">Riferimento: open(2)</a>.</p>
+
+</details>
+</td></tr>
+</table>
+<!-- /c-reference:open -->
+
 #### Dal numero alla risorsa: tre livelli
 
 <p align="justify">Supponiamo che l'apertura di <code>misure.txt</code> sia riuscita e abbia restituito <code>fd = 3</code>. Il programma conserva questo numero e lo passa al sistema operativo quando vuole scrivere. <strong>Come fa il kernel a partire da <code>3</code> e arrivare ai dati del file?</strong> Segue una catena di riferimenti fra strutture che ha predisposto all'apertura.</p>
@@ -644,7 +677,7 @@ int main(void)
 
 <!-- figure:01-tabella-descrittori -->
 <p align="center">
-  <img src="../../assets/tpsi4/01-tabella-descrittori.svg" alt="Nel kernel, la tabella del processo collega 0, 1 e 2 a un terminale, 3 a misure.txt aperto in scrittura e 4 a config.txt aperto in lettura; 5 è libero. Le descrizioni delle aperture conservano modalità e posizione. I permessi appartengono ai file: vengono verificati all&#x27;apertura, mentre le operazioni successive devono rispettare la modalità dell&#x27;apertura." width="960">
+  <img src="../../assets/tpsi4/01-tabella-descrittori.svg" alt="Nel kernel, la tabella del processo collega 0, 1 e 2 al terminale attraverso aperture distinte, rispettivamente in lettura, scrittura e scrittura. Il descrittore 3 raggiunge misure.txt aperto in scrittura e 4 config.txt aperto in lettura; 5 è libero. Le aperture dei file conservano modalità e posizione. I permessi appartengono ai file e vengono verificati all&#x27;apertura; durante l&#x27;uso il kernel controlla il descrittore e la modalità." width="960">
 </p>
 <p align="center"><em>Il descrittore seleziona un riferimento: modalità e posizione appartengono all&#x27;apertura, dati e permessi al file. Le frecce rappresentano riferimenti, non il verso dei dati.</em></p>
 
@@ -655,6 +688,80 @@ int main(void)
 <p align="justify"><strong>3. Raggiungere il file e operare sui dati.</strong> Dal riquadro centrale seguiamo la freccia viola fino a <code>misure.txt</code>, a destra. L'apertura mantiene il collegamento al file rappresentato dall'inode. Il filesystem usa le proprie strutture per individuare e gestire i byte richiesti. L'inode conserva informazioni sul file, come i permessi; la posizione 128 e la modalità di quella apertura restano invece al livello precedente. Aprire un file non significa copiarne automaticamente tutto il contenuto nella memoria privata del processo.</p>
 
 <p align="justify">Quando il programma chiede <strong>«scrivi questi dati sul descrittore 3»</strong>, il kernel può dunque individuare l'apertura, verificare che consenta la scrittura e raggiungere il file su cui eseguirla. Il descrittore è il punto di ingresso a questo percorso. Per chiedere le operazioni il programma usa chiamate di sistema: <code>read</code> per leggere, <code>write</code> per scrivere e <code>close</code> per chiudere il descrittore.</p>
+
+<!-- c-reference:read -->
+<table align="center">
+<tr><td>
+<details>
+<summary>&#128187; <strong>C</strong> — <code>ssize_t read(int fd, void *buf, size_t count);</code></summary>
+
+<p align="justify"><strong>Header:</strong> <code>#include &lt;unistd.h&gt;</code>. Trasferisce nel buffer del programma fino a <code>count</code> byte dalla risorsa collegata a <code>fd</code>.</p>
+
+<ul>
+  <li><code>fd</code>: descrittore valido, aperto per leggere.</li>
+  <li><code>buf</code>: indirizzo della memoria in cui depositare i byte letti; deve esserci spazio per almeno <code>count</code> byte.</li>
+  <li><code>count</code>: numero massimo di byte da leggere, espresso con <code>size_t</code>, un tipo intero senza segno.</li>
+</ul>
+
+<p align="justify"><strong>Risultato:</strong> <code>ssize_t</code> è un tipo intero con segno: un valore positivo conta i byte effettivamente letti; <code>0</code>, se sono stati richiesti byte, indica fine file; <code>-1</code> segnala un errore. Il numero letto può essere minore di quello richiesto. Per un file ordinario la posizione avanza dei byte effettivamente letti.</p>
+
+<p align="justify"><strong>Esempio:</strong> frammento dentro <code>main</code>; <code>fd</code> è già aperto in lettura. Le stampe richiedono anche <code>#include &lt;stdio.h&gt;</code>.</p>
+
+<pre lang="c"><code>char buffer[64];
+ssize_t n = read(fd, buffer, sizeof buffer);
+if (n == -1) {
+    perror(&quot;read&quot;);
+    return 1;
+} else if (n == 0) {
+    puts(&quot;Fine del file&quot;);
+} else {
+    printf(&quot;Letti %zd byte\n&quot;, n);
+    /* Sono validi soltanto i primi n byte di buffer. */
+}</code></pre>
+
+<p align="justify"><code>read</code> non aggiunge automaticamente il terminatore <code>'\0'</code> delle stringhe C. <code>EBADF</code> segnala un descrittore non valido o non aperto in lettura; <code>EINTR</code> un'interruzione da segnale prima del trasferimento. <a href="https://man7.org/linux/man-pages/man2/read.2.html">Riferimento: read(2)</a>.</p>
+
+</details>
+</td></tr>
+</table>
+<!-- /c-reference:read -->
+
+<!-- c-reference:write -->
+<table align="center">
+<tr><td>
+<details>
+<summary>&#128187; <strong>C</strong> — <code>ssize_t write(int fd, const void *buf, size_t count);</code></summary>
+
+<p align="justify"><strong>Header:</strong> <code>#include &lt;unistd.h&gt;</code>. Invia alla risorsa collegata a <code>fd</code> i byte presenti nel buffer del programma.</p>
+
+<ul>
+  <li><code>fd</code>: descrittore valido, aperto per scrivere.</li>
+  <li><code>buf</code>: indirizzo dei dati da inviare; <code>const</code> indica che la funzione non li modifica attraverso questo puntatore.</li>
+  <li><code>count</code>: numero di byte da inviare. Il buffer deve contenerne almeno altrettanti.</li>
+</ul>
+
+<p align="justify"><strong>Risultato:</strong> il numero di byte effettivamente scritti, oppure <code>-1</code> in caso di errore. Una scrittura può essere parziale: per completarla occorre inviare successivamente i byte rimasti. Nei file ordinari la posizione avanza dei byte scritti; in modalità <code>O_APPEND</code> la scrittura parte dalla fine corrente.</p>
+
+<p align="justify"><strong>Esempio:</strong> un singolo tentativo di scrittura, dentro <code>main</code>, con <code>fd</code> già aperto in scrittura. Le stampe richiedono anche <code>#include &lt;stdio.h&gt;</code>. <code>sizeof misura - 1</code> esclude il terminatore della stringa.</p>
+
+<pre lang="c"><code>const char misura[] = &quot;21.5\n&quot;;
+size_t richiesti = sizeof misura - 1;
+ssize_t n = write(fd, misura, richiesti);
+if (n == -1) {
+    perror(&quot;write&quot;);
+    return 1;
+}
+printf(&quot;Scritti %zd byte su %zu\n&quot;, n, richiesti);
+if ((size_t)n &lt; richiesti) {
+    fputs(&quot;Scrittura incompleta: restano byte da inviare\n&quot;, stderr);
+}</code></pre>
+
+<p align="justify">Il frammento segnala una scrittura incompleta; non implementa il ciclo di completamento. <code>EBADF</code> indica un descrittore non valido o non aperto in scrittura; <code>ENOSPC</code> spazio esaurito sul dispositivo. Una scrittura riuscita non garantisce da sola la persistenza su disco. <a href="https://man7.org/linux/man-pages/man2/write.2.html">Riferimento: write(2)</a>.</p>
+
+</details>
+</td></tr>
+</table>
+<!-- /c-reference:write -->
 
 <p align="justify">Riferimenti sulle strutture: <a href="https://docs.kernel.org/filesystems/vfs.html">Linux Virtual File System</a> e <a href="https://man7.org/linux/man-pages/man7/inode.7.html">inode(7)</a>.</p>
 
@@ -804,13 +911,96 @@ int main(void)
 
 #### Un numero locale, una risorsa eventualmente condivisa
 
-<p align="justify">Il descrittore <code>3</code> del processo A può indicare un file diverso dal <code>3</code> del processo B: il numero va interpretato nella tabella corretta. Viceversa, due descrittori possono riferirsi alla stessa apertura, per esempio dopo una duplicazione con <code>dup</code>. In questo caso condividono anche la posizione corrente del file. Nella figura i canali standard condividono un'apertura del terminale: è uno scenario possibile, non un requisito.</p>
+<p align="justify"><strong>Il descrittore ha significato nella tabella del processo che lo usa.</strong> Il numero <code>3</code> non identifica lo stesso file per tutti i programmi. Immaginiamo due processi, A e B, che abbiano aperto file diversi:</p>
 
-<p align="justify"><code>close</code> libera il riferimento, senza cancellare il nome del file dal filesystem. Se altri descrittori fanno riferimento alla stessa apertura, questa rimane utilizzabile attraverso di essi. Nell'applicazione del sensore, conservare un descrittore valido permette di riprendere a scrivere su <code>misure.txt</code> dopo una sospensione, mantenendo lo stato dell'apertura.</p>
+<table align="center">
+<thead>
+<tr><th>Processo</th><th>Voce nella propria tabella</th><th>File raggiunto</th></tr>
+</thead>
+<tbody>
+<tr><td>A</td><td><code>3</code></td><td><code>misure.txt</code></td></tr>
+<tr><td>B</td><td><code>3</code></td><td><code>nomi.txt</code></td></tr>
+</tbody>
+</table>
 
-<p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Controlla di avere capito:</strong> nella figura, quale descrittore useresti per salvare una misura? Perché una scrittura su <code>4</code> fallirebbe? Dopo aver chiuso <code>3</code>, quale numero potrebbe restituire la prossima apertura?</p>
+<p align="justify">Quando A chiede di leggere da <code>3</code>, il kernel consulta la tabella di A e raggiunge l'apertura di <code>misure.txt</code>. Quando B usa <code>3</code>, consulta la tabella di B e raggiunge l'apertura di <code>nomi.txt</code>. Per interpretare il numero bisogna quindi sapere <strong>quale processo sta facendo la richiesta</strong>.</p>
 
-<p align="justify">Riferimenti tecnici: <a href="https://man7.org/linux/man-pages/man2/open.2.html">open(2)</a>, <a href="https://man7.org/linux/man-pages/man3/stdin.3.html">stdin(3)</a>, <a href="https://man7.org/linux/man-pages/man2/write.2.html">write(2)</a>, <a href="https://man7.org/linux/man-pages/man2/dup.2.html">dup(2)</a>, <a href="https://man7.org/linux/man-pages/man2/close.2.html">close(2)</a> e <a href="https://man7.org/linux/man-pages/man2/chmod.2.html">chmod(2)</a>.</p>
+<p align="justify"><strong>Due processi possono anche aprire autonomamente lo stesso file.</strong> Consideriamo ora un altro caso: A e B eseguono ciascuno una propria apertura di <code>misure.txt</code>. Il kernel crea due descrizioni dell'apertura distinte. Riprendendo i tre livelli della figura, il percorso di ciascun processo passa dalla propria tabella alla propria apertura; entrambi i percorsi raggiungono poi lo stesso file, rappresentato dallo stesso inode.</p>
+
+<ul>
+  <li><strong>Per ogni apertura:</strong> il kernel conserva la modalità richiesta e la posizione corrente. A può aver chiesto sola lettura e B lettura e scrittura, se i rispettivi permessi lo consentono.</li>
+  <li><strong>Per il file:</strong> il contenuto e i metadati appartengono alla risorsa comune. Le due aperture non creano due copie private del file.</li>
+</ul>
+
+<p align="justify"><strong>Esempio di letture indipendenti.</strong> Supponiamo che <code>misure.txt</code> contenga <code>ABCDEFGH</code>, che entrambi i processi lo abbiano aperto in lettura e che entrambe le posizioni siano inizialmente 0. Nessuno modifica il file durante l'esempio e ogni lettura ottiene tutti i byte richiesti:</p>
+
+<table align="center">
+<thead>
+<tr><th>Operazione</th><th>Dati ricevuti</th><th>Posizione dell'apertura di A</th><th>Posizione dell'apertura di B</th></tr>
+</thead>
+<tbody>
+<tr><td>A legge 4 byte.</td><td><code>ABCD</code></td><td>4</td><td>0</td></tr>
+<tr><td>B legge 3 byte.</td><td><code>ABC</code></td><td>4</td><td>3</td></tr>
+<tr><td>A legge altri 2 byte.</td><td><code>EF</code></td><td>6</td><td>3</td></tr>
+</tbody>
+</table>
+
+<p align="justify">La lettura di A non consuma i dati per B: sposta soltanto la posizione nell'apertura di A. <strong>Il file è comune, le posizioni delle due aperture sono indipendenti.</strong></p>
+
+<p align="justify">Le scritture, invece, modificano quel contenuto comune. Se entrambi hanno aperto il file per scrivere e A sostituisce i primi quattro byte con <code>1234</code>, poi B scrive <code>WXYZ</code> nelle stesse posizioni, alla fine quei byte contengono <code>WXYZ</code>. Qui supponiamo che le due scritture riescano interamente, una dopo l'altra, senza modalità di aggiunta. Aperture distinte non impediscono di sovrascrivere gli stessi dati: il coordinamento fra processi richiederà regole apposite.</p>
+
+<p align="justify"><strong>Che cosa succede quando si chiude un descrittore?</strong> Nell'esempio delle due aperture indipendenti, se A chiama <code>close</code> sul proprio descrittore, il kernel libera quella voce nella tabella di A. Il numero può essere assegnato a un'apertura successiva. B conserva il proprio descrittore e può continuare a usare il file attraverso la propria apertura. Il file rimane nel filesystem: <strong>chiudere un descrittore non significa cancellare il file</strong>.</p>
+
+<!-- c-reference:close -->
+<table align="center">
+<tr><td>
+<details>
+<summary>&#128187; <strong>C</strong> — <code>int close(int fd);</code></summary>
+
+<p align="justify"><strong>Header:</strong> <code>#include &lt;unistd.h&gt;</code>. Riceve il descrittore da chiudere e libera il riferimento conservato nella tabella del processo. Il numero può essere riutilizzato per un'apertura successiva.</p>
+
+<p align="justify"><strong>Risultato:</strong> <code>0</code> se la chiusura riesce, <code>-1</code> in caso di errore. <code>EBADF</code> segnala un descrittore non valido; possono emergere anche errori di I/O relativi a scritture precedenti.</p>
+
+<p align="justify"><strong>Esempio:</strong> frammento dentro <code>main</code>, quando il programma ha terminato di usare <code>fd</code>. <code>perror</code> richiede anche <code>#include &lt;stdio.h&gt;</code>.</p>
+
+<pre lang="c"><code>int esito = close(fd);
+fd = -1;  /* Non riutilizziamo il vecchio numero. */
+if (esito == -1) {
+    perror(&quot;close&quot;);
+    return 1;
+}</code></pre>
+
+<p align="justify">Assegnare <code>-1</code> alla variabile è una scelta del programma per non usare accidentalmente il vecchio numero. Su Linux non bisogna ripetere automaticamente <code>close</code> dopo un errore: il numero potrebbe essere già stato liberato e riutilizzato. Chiudere non cancella il file e non garantisce da solo che le scritture siano persistenti su disco. <a href="https://man7.org/linux/man-pages/man2/close.2.html">Riferimento: close(2)</a>.</p>
+
+</details>
+</td></tr>
+</table>
+<!-- /c-reference:close -->
+
+<p align="justify">Anche una sospensione temporanea dovuta alla pianificazione della CPU non chiude i descrittori. Se il sistema operativo interrompe A per eseguire un altro processo, conserva la tabella e lo stato delle aperture di A. Quando A riprende, può continuare a usare gli stessi descrittori; nel frattempo, però, altri processi potrebbero aver modificato il contenuto dei file.</p>
+
+<p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Controlla di avere capito:</strong></p>
+
+<ol>
+  <li>Nella figura dei descrittori, quale numero useresti per salvare una misura?</li>
+  <li>Perché una scrittura sul descrittore <code>4</code> della figura fallirebbe?</li>
+  <li>Dopo aver chiuso <code>3</code>, quale numero potrebbe restituire la prossima apertura?</li>
+  <li>Nell'esempio delle letture, perché B riceve <code>ABC</code> anche se A ha già letto <code>ABCD</code>?</li>
+</ol>
+
+<details>
+<summary>Confronta le risposte</summary>
+
+<ol>
+  <li><code>3</code>: nella figura conduce all'apertura in scrittura di <code>misure.txt</code>.</li>
+  <li>L'apertura collegata a <code>4</code> è in sola lettura.</li>
+  <li><code>3</code>, se è ancora il numero libero più basso al momento della nuova apertura.</li>
+  <li>A e B hanno aperto il file separatamente: la lettura di A non modifica la posizione nell'apertura di B.</li>
+</ol>
+
+</details>
+
+<p align="justify">Riferimenti tecnici: <a href="https://man7.org/linux/man-pages/man2/open.2.html">open(2)</a>, <a href="https://man7.org/linux/man-pages/man3/stdin.3.html">stdin(3)</a>, <a href="https://man7.org/linux/man-pages/man2/read.2.html">read(2)</a>, <a href="https://man7.org/linux/man-pages/man2/write.2.html">write(2)</a>, <a href="https://man7.org/linux/man-pages/man2/close.2.html">close(2)</a> e <a href="https://man7.org/linux/man-pages/man2/chmod.2.html">chmod(2)</a>.</p>
 
 ### 6. Credenziali e permessi: identità e autorizzazione
 

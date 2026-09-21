@@ -68,7 +68,7 @@
       "id": "01-tabella-descrittori",
       "title": "Descrittori: dal numero alla risorsa",
       "section": "Anatomia di un processo",
-      "alt": "Nel kernel, la tabella del processo collega 0, 1 e 2 a un terminale, 3 a misure.txt aperto in scrittura e 4 a config.txt aperto in lettura; 5 è libero. Le descrizioni delle aperture conservano modalità e posizione. I permessi appartengono ai file: vengono verificati all'apertura, mentre le operazioni successive devono rispettare la modalità dell'apertura.",
+      "alt": "Nel kernel, la tabella del processo collega 0, 1 e 2 al terminale attraverso aperture distinte, rispettivamente in lettura, scrittura e scrittura. Il descrittore 3 raggiunge misure.txt aperto in scrittura e 4 config.txt aperto in lettura; 5 è libero. Le aperture dei file conservano modalità e posizione. I permessi appartengono ai file e vengono verificati all'apertura; durante l'uso il kernel controlla il descrittore e la modalità.",
       "caption": "Il descrittore seleziona un riferimento: modalità e posizione appartengono all'apertura, dati e permessi al file. Le frecce rappresentano riferimenti, non il verso dei dati.",
       "lesson": "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md",
       "scene": "assets/tpsi4/visual-system/scenes/01-tabella-descrittori.scene.svg",
