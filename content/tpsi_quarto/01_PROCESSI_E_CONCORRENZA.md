@@ -620,19 +620,43 @@ int main(void)
 
 #### Dal numero alla risorsa: tre livelli
 
-<ol>
-  <li><strong>Tabella del processo:</strong> il descrittore è l'indice di una voce occupata oppure libera. Una voce occupata contiene un riferimento all'apertura e informazioni proprie del descrittore, per esempio se chiuderlo quando viene caricato un nuovo programma con <code>exec</code>.</li>
-  <li><strong>Descrizione dell'apertura nel kernel:</strong> conserva la modalità di accesso, come sola lettura o sola scrittura, e lo stato dell'apertura; per un file ordinario conserva anche la posizione corrente, cioè da quale byte proseguire.</li>
-  <li><strong>Risorsa:</strong> il file con i suoi dati e metadati, oppure un terminale, una pipe o un socket. I permessi del file appartengono ai suoi metadati, non al numero del descrittore.</li>
-</ol>
+<p align="justify">Supponiamo che l'apertura di <code>misure.txt</code> sia riuscita e abbia restituito <code>fd = 3</code>. Il programma conserva questo numero e lo passa al sistema operativo quando vuole scrivere. <strong>Come fa il kernel a partire da <code>3</code> e arrivare ai dati del file?</strong> Segue una catena di riferimenti fra strutture che ha predisposto all'apertura.</p>
 
-<p align="justify">La tabella è associata al processo, ma si trova nel kernel: il programma non può modificarne direttamente le voci come quelle di un proprio array. Usa chiamate di sistema quali <code>open</code>, <code>read</code>, <code>write</code> e <code>close</code>. Il contenuto di un file aperto non viene automaticamente copiato nella memoria privata del processo.</p>
+<p align="justify">Per capire questo percorso consideriamo <strong>tre livelli di strutture</strong>, ciascuno con un compito diverso. Qui seguiamo un file ordinario; il caso di terminali, pipe e socket usa operazioni specifiche della risorsa.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Per un file ordinario distinguiamo queste tre strutture:</p>
+<ol>
+  <li><strong>Tabella dei descrittori del processo:</strong> associa un numero <code>fd</code> al riferimento a un'apertura.</li>
+  <li><strong>Descrizione dell'apertura</strong> (<em>open file description</em>, rappresentata in Linux da una <code>struct file</code>): conserva le informazioni relative a quella specifica apertura, come modalità di accesso e posizione corrente.</li>
+  <li><strong>Inode del file:</strong> è la struttura del filesystem che rappresenta il file e ne conserva i metadati, come proprietario, permessi e dimensione. Attraverso le strutture e le operazioni del filesystem permette di raggiungere il contenuto effettivo.</li>
+</ol>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Il percorso da ricordare è quindi <strong><code>fd</code> → tabella dei descrittori → descrizione dell'apertura → inode → accesso ai dati tramite il filesystem</strong>. È un modello didattico dei tre livelli principali: il kernel utilizza anche altre strutture interne. Il programma fornisce il descrittore; è il kernel a seguire i riferimenti.</p>
+
+<p align="justify">Nella figura seguente leggiamo questo percorso <strong>da sinistra verso destra</strong>. La prima colonna mostra la tabella del processo A, la seconda le descrizioni delle aperture, la terza le risorse raggiunte. Per i file, la colonna di destra riunisce in un solo riquadro i dati e i metadati: l'inode non è disegnato separatamente.</p>
 
 <!-- figure:01-tabella-descrittori -->
 <p align="center">
   <img src="../../assets/tpsi4/01-tabella-descrittori.svg" alt="Nel kernel, la tabella del processo collega 0, 1 e 2 a un terminale, 3 a misure.txt aperto in scrittura e 4 a config.txt aperto in lettura; 5 è libero. Le descrizioni delle aperture conservano modalità e posizione. I permessi appartengono ai file: vengono verificati all&#x27;apertura, mentre le operazioni successive devono rispettare la modalità dell&#x27;apertura." width="960">
 </p>
 <p align="center"><em>Il descrittore seleziona un riferimento: modalità e posizione appartengono all&#x27;apertura, dati e permessi al file. Le frecce rappresentano riferimenti, non il verso dei dati.</em></p>
+
+<p align="justify"><strong>1. Entrare nella tabella usando <code>fd</code>.</strong> Seguiamo la riga <code>3</code> nella colonna sinistra della figura. Il kernel usa il numero come indice nella tabella del processo che ha richiesto l'operazione. Quella voce contiene il riferimento alla descrizione dell'apertura di <code>misure.txt</code>: la freccia blu mostra quale struttura raggiungere. La tabella è associata al processo, ma è gestita nel kernel; il programma non può modificarla direttamente come un proprio array. Una voce libera, come la <code>5</code> della figura, non individua un'apertura utilizzabile.</p>
+
+<p align="justify"><strong>2. Consultare lo stato di quella apertura.</strong> La freccia dalla riga <code>3</code> arriva al riquadro centrale con <code>O_WRONLY</code> e posizione <code>128 byte</code>. Il kernel ricava da qui che l'apertura consente la sola scrittura e che la prossima scrittura ordinaria parte dalla posizione 128, contando dall'inizio del file. La posizione appartiene all'apertura: se vengono scritti interamente quattro byte, avanza a 132. Il riquadro collegato a <code>4</code> conserva invece lo stato di un'altra apertura: sola lettura e posizione iniziale 0.</p>
+
+<p align="justify"><strong>3. Raggiungere il file e operare sui dati.</strong> Dal riquadro centrale seguiamo la freccia viola fino a <code>misure.txt</code>, a destra. L'apertura mantiene il collegamento al file rappresentato dall'inode. Il filesystem usa le proprie strutture per individuare e gestire i byte richiesti. L'inode conserva informazioni sul file, come i permessi; la posizione 128 e la modalità di quella apertura restano invece al livello precedente. Aprire un file non significa copiarne automaticamente tutto il contenuto nella memoria privata del processo.</p>
+
+<p align="justify">Quando il programma chiede <strong>«scrivi questi dati sul descrittore 3»</strong>, il kernel può dunque individuare l'apertura, verificare che consenta la scrittura e raggiungere il file su cui eseguirla. Il descrittore è il punto di ingresso a questo percorso. Per chiedere le operazioni il programma usa chiamate di sistema: <code>read</code> per leggere, <code>write</code> per scrivere e <code>close</code> per chiudere il descrittore.</p>
+
+<p align="justify">Riferimenti sulle strutture: <a href="https://docs.kernel.org/filesystems/vfs.html">Linux Virtual File System</a> e <a href="https://man7.org/linux/man-pages/man7/inode.7.html">inode(7)</a>.</p>
 
 #### I tre descrittori standard: 0, 1 e 2
 
