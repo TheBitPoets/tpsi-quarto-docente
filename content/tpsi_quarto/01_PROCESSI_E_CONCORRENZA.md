@@ -673,15 +673,64 @@ int main(void)
 </tbody>
 </table>
 
-<p align="justify">In C/POSIX, <code>&lt;unistd.h&gt;</code> fornisce le costanti <code>STDIN_FILENO</code>, <code>STDOUT_FILENO</code> e <code>STDERR_FILENO</code>, rispettivamente <code>0</code>, <code>1</code> e <code>2</code>. Invece <code>stdin</code>, <code>stdout</code> e <code>stderr</code> di <code>&lt;stdio.h&gt;</code> sono flussi di tipo <code>FILE *</code>: oggetti della libreria C costruiti sopra i descrittori, con gestione del buffering. Anche <code>fopen</code> restituisce un <code>FILE *</code>, mentre <code>open</code> restituisce un intero.</p>
+#### Reindirizzare ingresso, uscita ed errori: `<`, `>` e `2>`
 
-<p align="justify">I numeri indicano ruoli convenzionali, non dispositivi fissi: <code>0</code> non significa necessariamente tastiera e <code>1</code> non significa necessariamente schermo. La shell può collegarli a file o pipe prima di avviare il programma. Supponiamo di avere un programma <code>analizza</code> che legge da <code>stdin</code>, scrive i risultati su <code>stdout</code> e le diagnosi su <code>stderr</code>:</p>
+<p align="justify">Quando avviamo normalmente un programma da un terminale, il descrittore <code>0</code> permette di ricevere il testo digitato, mentre <code>1</code> e <code>2</code> permettono di mostrare risultati e messaggi. Possiamo però scegliere una sorgente o una destinazione diversa usando i simboli di reindirizzamento della shell.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>reindirizzamento</strong> è l'operazione con cui la shell cambia la risorsa collegata a un descrittore del programma che sta per avviare. Per esempio, può collegare l'uscita standard a un file: il programma continua a scrivere sul descrittore <code>1</code>, ma i dati vengono inviati al file scelto.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">I simboli seguenti sono istruzioni per la <strong>shell</strong>, che prepara i collegamenti prima dell'esecuzione. Nella tabella, <code>file</code> indica il percorso scelto:</p>
+
+<table align="center">
+<thead>
+<tr><th>Sintassi</th><th>Descrittore interessato</th><th>Effetto</th></tr>
+</thead>
+<tbody>
+<tr><td><code>&lt; file</code></td><td><code>0</code> — ingresso standard</td><td>Apre il file in lettura: il programma riceve da quel file i dati che normalmente arriverebbero dal terminale.</td></tr>
+<tr><td><code>&gt; file</code></td><td><code>1</code> — uscita standard</td><td>Invia al file l'output ordinario. Normalmente crea il file se manca oppure ne svuota il contenuto se esiste.</td></tr>
+<tr><td><code>2&gt; file</code></td><td><code>2</code> — uscita standard degli errori</td><td>Invia al file i messaggi diagnostici. Normalmente crea il file se manca oppure ne svuota il contenuto se esiste.</td></tr>
+</tbody>
+</table>
+
+<p align="justify">Quando il numero è omesso, <code>&lt;</code> si riferisce a <code>0</code> e <code>&gt;</code> a <code>1</code>: possiamo scrivere anche <code>0&lt;</code> e <code>1&gt;</code>. In <code>2&gt;</code>, il <code>2</code> specifica invece il canale degli errori e deve essere attaccato al simbolo <code>&gt;</code>. Con il solo <code>&gt;</code> reindirizziamo i risultati; i messaggi scritti su <code>2</code> continuano ad arrivare al terminale.</p>
+
+<p align="justify"><strong>Prima: avvio senza reindirizzamento.</strong> Supponiamo di avere un programma <code>analizza</code> che legge da <code>stdin</code>, scrive i risultati su <code>stdout</code> e le diagnosi su <code>stderr</code>. Lo avviamo così:</p>
+
+```bash
+./analizza
+```
+
+<p align="justify">In un normale avvio interattivo, inseriamo i dati dal terminale. Nello stesso terminale vediamo sia i risultati sia gli eventuali messaggi diagnostici, pur essendo prodotti attraverso due descrittori distinti.</p>
+
+<p align="justify"><strong>Dopo: lo stesso programma con reindirizzamento.</strong> Prepariamo <code>dati.txt</code> con i dati da analizzare e avviamo:</p>
 
 ```bash
 ./analizza < dati.txt > risultati.txt 2> errori.txt
 ```
 
-<p align="justify">Il programma continua a usare gli stessi tre canali: <code>0</code> riceve i dati da <code>dati.txt</code>, <code>1</code> invia i risultati a <code>risultati.txt</code>, <code>2</code> invia le diagnosi a <code>errori.txt</code>. Qui <code>&gt;</code> e <code>2&gt;</code> creano o svuotano i rispettivi file di uscita. Tenere separati risultati e messaggi permette, per esempio, di elaborare successivamente i risultati senza confonderli con una segnalazione d'errore.</p>
+<p align="justify">La shell prepara i tre collegamenti. Il programma esegue la stessa elaborazione e usa gli stessi descrittori, con queste sorgenti e destinazioni:</p>
+
+<table align="center">
+<thead>
+<tr><th>Canale del programma</th><th>Senza reindirizzamento</th><th>Con il comando precedente</th></tr>
+</thead>
+<tbody>
+<tr><td><code>0</code> — <code>stdin</code></td><td>Testo inserito nel terminale.</td><td>Dati letti da <code>dati.txt</code>.</td></tr>
+<tr><td><code>1</code> — <code>stdout</code></td><td>Risultati mostrati nel terminale.</td><td>Risultati scritti in <code>risultati.txt</code>.</td></tr>
+<tr><td><code>2</code> — <code>stderr</code></td><td>Diagnosi mostrate nel terminale.</td><td>Diagnosi scritte in <code>errori.txt</code>.</td></tr>
+</tbody>
+</table>
+
+<p align="justify">Ricolleghiamoci alla figura dei descrittori: il numero della riga resta lo stesso, mentre cambia il riferimento all'apertura. In questo esempio la riga <code>1</code> conduce all'apertura di <code>risultati.txt</code>. <strong>Cambia la destinazione dell'output, non il numero che il programma usa per produrlo.</strong> Separare risultati e diagnosi permette poi di elaborare il file dei risultati senza mescolarvi i messaggi d'errore.</p>
+
+<p align="justify">Riferimento: <a href="https://www.gnu.org/s/bash/manual/html_node/Redirections.html">Bash Reference Manual — Redirections</a>.</p>
 
 #### Dopo i tre canali standard: 3, 4 e riuso dei numeri
 
