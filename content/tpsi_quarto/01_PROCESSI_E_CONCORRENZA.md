@@ -752,14 +752,55 @@ int main(void)
 
 #### Che cosa può controllare il kernel?
 
-<p align="justify">La tabella dà al kernel il collegamento necessario per verificare un'operazione. Distinguiamo due momenti:</p>
+<p align="justify">Quando un programma vuole usare un file, il kernel deve distinguere <strong>i permessi che l'utente ha sul file</strong> dalla <strong>modalità richiesta dal programma per quella apertura</strong>. Un utente autorizzato a leggere e scrivere può avviare un programma che chiede soltanto la lettura.</p>
+
+<p align="justify"><strong>Primo momento: il programma chiede di aprire il file.</strong> La richiesta specifica il file e il tipo di accesso desiderato: sola lettura (<code>O_RDONLY</code>), sola scrittura (<code>O_WRONLY</code>) oppure lettura e scrittura (<code>O_RDWR</code>). Prima di concedere l'apertura, il kernel confronta <strong>l'accesso richiesto con i permessi dell'utente sul file</strong>. Per stabilire per conto di chi agisce il programma usa le informazioni di identità del processo, che approfondiremo nella sezione successiva.</p>
+
+<p align="justify">Per esempio, una richiesta di lettura richiede il permesso di lettura; una richiesta di lettura e scrittura richiede entrambi. Se l'accesso richiesto non è consentito, il kernel rifiuta l'apertura e non restituisce un descrittore valido. Se i controlli passano e l'apertura riesce, restituisce il descrittore e conserva nella descrizione dell'apertura <strong>la modalità richiesta dal programma</strong>. Nell'esempio seguente supponiamo che il file esista, sia raggiungibile e non vi siano altri impedimenti.</p>
+
+<p align="justify"><strong>Esempio: Antonio può leggere e scrivere, ma il programma chiede soltanto di leggere.</strong> Antonio avvia un programma che vuole consultare <code>misure.txt</code>. I permessi del file consentono ad Antonio sia la lettura sia la scrittura. Seguiamo una nuova esecuzione:</p>
+
+<ol>
+  <li>Il programma chiede: <strong>«Apri <code>misure.txt</code> in sola lettura»</strong>, indicando <code>O_RDONLY</code>.</li>
+  <li>Il kernel controlla: <strong>«Antonio ha il permesso di leggere questo file?»</strong>. La risposta è sì, quindi può concedere l'accesso richiesto.</li>
+  <li>L'apertura riesce e il programma riceve, per esempio, <code>fd = 3</code>. Nella descrizione di questa apertura il kernel registra <strong>sola lettura</strong>.</li>
+</ol>
+
+<p align="justify">Il permesso di scrittura di Antonio non viene aggiunto automaticamente alla modalità scelta: il programma ha richiesto un'apertura per leggere. Se Antonio avesse soltanto il permesso di lettura e il programma chiedesse invece un'apertura in scrittura, il kernel dovrebbe rifiutarla.</p>
+
+<p align="justify"><strong>Secondo momento: il programma usa il descrittore ricevuto.</strong> A ogni richiesta di lettura o scrittura, il kernel usa la tabella dei descrittori per trovare l'apertura. Verifica che il descrittore sia ancora valido e che la modalità dell'apertura consenta l'operazione. Proseguiamo con il descrittore <code>3</code> dell'esempio di Antonio:</p>
+
+<table align="center">
+<thead>
+<tr><th>Richiesta del programma</th><th>Controllo del kernel</th><th>Esito del controllo</th></tr>
+</thead>
+<tbody>
+<tr><td>Leggere dal descrittore <code>3</code>.</td><td>L'apertura è in sola lettura.</td><td>La lettura è consentita e può procedere.</td></tr>
+<tr><td>Scrivere sul descrittore <code>3</code>.</td><td>L'apertura non consente la scrittura.</td><td>La scrittura viene rifiutata, anche se Antonio ha il permesso di scrivere sul file.</td></tr>
+<tr><td>Usare <code>3</code> dopo averlo chiuso, prima che venga riutilizzato.</td><td>La voce non indica più un'apertura valida.</td><td>L'operazione viene rifiutata.</td></tr>
+</tbody>
+</table>
+
+<p align="justify">Per scrivere, il programma deve ottenere un'apertura in sola scrittura o in lettura e scrittura. Questa nuova richiesta sarà nuovamente confrontata con i permessi applicabili all'utente. <strong>Il numero <code>3</code> non indica da solo quali operazioni sono consentite:</strong> il kernel deve seguire il riferimento alla descrizione dell'apertura, come mostrato nella figura. Nell'esempio di Antonio vi trova sola lettura; nello scenario della figura, invece, la riga <code>3</code> conduce a un'apertura in sola scrittura.</p>
+
+<details>
+<summary>Approfondimento: come vengono segnalati i due errori</summary>
+
+<p align="justify">Le chiamate <code>open</code> e <code>write</code> restituiscono <code>-1</code> quando falliscono; <code>errno</code> indica il motivo. Nei casi descritti:</p>
 
 <ul>
-  <li><strong>All'apertura:</strong> il kernel confronta la richiesta con le credenziali del processo e le regole di accesso alla risorsa. Se manca il permesso richiesto, l'apertura viene rifiutata. Per esempio, un accesso negato può produrre <code>-1</code> con <code>errno</code> impostato a <code>EACCES</code>.</li>
-  <li><strong>Durante l'uso:</strong> il kernel verifica che il descrittore sia valido e che l'apertura consenta l'operazione richiesta. Un file aperto con <code>O_RDONLY</code> non può essere scritto attraverso quel descrittore: <code>write</code> fallisce con <code>EBADF</code>, anche se l'utente avrebbe il permesso di aprire lo stesso file in scrittura. <code>O_WRONLY</code> abilita la sola scrittura; <code>O_RDWR</code> lettura e scrittura.</li>
+  <li><code>EACCES</code> all'apertura segnala che l'accesso richiesto è stato negato: per esempio, manca il permesso di scrittura sul file.</li>
+  <li><code>EBADF</code> durante una scrittura segnala che il descrittore non è valido oppure che l'apertura non consente di scrivere.</li>
 </ul>
 
-<p align="justify">I permessi del file e la modalità dell'apertura rispondono dunque a domande diverse: <strong>«questo processo può ottenere l'accesso richiesto?»</strong> e <strong>«questa apertura consente l'operazione?»</strong>. Cambiare i normali permessi del file con <code>chmod</code> non revoca, in generale, l'accesso già ottenuto attraverso un descrittore aperto. Le credenziali e i permessi vengono ripresi nella sezione successiva.</p>
+</details>
+
+<details>
+<summary>Approfondimento: se i permessi cambiano dopo l'apertura</summary>
+
+<p align="justify">Consideriamo un altro caso: il programma di Antonio ha già ottenuto un'apertura <strong>in scrittura</strong>. Successivamente qualcuno usa <code>chmod</code> per rimuovere il permesso di scrittura sul file. Su un normale filesystem locale Linux, questo cambiamento generalmente <strong>non revoca l'accesso già ottenuto</strong>: il programma può continuare a usare quell'apertura. Una nuova richiesta di apertura viene invece controllata rispetto ai permessi aggiornati. Modificare i normali permessi del file non equivale quindi a chiudere i descrittori già aperti.</p>
+
+</details>
 
 #### Un numero locale, una risorsa eventualmente condivisa
 
