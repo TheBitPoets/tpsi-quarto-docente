@@ -644,7 +644,7 @@ if (fd == -1) {
 printf(&quot;Descrittore ottenuto: %d\n&quot;, fd);
 /* Ora fd puo essere usato per leggere. */</code></pre>
 
-<p align="justify">Nell'esempio di Antonio, il kernel verifica il permesso di lettura e registra un'apertura in sola lettura. <a href="https://man7.org/linux/man-pages/man2/open.2.html">Riferimento: open(2)</a>.</p>
+<p align="justify"><a href="https://man7.org/linux/man-pages/man2/open.2.html">Riferimento: open(2)</a>.</p>
 
 </details>
 </td></tr>
