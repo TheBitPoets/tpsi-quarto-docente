@@ -91,7 +91,7 @@ Gli scostamenti dal preventivo vanno riportati nel consuntivo e compensati aggio
 - [Content Pack](content/tpsi_quarto/content-pack.json), con fonti e stato dei materiali.
 - [Note docente del laboratorio fork/pipe](activities/tpsi_quarto/fork_pipe_square/teacher/NOTES.md).
 
-La dispensa integrativa [LINUX_PROGRAMMING.md](https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming) è una fonte remota del repository `TheBitPoets/2cornot2c`, identificata nel Content Pack; non è un file locale di questo repository. Il percorso la utilizza a partire dalla sezione `Linux Programming`, escludendo la sezione iniziale `Controllo dei processi`.
+La dispensa integrativa [LINUX_PROGRAMMING.md](https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming) è una fonte remota del repository `TheBitPoets/2cornot2c`, identificata nel Content Pack; non è un file locale di questo repository. L'importazione parte dalla sezione `Linux Programming`. Gli argomenti delle immagini iniziali di `Controllo dei processi` sono ripresi nel [laboratorio originale per Ubuntu](content/tpsi_quarto/01_LABORATORIO_PROCESSI_UBUNTU.md), con ps, nice, kill, killall e prove sui segnali.
 
 ## Immagini e formattazione del corso
 

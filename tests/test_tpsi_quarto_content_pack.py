@@ -153,6 +153,7 @@ def test_content_pack_v1_sources_project_to_course_board_catalog() -> None:
         "README.md",
         "COVERAGE.md",
         "01_PROCESSI_E_CONCORRENZA.md",
+        "01_LABORATORIO_PROCESSI_UBUNTU.md",
         "02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md",
         "03_REQUISITI_SOFTWARE.md",
         "04_DOCUMENTAZIONE_VERSIONAMENTO.md",
@@ -170,11 +171,12 @@ def test_archived_course_design_remains_a_valid_33_week_legacy_design() -> None:
     source_files = course_source_catalog.local_markdown_source_files(design, ROOT)
 
     # Il CourseDesign storico mantiene ancora la vecchia sorgente overlay Linux.
-    # In un checkout standalone vengono indicizzati soltanto gli otto file locali reali.
+    # In un checkout standalone vengono indicizzati soltanto i nove file locali reali.
     indexed_paths = {item.relative_path for item in source_files}
     assert "LINUX_PROGRAMMING.md" not in indexed_paths
     assert "content/tpsi_quarto/01_PROCESSI_E_CONCORRENZA.md" in indexed_paths
-    assert len(indexed_paths) == 8
+    assert "content/tpsi_quarto/01_LABORATORIO_PROCESSI_UBUNTU.md" in indexed_paths
+    assert len(indexed_paths) == 9
 
     normalized_sources = course_source_catalog.normalize_course_sources(design)
     assert [source.source_id for source in normalized_sources] == [

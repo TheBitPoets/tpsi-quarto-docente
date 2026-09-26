@@ -98,9 +98,10 @@ Sezioni incluse nel lavoro di integrazione:
 - semafori e variabili di condizione;
 - implementazione Linux, `clone` e confronto processi/thread.
 
-Sezione esclusa:
+Integrazione operativa:
 
-- `Controllo dei processi` e le relative slide iniziali.
+- [Laboratorio Ubuntu](01_LABORATORIO_PROCESSI_UBUNTU.md): osservazione con ps/top, priorità nice/renice, selezione per PID o nome, segnali e job control. Cinque prove guidate collegate ai moduli 1 e 2.
+- Le immagini editoriali iniziali di `Controllo dei processi` restano escluse dall'importazione; gli argomenti richiesti sono rielaborati nella scheda originale con riferimenti ai manuali attuali.
 
 Nota di licenza: gli esempi presenti nella dispensa che dichiarano una provenienza editoriale esterna devono essere controllati singolarmente. Dove la licenza non consente la redistribuzione o non è chiara, il pacchetto deve usare una nuova implementazione originale.
 

@@ -11,6 +11,7 @@
         "README.md",
         "COVERAGE.md",
         "01_PROCESSI_E_CONCORRENZA.md",
+        "01_LABORATORIO_PROCESSI_UBUNTU.md",
         "02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md",
         "03_REQUISITI_SOFTWARE.md",
         "04_DOCUMENTAZIONE_VERSIONAMENTO.md",
@@ -37,7 +38,7 @@
       "audience": {
         "class_ids": []
       },
-      "description": "Percorso TPSI originale e multi-fonte allineato ai nuclei pubblici del volume 2 adottato, integrato con la dispensa Linux a partire dalla sezione Linux Programming. La sezione iniziale Controllo dei processi è esclusa.",
+      "description": "Percorso TPSI originale e multi-fonte allineato ai nuclei pubblici del volume 2 adottato, integrato con la dispensa Linux a partire dalla sezione Linux Programming. I comandi di gestione dei processi sono ripresi nel laboratorio originale per Ubuntu; le immagini editoriali iniziali restano escluse dall'importazione.",
       "weekly_hours": 3,
       "weeks": 33,
       "udas": [
@@ -97,7 +98,7 @@
                 "recall": "Riprendere processo di compilazione, spazio di memoria e gestione degli errori.",
                 "preview": "Prepara IPC, race condition, mutex, semafori, condition e problemi classici.",
                 "next_step": "Svolgere esercizi A-D e avviare il laboratorio fork/pipe.",
-                "references": "Modulo originale e heading pertinenti di LINUX_PROGRAMMING.md, esclusa Controllo dei processi."
+                "references": "Modulo originale, laboratorio Ubuntu su comandi e segnali e heading pertinenti di LINUX_PROGRAMMING.md."
               }
             }
           ]

@@ -97,7 +97,7 @@ content/tpsi_quarto/*.md
 LINUX_PROGRAMMING.md
 ```
 
-Il file `LINUX_PROGRAMMING.md` viene indicizzato, ma il percorso non usa la sezione iniziale `Controllo dei processi`. I collegamenti validi iniziano da `Linux Programming`.
+Il file `LINUX_PROGRAMMING.md` viene indicizzato a partire da `Linux Programming`. Le immagini editoriali iniziali di `Controllo dei processi` restano escluse dall'importazione; i comandi e i segnali sono trattati nel [laboratorio originale per Ubuntu](../content/tpsi_quarto/01_LABORATORIO_PROCESSI_UBUNTU.md), incluso fra le fonti locali.
 
 ## Struttura del pacchetto
 
@@ -107,6 +107,7 @@ content/tpsi_quarto/
   manifest.json
   COVERAGE.md
   01_PROCESSI_E_CONCORRENZA.md
+  01_LABORATORIO_PROCESSI_UBUNTU.md
   02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md
   03_REQUISITI_SOFTWARE.md
   04_DOCUMENTAZIONE_VERSIONAMENTO.md
@@ -176,7 +177,7 @@ Il pacchetto:
 - aggiunge confronti originali C/POSIX e Java;
 - mantiene i concetti del libro separati dagli approfondimenti specifici Linux.
 
-La prima sezione esclusa è:
+La sezione di immagini esclusa dall'importazione è:
 
 ```text
 ## Controllo dei processi

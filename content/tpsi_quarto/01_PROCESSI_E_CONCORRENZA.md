@@ -50,7 +50,7 @@ Svolgere esercizi A-D e avviare il laboratorio fork/pipe.
 
 <p align="justify">
 <strong><span style="font-size: 1.15em;">&#128279;</span> Rimando:</strong>
-Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming">dispensa Linux di 2cornot2c</a>, esclusa Controllo dei processi. <a href="#fonti-e-note-di-revisione">Fonti e note della lezione</a>; <a href="COVERAGE.md">matrice di copertura</a>.
+Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#linux-programming">dispensa Linux di 2cornot2c</a>; <a href="01_LABORATORIO_PROCESSI_UBUNTU.md">laboratorio Ubuntu su comandi e segnali</a>. <a href="#fonti-e-note-di-revisione">Fonti e note della lezione</a>; <a href="COVERAGE.md">matrice di copertura</a>.
 </p>
 
 </details>
@@ -1331,6 +1331,8 @@ pstree -p
 ```
 
 <p align="justify">L'albero non implica che il padre controlli ogni istruzione del figlio. Indica una relazione utile per creazione, attesa, ereditarietà di alcune risorse e raccolta dello stato di terminazione.</p>
+
+<p align="justify"><strong>&#128187; Prova nella VM:</strong> il <a href="01_LABORATORIO_PROCESSI_UBUNTU.md">laboratorio Ubuntu: osservare e gestire i processi</a> guida all'uso di <code>ps</code>, <code>top</code>, <code>nice</code>, <code>renice</code>, <code>kill</code> e <code>killall</code>, con cinque prove su stati, priorità e segnali.</p>
 
 ## Creazione di processi: `fork`, `exec` e `wait`
 

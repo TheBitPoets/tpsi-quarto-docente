@@ -11,6 +11,10 @@ Questa cartella contiene materiali didattici originali per il quarto anno TPSI, 
 5. [Testing e debugging](05_TESTING_DEBUGGING.md)
 6. [Cittadinanza digitale](06_CITTADINANZA_DIGITALE.md)
 
+### Laboratori guidati
+
+- [Ubuntu: osservare e gestire i processi](01_LABORATORIO_PROCESSI_UBUNTU.md): ps, top, nice, renice, kill, killall e segnali; cinque prove nella VM, collegate ai moduli 1 e 2.
+
 ## File di controllo
 
 - [`manifest.json`](manifest.json): identità, fonti, versioni e relazioni del pacchetto;
@@ -37,7 +41,7 @@ La sezione precedente:
 ## Controllo dei processi
 ```
 
-è esclusa dal percorso perché il docente ha richiesto di non integrarla.
+rimane esclusa dall'importazione delle immagini editoriali. I suoi argomenti operativi sono ora ripresi nel [laboratorio originale per Ubuntu](01_LABORATORIO_PROCESSI_UBUNTU.md), con comandi verificati sui manuali attuali ed esercizi nuovi.
 
 I moduli non duplicano l'intera dispensa Linux: introducono la cornice concettuale, collegano gli heading pertinenti e aggiungono contenuti mancanti, confronti Java, esercizi, laboratori e verifiche.
 
