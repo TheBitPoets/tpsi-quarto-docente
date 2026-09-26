@@ -88,6 +88,34 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
 
 <p align="justify">Per la traccia Java sono utili classi, metodi, oggetti e gestione delle eccezioni.</p>
 
+## Prima distinzione: programma, processo e thread
+
+<p align="justify">Partiamo da un programma C già conosciuto: lo compiliamo e lo avviamo dal terminale. Il file eseguibile rimane sul disco; il sistema operativo avvia un'esecuzione con la memoria e le risorse necessarie a svolgere il lavoro.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o un insieme di istruzioni memorizzate. Un <strong>processo</strong> è un'esecuzione attiva di quel programma, con uno stato che cambia nel tempo.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Nei semplici programmi C scritti finora, seguiamo un solo percorso: entriamo in <code>main</code>, chiamiamo una funzione, torniamo al chiamante e proseguiamo. Questo percorso attraverso le istruzioni è il flusso di esecuzione. Una chiamata di funzione fa proseguire lo stesso flusso dentro la funzione chiamata.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Un <strong>thread</strong> è un flusso di esecuzione all'interno di un processo: segue una sequenza di istruzioni e mantiene il proprio punto di avanzamento. Un processo può contenere uno o più thread, che usano la memoria e le risorse del processo a cui appartengono.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Un programma C che non avvia altri thread lavora con il solo thread iniziale, che esegue <code>main</code>. Per ottenere più flussi occorre avviarli esplicitamente con gli strumenti che vedremo più avanti. Ogni thread può trovarsi in un punto diverso del codice: uno può attendere un dato mentre un altro elabora un comando.</p>
+
+<p align="justify">Distinguiamo quindi due domande: <strong>quale processo contiene i dati e le risorse?</strong> e <strong>quale thread sta eseguendo le istruzioni?</strong> Avere più thread permette di organizzare più attività, ma non garantisce che vengano eseguite nello stesso istante. Nel problema seguente useremo questa distinzione; poi studieremo le risorse del processo e, nella sezione <a href="#da-processo-a-thread">Da processo a thread</a>, come avviare e attendere i singoli flussi.</p>
+
 ## Problema iniziale: una sola attività o più attività coordinate?
 
 <p align="justify">Immaginiamo una stazione che misura la temperatura di un'aula. L'applicazione deve <strong>leggere un sensore</strong>, <strong>inviare le misure a un server attraverso un socket</strong> e <strong>aggiornare una schermata</strong> con temperatura, orario e pulsanti.</p>
@@ -105,7 +133,7 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
 
 ### Una sola attività: prima leggi, poi invia, poi aggiorna
 
-<p align="justify">La soluzione iniziale usa un solo <strong>thread</strong>, cioè un unico flusso di esecuzione: legge una misura, la invia, aggiorna la schermata e ricomincia. Supponiamo che lettura e invio siano <strong>bloccanti</strong>: se l'operazione non può proseguire subito, il thread aspetta al suo interno e non esegue ancora le istruzioni successive.</p>
+<p align="justify">La soluzione iniziale usa un solo thread: legge una misura, la invia, aggiorna la schermata e ricomincia. Supponiamo che lettura e invio siano <strong>bloccanti</strong>: se l'operazione non può proseguire subito, il thread aspetta al suo interno e non esegue ancora le istruzioni successive.</p>
 
 <!-- figure:01-io-sequenziale -->
 <p align="center">
@@ -176,15 +204,7 @@ Modulo originale e sezioni pertinenti della <a href="https://github.com/TheBitPo
 
 ## Dal programma al processo
 
-<!-- definition -->
-<table align="center">
-<tr><td>
-&#10071; <strong>Importante</strong>
-<p align="justify">
-Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o un insieme di istruzioni memorizzate. Un <strong>processo</strong> è un'esecuzione attiva di quel programma, con uno stato che cambia nel tempo.</p>
-</td></tr>
-</table>
-<!-- /definition -->
+<p align="justify">Riprendiamo la <a href="#prima-distinzione-programma-processo-e-thread">distinzione iniziale</a> e concentriamoci sul processo: che cosa deve gestire il sistema operativo quando avvia un programma?</p>
 
 <p align="justify">Lo stesso programma può essere eseguito in più processi. Se apriamo due terminali e avviamo due volte lo stesso comando, il codice del programma è lo stesso, ma le due esecuzioni hanno identificatori, memoria e risorse proprie.</p>
 
@@ -285,7 +305,7 @@ Un <strong>programma</strong> è una descrizione passiva: un file eseguibile o u
   <li><strong>I registri fisici della CPU:</strong> contengono i valori e gli indirizzi usati mentre le istruzioni vengono eseguite. Quando l'esecuzione viene sospesa, il sistema salva in memoria lo stato necessario per poterla riprendere.</li>
 </ul>
 
-<p align="justify">Per ora immaginiamo un processo con un solo flusso di esecuzione. Quando introdurremo i thread, distingueremo le risorse del processo dal contesto e dallo stack di ciascun thread.</p>
+<p align="justify">Per ora immaginiamo un processo con un solo thread. Nella sezione <a href="#risorse-private-e-risorse-condivise">Risorse private e risorse condivise</a> distingueremo le risorse comuni del processo dal contesto e dallo stack di ciascun thread.</p>
 
 ### 1. Identificatore: distinguere questa esecuzione
 
@@ -1165,9 +1185,9 @@ if (esito == -1) {
 
 <p align="justify">Una domanda fondamentale è: <strong>quale stato appartiene a una sola attività e quale è visibile a più attività?</strong></p>
 
-<p align="justify">Con processi separati, lo spazio di indirizzamento è normalmente isolato. Dopo una creazione con <code>fork</code>, padre e figlio osservano inizialmente valori equivalenti, ma le modifiche ordinarie alla memoria di uno non diventano automaticamente modifiche nella memoria dell'altro.</p>
+<p align="justify">Con processi separati, lo spazio di indirizzamento è normalmente isolato. Lo vedremo con <a href="#fork"><code>fork()</code>, nella sezione sulla creazione dei processi</a>: il processo padre e il nuovo processo figlio osservano inizialmente valori equivalenti, ma le modifiche ordinarie alla memoria di uno non diventano automaticamente modifiche nella memoria dell'altro.</p>
 
-<p align="justify">Con più thread nello stesso processo, invece, sono tipicamente condivisi:</p>
+<p align="justify">Riprendiamo ora i <a href="#prima-distinzione-programma-processo-e-thread">thread introdotti all'inizio</a>. Più flussi nello stesso processo usano lo stesso spazio di indirizzamento. Sono tipicamente condivisi:</p>
 
 <ul>
   <li>variabili globali;</li>
@@ -1177,6 +1197,8 @@ if (esito == -1) {
 </ul>
 
 <p align="justify">Ogni thread possiede almeno uno stack e un contesto di esecuzione separati.</p>
+
+<p align="justify">Per esempio, il thread che legge il sensore e quello che aggiorna la schermata possono accedere allo stesso oggetto in memoria che contiene l'ultima misura. Ognuno conserva però il proprio punto di avanzamento e le proprie chiamate di funzione. Gli stack sono distinti, ma appartengono allo stesso spazio di indirizzamento: non costituiscono una barriera di protezione fra thread.</p>
 
 <table align="center">
 <thead>
@@ -1430,16 +1452,26 @@ gcc -Wall -Wextra -Wpedantic -std=c17 process_wait.c -o process_wait
 
 ## Da processo a thread
 
-<!-- definition -->
-<table align="center">
-<tr><td>
-&#10071; <strong>Importante</strong>
-<p align="justify">Un <strong>thread</strong> è un flusso di esecuzione all'interno di un processo.</p>
-</td></tr>
-</table>
-<!-- /definition -->
+<p align="justify">Abbiamo <a href="#prima-distinzione-programma-processo-e-thread">introdotto il thread</a> come flusso di esecuzione e confrontato le <a href="#risorse-private-e-risorse-condivise">risorse private e condivise</a>. Ora possiamo collegare quel modello al codice: come passa un processo da un solo flusso a più attività coordinate?</p>
 
-<p align="justify">Più thread possono lavorare sugli stessi oggetti in memoria.</p>
+### Dal thread iniziale a più flussi
+
+<p align="justify">Consideriamo un programma che deve sommare un grande intervallo di numeri. Il thread iniziale può svolgere tutto il calcolo oppure avviare due thread e assegnare a ciascuno metà dell'intervallo. Nel secondo caso ci sono tre thread nello stesso processo: quello iniziale e i due che calcolano.</p>
+
+<ol>
+  <li><strong>Preparazione:</strong> il thread iniziale predispone i dati per le due parti del lavoro.</li>
+  <li><strong>Avvio:</strong> crea i due thread, indicando per ciascuno la funzione da eseguire e i dati da usare. In POSIX C useremo <code>pthread_create</code>; in Java chiameremo <code>start()</code> su un oggetto <code>Thread</code>.</li>
+  <li><strong>Esecuzione:</strong> ogni thread avanza nella propria funzione. Anche se eseguono la stessa funzione, i due thread hanno contesti e stack distinti: i parametri e le variabili locali di ciascuna chiamata possono contenere valori diversi.</li>
+  <li><strong>Attesa e risultato:</strong> il thread iniziale attende la conclusione dei due calcoli con <code>pthread_join</code> in POSIX o <code>join()</code> in Java, poi legge i risultati e li somma.</li>
+</ol>
+
+<p align="justify">Chiamare direttamente la funzione di calcolo la esegue nel thread corrente, che prosegue dopo il suo ritorno. Avviare un thread aggiunge invece un flusso che può avanzare insieme a quello che lo ha creato. Il nuovo thread potrebbe cominciare a lavorare prima che il chiamante esegua l'istruzione successiva all'avvio: l'ordine dipende dalla pianificazione.</p>
+
+<p align="justify">Con una sola CPU logica i thread si alternano; con più CPU logiche possono anche eseguire in parallelo. Ogni thread può essere pronto, in esecuzione o in attesa: se uno aspetta un'operazione di I/O, gli altri possono proseguire se sono pronti e non dipendono da ciò che manca al primo.</p>
+
+<p align="justify">I risultati possono restare in oggetti dello stesso processo, accessibili al thread iniziale dopo l'attesa. Questa condivisione richiede regole: nell'esempio seguente ciascun thread scriverà nel proprio campo del risultato e il thread iniziale lo leggerà soltanto dopo il completamento.</p>
+
+### Quando scegliere thread o processi
 
 <p align="justify">Usare thread può essere conveniente quando:</p>
 
@@ -1784,6 +1816,8 @@ tpsi4-activity-c-fork-pipe-square-001
 
 <ol>
   <li>Qual è la differenza tra programma e processo?</li>
+  <li>Che cos'è un thread e quale relazione ha con il processo che lo contiene?</li>
+  <li>Perché chiamare una funzione non equivale ad avviare un nuovo thread?</li>
   <li>Un processo pronto sta necessariamente usando la CPU?</li>
   <li>Perché due processi non condividono automaticamente le normali variabili?</li>
   <li>Che cosa restituisce <code>fork()</code> nel figlio?</li>
