@@ -1173,6 +1173,8 @@ if (esito == -1) {
 
 <p align="justify">Un'interruzione del timer o un'operazione che richiede attesa può portare il controllo al kernel. Lo scheduler decide quale attività pronta eseguire. Entrare nel kernel non comporta sempre cambiare processo; quando il cambio avviene, il lavoro di salvataggio e ripristino ha un costo.</p>
 
+<p align="justify">Questo esempio usa un thread per processo. Con più thread, il sistema deve conservare il contesto di ciascuno e può passare anche fra due thread dello stesso processo. Vedremo <a href="#il-cambio-di-contesto-fra-thread">che cosa cambia nel costo del passaggio</a> e <a href="#come-i-thread-si-contendono-la-cpu">come viene assegnata la CPU ai singoli thread</a>.</p>
+
 <p align="justify"><strong><span style="font-size: 1.15em;">&#10067;</span> Controlla il modello:</strong> durante la pausa di A, dove si trova il valore 23? Perché il blocco di A contiene ancora 20? Che cosa deve ritrovare A per completare la scrittura? Rileggi i tre pannelli della figura per motivare le risposte.</p>
 
 <!-- figure:01-stati-processo -->
@@ -1226,8 +1228,8 @@ if (esito == -1) {
 </tr>
 <tr>
 <td>comunicazione</td>
-<td>richiede un meccanismo IPC</td>
-<td>può usare memoria condivisa</td>
+<td>richiede un meccanismo IPC: messaggi oppure memoria condivisa predisposta esplicitamente</td>
+<td>può usare direttamente oggetti nello spazio di indirizzamento comune</td>
 </tr>
 <tr>
 <td>isolamento dei guasti</td>
@@ -1235,20 +1237,100 @@ if (esito == -1) {
 <td>minore</td>
 </tr>
 <tr>
-<td>costo di coordinamento</td>
-<td>spesso maggiore</td>
-<td>spesso minore, ma più delicato</td>
+<td>coordinamento degli accessi</td>
+<td>dipende dal canale scelto; necessario anche con memoria condivisa fra processi</td>
+<td>necessario per usare correttamente i dati condivisi modificabili</td>
 </tr>
 </tbody>
 </table>
 
-<p align="justify">L'isolamento riduce alcuni errori, ma rende necessaria una comunicazione esplicita. La condivisione facilita lo scambio di dati, ma può produrre race condition.</p>
+### Comunicare attraverso gli stessi dati
+
+<p align="justify"><strong>Un vantaggio dei thread è poter scambiare informazioni usando direttamente gli stessi oggetti in memoria.</strong> Se A produce una misura e B deve leggerla, entrambi possono accedere alla stessa struttura. Per questo scambio non è necessario predisporre una pipe, un socket o una coda di messaggi, né trasferire il dato fra due spazi di indirizzamento separati. Questo può semplificare il programma e ridurre il lavoro necessario alla comunicazione.</p>
+
+<p align="justify">Anche due processi possono comunicare attraverso memoria condivisa, ma devono predisporre esplicitamente un'area accessibile a entrambi. La memoria condivisa è quindi anche una forma di comunicazione fra processi (<em>IPC, Inter-Process Communication</em>): IPC non significa soltanto passaggio di messaggi. Nei thread dello stesso processo lo spazio comune è già disponibile. <a href="https://man7.org/linux/man-pages/man7/shm_overview.7.html">Riferimento: memoria condivisa POSIX</a>.</p>
+
+<p align="justify"><strong>Il costo da gestire è il coordinamento degli accessi.</strong> Supponiamo che la struttura contenga temperatura e orario: se A la sta aggiornando mentre B la legge, B potrebbe osservare campi riferiti a misure diverse. In C, accessi concorrenti non sincronizzati allo stesso dato ordinario, di cui almeno uno in scrittura, possono inoltre rendere indefinito il comportamento del programma. La disponibilità dello stesso indirizzo non rende corretto qualsiasi ordine di lettura e scrittura.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La <strong>mutua esclusione</strong> garantisce che una sola attività alla volta esegua le operazioni da proteggere su una risorsa condivisa. La porzione di codice che esegue tali operazioni è una <strong>sezione critica</strong>. Un <strong>mutex</strong> è uno strumento di sincronizzazione che consente a un solo thread alla volta di acquisirne il possesso, fino al rilascio.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Per condividere la coppia temperatura-orario possiamo usare lo stesso mutex in entrambi i thread:</p>
+
+<ol>
+  <li><strong>A acquisisce il mutex</strong>, aggiorna entrambi i campi e lo rilascia.</li>
+  <li><strong>B acquisisce lo stesso mutex</strong>, copia entrambi i campi in dati propri e lo rilascia. Se A lo possiede ancora, B deve attendere.</li>
+  <li><strong>B usa la copia</strong> per aggiornare la schermata, senza trattenere il mutex durante quel lavoro.</li>
+</ol>
+
+<p align="justify">Tutti gli accessi coinvolti devono rispettare il protocollo, comprese le letture. I mutex POSIX coordinano anche la visibilità delle scritture fra i thread. Attese e accessi serializzati possono ridurre il vantaggio della condivisione; per questo le sezioni critiche vanno mantenute brevi. La sincronizzazione serve anche su una sola CPU logica, perché un thread può essere sospeso a metà di un aggiornamento.</p>
+
+<p align="justify">Non occorre un mutex per ogni lettura: dati inizializzati e resi disponibili correttamente, poi soltanto letti, possono essere condivisi senza proteggere ciascun accesso. Esistono inoltre altre forme di sincronizzazione, come operazioni atomiche e attesa del completamento. Studieremo criteri ed esempi nel <a href="02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md#sezione-critica-e-invariante">modulo sulla sincronizzazione</a>. Se B deve aspettare una nuova misura, occorre anche un modo per segnalargli che è pronta: il solo mutex garantisce l'accesso esclusivo, non la disponibilità di nuovi dati.</p>
 
 <!-- figure:01-memoria-thread -->
 <p align="center">
   <img src="../../assets/tpsi4/01-memoria-thread.svg" alt="Due processi hanno heap separati. Due thread di uno stesso processo condividono heap, globali e descrittori, ma conservano stack e registri propri." width="960">
 </p>
 <p align="center"><em>Due processi hanno heap separati. Due thread di uno stesso processo condividono heap, globali e descrittori, ma conservano stack e registri propri.</em></p>
+
+### Il cambio di contesto fra thread
+
+<p align="justify">Immaginiamo che la stessa CPU logica passi dal thread A al thread B del medesimo processo. Il kernel deve comunque conservare il punto raggiunto da A, lo stato necessario dei registri e i riferimenti al suo stack; poi ripristina il contesto di B. <strong>Condividere la memoria non significa condividere il punto di esecuzione.</strong></p>
+
+<table align="center">
+<thead><tr><th>Operazione</th><th>Fra thread dello stesso processo</th><th>Fra thread di processi con spazi distinti</th></tr></thead>
+<tbody>
+<tr><td>Salvare e ripristinare il contesto di esecuzione</td><td>Necessario.</td><td>Necessario.</td></tr>
+<tr><td>Riprendere lo stack del thread scelto</td><td>Necessario: ogni thread ha il proprio stack.</td><td>Necessario.</td></tr>
+<tr><td>Passare a un altro spazio di indirizzamento</td><td>Non serve: le mappature del processo sono comuni.</td><td>Serve selezionare le mappature del processo di destinazione.</td></tr>
+<tr><td>Copiare integralmente stack e heap</td><td>Non serve.</td><td>Non serve.</td></tr>
+</tbody>
+</table>
+
+<p align="justify"><strong>Il passaggio fra thread dello stesso processo può essere più snello perché evita il cambio dello spazio di indirizzamento.</strong> Restano utilizzabili le stesse tabelle delle pagine e, quando ancora valide, le traduzioni degli indirizzi già memorizzate dalla CPU. Rimangono però il lavoro dello scheduler e il salvataggio/ripristino dello stato del thread.</p>
+
+<p align="justify">È un vantaggio possibile, non una durata garantita: il costo dipende anche dall'hardware, dai dati già presenti nelle cache e dall'eventuale spostamento su un'altra CPU. Anche fra processi diversi l'hardware può conservare traduzioni già note. Non possiamo quindi assegnare un rapporto fisso fra i due costi. Il confronto è una semplificazione didattica del <a href="https://github.com/torvalds/linux/blob/master/kernel/sched/core.c">cambio di contesto nel kernel</a> e della <a href="https://github.com/torvalds/linux/blob/master/arch/x86/mm/tlb.c">gestione delle traduzioni su x86</a>.</p>
+
+### Come i thread si contendono la CPU
+
+<p align="justify">Consideriamo i <strong>thread POSIX su Linux</strong>, come quelli che creeremo con <code>pthread_create</code>. Ciascuno corrisponde a un'attività che il kernel può pianificare separatamente. <strong>Lo scheduler sceglie quale thread pronto eseguire</strong>, considerando anche i thread degli altri processi. Il processo mette in comune memoria e risorse; ciascun thread mantiene il proprio stato di pianificazione.</p>
+
+<p align="justify"><strong>Non esiste, per il solo fatto di appartenere allo stesso processo, un unico quanto di CPU che tutti i suoi thread devono spartirsi.</strong> Ogni thread pronto può ricevere un proprio intervallo di esecuzione. Se A attende un dato, B dello stesso processo può essere scelto; su più CPU logiche A e B possono anche eseguire contemporaneamente, se entrambi sono pronti e le impostazioni lo consentono. <a href="https://man7.org/linux/man-pages/man7/sched.7.html">Riferimento: pianificazione in Linux</a>.</p>
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Nel modello a turni, il <strong>quanto di tempo</strong> è l'intervallo massimo di CPU assegnato a un'attività per un turno prima di cedere il posto a un'altra attività pronta. L'attività può lasciare la CPU prima, per esempio perché deve attendere un'operazione di I/O.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Questo modello aiuta a capire l'alternanza, ma <strong>i thread ordinari di Linux non ricevono tutti un quanto fisso e identico</strong>. La politica normalmente usata, <code>SCHED_OTHER</code>, ripartisce la CPU tenendo conto del tempo già ricevuto, dei pesi legati al nice e delle attività pronte. Nei kernel recenti la pianificazione equa usa EEVDF, evoluzione del precedente CFS. L'algoritmo decide durata e ordine dei turni: non possiamo dedurli dal solo numero dei thread. <a href="https://docs.kernel.org/scheduler/sched-eevdf.html">Riferimento: EEVDF</a>.</p>
+
+#### Un esempio con due processi e tre thread pronti
+
+<p align="justify">Supponiamo di avere una sola CPU logica disponibile, il processo P con i thread P1 e P2 e il processo Q con il solo thread Q1. Tutti e tre sono sempre pronti, hanno lo stesso peso e appartengono allo stesso gruppo di pianificazione, senza quote limitanti. Trascuriamo le altre attività e il costo dei cambi. Il seguente schema illustra turni uguali per rendere visibile il ragionamento; non predice l'ordine reale di Linux.</p>
+
+<table align="center">
+<thead><tr><th>Turno illustrativo</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead>
+<tbody>
+<tr><td>Thread sulla CPU</td><td>P1</td><td>P2</td><td>Q1</td><td>P1</td><td>P2</td><td>Q1</td></tr>
+<tr><td>Processo di appartenenza</td><td>P</td><td>P</td><td>Q</td><td>P</td><td>P</td><td>Q</td></tr>
+</tbody>
+</table>
+
+<p align="justify">Con queste ipotesi, su un intervallo abbastanza lungo ciascun thread tende a ricevere circa un terzo della CPU disponibile. P accumula quindi circa due terzi attraverso i suoi due thread e Q circa un terzo. Se P2 si mette in attesa, i due thread rimasti pronti possono dividersi circa a metà la CPU. Sono proporzioni ideali, non misure garantite della VM. <a href="https://docs.kernel.org/scheduler/sched-design-CFS.html">Riferimento: ripartizione equa del tempo di CPU</a>.</p>
+
+<p align="justify">Linux può inoltre ripartire la CPU fra <strong>gruppi di attività</strong>: gli autogroup possono riunire attività della stessa sessione, mentre i cgroup permettono di configurare pesi e limiti complessivi. Se un gruppo è limitato a una certa quantità di CPU, i thread al suo interno si dividono quella disponibilità. Questo limite deriva dalla configurazione del gruppo, non dall'esistenza del processo. Aggiungere thread non supera la quota. <a href="https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu">Riferimento: controllo della CPU con cgroup</a>.</p>
+
+<p align="justify"><strong>&#10067; Controlla il modello:</strong> nell'esempio, se P1 è sospeso mentre possiede il mutex che serve a P2, P2 può completare subito l'accesso ai dati? No: essere pianificato sulla CPU e avere accesso alla risorsa sono due condizioni distinte. P2 deve attendere il rilascio, mentre un thread pronto di Q può proseguire.</p>
 
 ## Sequenziale, concorrente e parallelo
 
@@ -1469,7 +1551,7 @@ gcc -Wall -Wextra -Wpedantic -std=c17 process_wait.c -o process_wait
 
 <p align="justify">Chiamare direttamente la funzione di calcolo la esegue nel thread corrente, che prosegue dopo il suo ritorno. Avviare un thread aggiunge invece un flusso che può avanzare insieme a quello che lo ha creato. Il nuovo thread potrebbe cominciare a lavorare prima che il chiamante esegua l'istruzione successiva all'avvio: l'ordine dipende dalla pianificazione.</p>
 
-<p align="justify">Con una sola CPU logica i thread si alternano; con più CPU logiche possono anche eseguire in parallelo. Ogni thread può essere pronto, in esecuzione o in attesa: se uno aspetta un'operazione di I/O, gli altri possono proseguire se sono pronti e non dipendono da ciò che manca al primo.</p>
+<p align="justify">Come visto nella sezione su <a href="#come-i-thread-si-contendono-la-cpu">thread e assegnazione della CPU</a>, ciascun thread POSIX può essere pianificato separatamente. Con una sola CPU logica i thread si alternano; con più CPU logiche possono anche eseguire in parallelo. Se uno aspetta un'operazione di I/O, gli altri possono proseguire se sono pronti e non dipendono da ciò che manca al primo.</p>
 
 <p align="justify">I risultati possono restare in oggetti dello stesso processo, accessibili al thread iniziale dopo l'attesa. Questa condivisione richiede regole: nell'esempio seguente ciascun thread scriverà nel proprio campo del risultato e il thread iniziale lo leggerà soltanto dopo il completamento.</p>
 
@@ -1827,6 +1909,9 @@ tpsi4-activity-c-fork-pipe-square-001
   <li>Perché il padre dovrebbe eseguire <code>wait</code> o <code>waitpid</code>?</li>
   <li>Qual è la differenza tra concorrenza e parallelismo?</li>
   <li>Quali aree sono normalmente condivise da thread dello stesso processo?</li>
+  <li>Perché la memoria condivisa semplifica la comunicazione fra thread, ma richiede un protocollo per gli accessi?</li>
+  <li>Quale lavoro può essere evitato nel cambio di contesto fra thread dello stesso processo? Quale rimane necessario?</li>
+  <li>In Linux, i thread di un processo hanno automaticamente un unico quanto da dividersi? Come possono incidere i limiti di un gruppo?</li>
   <li>Che cosa rappresenta un interleaving?</li>
   <li>Fornisci un esempio di proprietà di safety e uno di liveness.</li>
 </ol>
@@ -1843,7 +1928,9 @@ tpsi4-activity-c-fork-pipe-square-001
   <li>Processi distinti hanno memoria separata; i thread dello stesso processo condividono più stato.</li>
   <li>Concorrente significa che più attività avanzano nello stesso intervallo; parallelo significa che eseguono nello stesso istante.</li>
   <li><code>fork</code> crea un figlio, <code>exec</code> sostituisce il programma, <code>wait</code> raccoglie la terminazione.</li>
-  <li>I thread sono più leggeri, ma la memoria condivisa richiede regole precise.</li>
+  <li>I thread possono scambiarsi dati attraverso gli stessi oggetti; gli accessi a dati modificabili richiedono coordinamento.</li>
+  <li>Il cambio fra thread dello stesso processo conserva lo spazio di indirizzamento, ma richiede comunque di cambiare il contesto di esecuzione.</li>
+  <li>Linux pianifica i singoli thread pronti; il tempo ricevuto dipende dalla politica, dal carico e dagli eventuali limiti del gruppo.</li>
   <li>L'ordine tra attività concorrenti può cambiare.</li>
   <li>Una soluzione corretta deve funzionare per tutti gli ordini consentiti, non soltanto per quello osservato una volta.</li>
 </ul>
@@ -1865,6 +1952,8 @@ tpsi4-activity-c-fork-pipe-square-001
   <li>Memoria e allocazioni: <a href="https://man7.org/linux/man-pages/man5/proc_pid_maps.5.html">proc_pid_maps(5)</a> e <a href="https://man7.org/linux/man-pages/man3/malloc.3.html">malloc(3)</a>. La descrizione di stack e heap è un modello didattico, non una disposizione universale della memoria.</li>
   <li>Risorse aperte: <a href="https://man7.org/linux/man-pages/man2/open.2.html">open(2)</a> e <a href="https://man7.org/linux/man-pages/man5/proc_pid_fd.5.html">proc_pid_fd(5)</a>.</li>
   <li>Stato e distinzione processo/thread: <a href="https://man7.org/linux/man-pages/man5/proc_pid_status.5.html">proc_pid_status(5)</a> e <a href="https://man7.org/linux/man-pages/man7/pthreads.7.html">pthreads(7)</a>.</li>
+  <li>Condivisione e coordinamento: <a href="https://man7.org/linux/man-pages/man7/shm_overview.7.html">shm_overview(7)</a> e <a href="https://man7.org/linux/man-pages/man3/pthread_mutex_lock.3p.html">mutex POSIX</a>. L'esempio temperatura-orario descrive un protocollo; l'implementazione è affrontata nel modulo 2.</li>
+  <li>Pianificazione dei thread: <a href="https://man7.org/linux/man-pages/man7/sched.7.html">sched(7)</a>, <a href="https://docs.kernel.org/scheduler/sched-design-CFS.html">CFS</a>, <a href="https://docs.kernel.org/scheduler/sched-eevdf.html">EEVDF</a> e <a href="https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu">controller CPU dei cgroup</a>. Le quote numeriche dell'esempio sono un modello ideale con ipotesi esplicite, non un benchmark. Riferimenti ricontrollati il 28 settembre 2026.</li>
   <li>Tutti gli esempi di questo modulo sono formulati ex novo per il pacchetto.</li>
   <li>Gli esempi della fonte Linux con intestazioni di copyright esterne non devono essere duplicati nelle activity senza averne verificato la licenza.</li>
   <li>Stato: <code>draft</code>; revisione docente richiesta prima della pubblicazione agli studenti.</li>
