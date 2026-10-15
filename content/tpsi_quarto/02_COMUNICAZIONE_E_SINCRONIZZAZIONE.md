@@ -309,7 +309,7 @@ int main(void) {
 
 <p align="justify">Non è il mezzo adatto per trasferire strutture dati complesse.</p>
 
-<p align="justify">Per osservare l'effetto dei segnali prima di programmarne la gestione in C, svolgi il <a href="01_LABORATORIO_PROCESSI_UBUNTU.md#segnali-notificare-sospendere-riprendere-terminare">laboratorio Ubuntu su segnali e comandi</a>: comprende STOP/CONT, TERM/KILL e un esempio con <code>trap</code> in Bash.</p>
+<p align="justify">Per osservare l'effetto dei segnali prima di programmarne la gestione in C, svolgi il <a href="01_LABORATORIO_PROCESSI_UBUNTU.md#segnali-notificare-sospendere-riprendere-terminare">laboratorio Ubuntu su segnali e comandi</a>: comprende esempi dei segnali più comuni e tre prove brevi su terminazione, sospensione, ripresa e controllo dei job in Bash.</p>
 
 <p align="justify">Collegamenti:</p>
 

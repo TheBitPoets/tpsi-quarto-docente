@@ -12,90 +12,35 @@ transformation: original-course-material
 <tr><td>
 <details>
 <summary>&#129517; <strong>Orientamento della sezione</strong></summary>
-<p align="justify"><strong><span style="font-size: 1.15em;">&#128506;</span> Contesto:</strong> laboratorio del modulo su processi e concorrenza, da svolgere nel terminale della macchina virtuale Ubuntu.</p>
-<p align="justify"><strong><span style="font-size: 1.15em;">&#128736;</span> Prerequisiti:</strong> aprire un terminale, eseguire comandi, riconoscere PID, PPID e stati di un processo.</p>
-<p align="justify"><strong><span style="font-size: 1.15em;">&#127919;</span> Obiettivi:</strong> leggere l'output di ps, distinguere gli stati S, D, T e t, inviare segnali per PID, nome o tastiera, gestire i job con bg e fg, osservare con top e modificare il valore nice.</p>
-<p align="justify"><strong><span style="font-size: 1.15em;">&#128257;</span> Richiamo:</strong> un processo può esistere anche mentre non usa la CPU; il suo identificatore permette di individuarlo.</p>
-<p align="justify"><strong><span style="font-size: 1.15em;">&#128064;</span> Anticipazione:</strong> i programmi possono gestire alcuni segnali; nel modulo successivo useremo queste notifiche per coordinare attività.</p>
-<p align="justify"><strong><span style="font-size: 1.15em;">&#10145;</span> Prossimo passo:</strong> svolgere le cinque prove e annotare comando, osservazione e spiegazione.</p>
-<p align="justify"><strong><span style="font-size: 1.15em;">&#128279;</span> Rimando:</strong> <a href="01_PROCESSI_E_CONCORRENZA.md">Processi, thread e concorrenza</a>; <a href="#fonti-e-note-di-revisione">manuali e note di revisione</a>.</p>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#128506;</span> Contesto:</strong> laboratorio sui processi nel terminale della macchina virtuale Ubuntu.</p>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#128736;</span> Prerequisiti:</strong> saper aprire il terminale e digitare un comando. Simboli e opzioni usati sono spiegati qui.</p>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#127919;</span> Obiettivi:</strong> trovare il PID, inviare i segnali più comuni, distinguere attesa e sospensione, usare jobs, bg e fg.</p>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#128257;</span> Richiamo:</strong> un processo può esistere anche mentre non usa la CPU.</p>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#128064;</span> Anticipazione:</strong> nel modulo successivo vedremo come un programma può rispondere ai segnali.</p>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#10145;</span> Prossimo passo:</strong> svolgere le tre prove guidate; gli approfondimenti finali sono facoltativi.</p>
+<p align="justify"><strong><span style="font-size: 1.15em;">&#128279;</span> Rimando:</strong> <a href="01_PROCESSI_E_CONCORRENZA.md">Processi, thread e concorrenza</a>; <a href="#fonti-e-note-di-revisione">fonti e note</a>.</p>
 </details>
 </td></tr>
 </table>
 
-<p align="justify">Seguiremo un processo dalla sua creazione nel terminale fino alla terminazione. Prima lo osserviamo, poi proviamo a sospenderlo e riprenderlo, infine confrontiamo la selezione per PID con quella per nome. Le spiegazioni e gli esercizi sono originali; gli argomenti riprendono la sezione <a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#controllo-dei-processi">Controllo dei processi</a>, confrontata con i manuali Linux attuali.</p>
+<p align="justify">Useremo quasi sempre un solo comando: <code>sleep 300</code>. Aspetta 300 secondi, cioè cinque minuti, e poi termina. Durante l'attesa non stampa nulla: possiamo così provare i comandi sui processi senza scrivere un programma.</p>
 
-## Ambiente e preparazione
+## Prima di iniziare
 
-<p align="justify">La macchina virtuale del corso usa <strong>Ubuntu 24.04.3 LTS</strong>. Gli esempi usano <strong>Bash</strong>: esegui i comandi nel terminale Linux della VM. Per verificare distribuzione, kernel e shell:</p>
+<p align="justify">Apri il terminale nella VM Ubuntu 24.04.3 LTS del corso, con la shell Bash. Usa il tuo utente normale: <strong>non serve sudo</strong>. Esegui una riga alla volta e resta nello stesso terminale durante ciascuna prova. I blocchi mostrano i comandi da digitare; premi Invio dopo ogni riga. Quando trovi Ctrl+C o Ctrl+Z, tieni premuto Ctrl e premi la lettera indicata.</p>
 
-```bash
-cat /etc/os-release
-uname -r
-printf '%s\n' "$BASH_VERSION"
-```
-
-<p align="justify"><code>PRETTY_NAME</code> indica la versione di Ubuntu; <code>uname -r</code> indica quella del kernel. Sono informazioni diverse. La scheda fa riferimento ai comandi di Ubuntu 24.04 LTS, la serie a cui appartiene la VM del corso; la verifica pratica è descritta nelle note finali.</p>
-
-```bash
-command -v ps top pgrep nice renice killall pstree
-type -a kill
-```
-
-<p align="justify">In Bash, <code>kill</code> è normalmente un comando integrato nella shell; esiste anche un eseguibile esterno. Per il primo consulta <code>help kill</code>, per gli altri <code>man ps</code>, <code>man nice</code>, <code>man renice</code> e <code>man killall</code>. Esci dal manuale premendo <code>q</code>.</p>
-
-<p align="justify">Se mancano strumenti, i pacchetti pertinenti sono <code>procps</code> per ps, top e pgrep, <code>psmisc</code> per killall e pstree, <code>coreutils</code> per nice e sleep. Sulle immagini minime può mancare anche <code>man-db</code>. Solo in quel caso, prepara la VM con:</p>
-
-```bash
-sudo apt update
-sudo apt install procps psmisc coreutils util-linux man-db
-```
-
-<p align="justify"><strong>Per le prove usa l'utente normale, senza sudo.</strong> Agiremo sui processi creati da noi. Digita i blocchi nell'ordine indicato, mantenendo lo stesso terminale per tutta una prova: le variabili con i PID appartengono a quella shell. Esegui ogni prova fino alla chiusura prima di passare alla successiva.</p>
-
-## Osservare: ps, pgrep e top
-
-<p align="justify"><code>ps</code> produce una fotografia dei processi selezionati. Senza opzioni mostra una selezione legata all'utente e al terminale corrente: poche righe non significano che sul sistema esistano soltanto quei processi.</p>
-
+<!-- definition -->
 <table align="center">
-<thead><tr><th>Comando</th><th>Che cosa osservare</th></tr></thead>
-<tbody>
-<tr><td><code>ps</code></td><td>Selezione predefinita del terminale corrente.</td></tr>
-<tr><td><code>ps aux</code></td><td>Panoramica di tutti i processi, con consumo di CPU e memoria; queste opzioni BSD si scrivono senza trattino.</td></tr>
-<tr><td><code>ps -ef</code></td><td>Tutti i processi in formato esteso, con PID e PPID.</td></tr>
-<tr><td><code>ps -u "$(id -un)" -o pid,ppid,stat,ni,etime,time,args</code></td><td>Processi dell'utente corrente con colonne scelte esplicitamente.</td></tr>
-<tr><td><code>ps -e -o pid,ppid,stat,ni,args --forest</code></td><td>Vista delle relazioni padre-figlio.</td></tr>
-<tr><td><code>pstree -p</code></td><td>Albero dei processi con i PID.</td></tr>
-<tr><td><code>pgrep -a -u "$(id -u)" -x sleep</code></td><td>PID e comandi dei propri processi con nome esattamente sleep.</td></tr>
-</tbody>
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">La <strong>shell</strong> è il programma che interpreta i comandi digitati nel terminale. Il <strong>prompt</strong> è il testo che mostra quando è pronta a ricevere un nuovo comando.</p>
+<p align="justify">Un <strong>processo</strong> è un programma in esecuzione. Il <strong>PID</strong> è il numero che lo identifica nel sistema.</p>
+<p align="justify">Un comando in <strong>primo piano</strong> fa attendere la shell prima di mostrare un nuovo prompt. Un comando in <strong>background</strong> lascia disponibile il prompt mentre prosegue.</p>
+</td></tr>
 </table>
+<!-- /definition -->
 
-<p align="justify">Preferisci <code>ps aux</code> a <code>ps -aux</code>, che ha un'interpretazione ambigua. Con <code>pgrep</code>, <code>-x</code> richiede il nome esatto; <code>-f</code> estenderebbe la ricerca all'intera riga di comando. Una ricerca senza corrispondenze non stampa righe e restituisce codice 1. <a href="https://man7.org/linux/man-pages/man1/ps.1.html">Manuale ps</a>; <a href="https://man7.org/linux/man-pages/man1/pgrep.1.html">manuale pgrep</a>.</p>
-
-### Leggere le colonne senza confonderle
-
-<table align="center">
-<thead><tr><th>Campo</th><th>Lettura</th></tr></thead>
-<tbody>
-<tr><td><code>PID</code>, <code>PPID</code></td><td>Identificatore del processo e del padre.</td></tr>
-<tr><td><code>STAT</code></td><td>Stato principale seguito da eventuali indicatori aggiuntivi.</td></tr>
-<tr><td><code>NI</code></td><td>Valore nice; lo useremo nella prova sulle priorità.</td></tr>
-<tr><td><code>ETIME</code>, <code>TIME</code></td><td>Tempo trascorso dall'avvio e tempo di CPU accumulato. Un processo può esistere da un minuto e aver usato pochissima CPU.</td></tr>
-<tr><td><code>%CPU</code></td><td>In ps, rapporto fra tempo di CPU usato e tempo trascorso dalla partenza; non è una misura istantanea.</td></tr>
-<tr><td><code>VSZ</code>, <code>RSS</code></td><td>Dimensione virtuale e memoria residente, espresse da ps in KiB. RSS può comprendere pagine condivise.</td></tr>
-<tr><td><code>TTY</code>, <code>COMMAND</code></td><td>Terminale associato e comando; <code>?</code> indica l'assenza di un terminale di controllo.</td></tr>
-</tbody>
-</table>
-
-<p align="justify">La prima lettera di <code>STAT</code> indica lo stato del processo. Dopo aver studiato segnali e controllo dei job, torneremo su questa colonna per <a href="#comprendere-gli-stati-s-d-t-e-t-di-ps">distinguere attesa, sospensione e arresto per tracciamento</a>, collegandoli agli <a href="01_PROCESSI_E_CONCORRENZA.md#stato-e-ciclo-di-vita-di-un-processo">stati già studiati</a>.</p>
-
-### Una vista che si aggiorna
-
-```bash
-top -d 1
-```
-
-<p align="justify">L'aggiornamento richiesto è di un secondo. Premi <code>P</code> per ordinare per CPU, <code>M</code> per memoria e <code>q</code> per uscire. Per osservare un solo processo, usa <code>top -d 1 -p "$lab_pid"</code> dopo aver assegnato la variabile nella prova 1. In top la percentuale di CPU si riferisce normalmente all'intervallo fra aggiornamenti; il primo campione può essere poco rappresentativo. <a href="https://man7.org/linux/man-pages/man1/top.1.html">Manuale top</a>.</p>
+<p align="justify">Se una prova dura più di cinque minuti, sleep può terminare da solo. In quel caso riparti dal suo avvio: ogni nuovo processo avrà un nuovo PID. Se compare <code>No such process</code> o <code>Nessun processo corrisponde</code>, controlla se il processo è già terminato.</p>
 
 ## Segnali: notificare, sospendere, riprendere, terminare
 
@@ -103,112 +48,169 @@ top -d 1
 <table align="center">
 <tr><td>
 &#10071; <strong>Importante</strong>
-<p align="justify">Un <strong>segnale</strong> è una notifica che il sistema operativo consegna a un processo o a un suo thread per comunicare un evento. Ogni segnale ha un significato e un comportamento predefinito.</p>
+<p align="justify">Un <strong>segnale</strong> è una notifica inviata a un processo per comunicargli un evento o richiedere un'azione, come terminare, sospendersi o riprendere.</p>
 </td></tr>
 </table>
 <!-- /definition -->
 
-<p align="justify">Un segnale può essere generato dal kernel, inviato da un altro processo oppure provocato da un'azione dell'utente sul terminale. La ricezione può causare la terminazione, la sospensione o la ripresa del processo. Per molti segnali il programma può anche scegliere di ignorarli oppure eseguire una propria funzione.</p>
+<p align="justify">Il comando <code>kill</code> invia segnali: il suo nome non implica sempre la terminazione. Per esempio, <code>kill -STOP</code> sospende un processo e <code>kill -CONT</code> lo fa riprendere. Vediamo prima un esempio completo.</p>
 
-<!-- definition -->
-<table align="center">
-<tr><td>
-&#10071; <strong>Importante</strong>
-<p align="justify">Un <strong>gestore del segnale</strong> è una funzione predisposta dal programma per essere eseguita quando viene consegnato un determinato segnale.</p>
-</td></tr>
-</table>
-<!-- /definition -->
+## Prova 1: avviare, osservare e terminare
 
-<table align="center">
-<thead><tr><th>Segnale</th><th>Azione predefinita</th><th>Uso da ricordare</th></tr></thead>
-<tbody>
-<tr><td><code>SIGTERM</code></td><td>Termina.</td><td>Richiesta ordinaria di terminazione; il programma può gestirla per completare la chiusura.</td></tr>
-<tr><td><code>SIGINT</code></td><td>Termina.</td><td>Normalmente Ctrl+C sul gruppo in primo piano.</td></tr>
-<tr><td><code>SIGKILL</code></td><td>Termina forzatamente.</td><td>Non può essere catturato, ignorato o bloccato; il programma non esegue una propria procedura di chiusura.</td></tr>
-<tr><td><code>SIGSTOP</code></td><td>Sospende.</td><td>Non può essere catturato, ignorato o bloccato.</td></tr>
-<tr><td><code>SIGTSTP</code></td><td>Sospende.</td><td>Normalmente Ctrl+Z; può essere gestito o ignorato.</td></tr>
-<tr><td><code>SIGCONT</code></td><td>Riprende un processo sospeso.</td><td>Permette di proseguire dopo STOP o TSTP.</td></tr>
-<tr><td><code>SIGHUP</code></td><td>Termina.</td><td>Associato alla perdita del terminale; la rilettura della configurazione esiste solo se prevista dal programma.</td></tr>
-<tr><td><code>SIGUSR1</code>, <code>SIGUSR2</code></td><td>Terminano.</td><td>Il programma può assegnare loro una funzione specifica.</td></tr>
-<tr><td><code>SIGQUIT</code></td><td>Termina con possibile core dump.</td><td>Normalmente Ctrl+\; la produzione del dump dipende dalla configurazione.</td></tr>
-<tr><td><code>SIGCHLD</code></td><td>Ignorato per default.</td><td>Notifica cambiamenti di stato dei figli; il padre deve comunque raccogliere la terminazione quando richiesto.</td></tr>
-</tbody>
-</table>
+### 1. Avvia il processo e conserva il PID
 
-<p align="justify"><code>SIGKILL</code> e <code>SIGSTOP</code> non possono essere catturati, ignorati o bloccati.</p>
+```bash
+sleep 300 &
+pid=$!
+echo "$pid"
+```
 
-<!-- definition -->
-<table align="center">
-<tr><td>
-&#10071; <strong>Importante</strong>
-<p align="justify"><strong>Bloccare un segnale</strong> significa rinviarne la consegna; <strong>ignorare un segnale</strong> significa scartare la notifica. Un <strong>segnale pendente</strong> è stato generato ma non ancora consegnato.</p>
-</td></tr>
-</table>
-<!-- /definition -->
+<ul>
+  <li><code>sleep 300</code> avvia l'attesa di cinque minuti.</li>
+  <li><code>&amp;</code> alla fine avvia il comando in background: puoi subito digitare altro.</li>
+  <li><code>$!</code> contiene il PID dell'ultimo processo avviato in background.</li>
+  <li><code>pid=$!</code> conserva quel numero nella variabile chiamata <code>pid</code>. Scrivi l'assegnazione senza spazi intorno a <code>=</code>.</li>
+  <li><code>echo "$pid"</code> stampa il numero conservato. <code>$pid</code> legge il valore della variabile; le virgolette lo mantengono come un unico argomento.</li>
+</ul>
 
-<p align="justify">Le occorrenze ripetute di uno stesso segnale standard pendente non costituiscono un contatore affidabile. Linux supporta anche segnali real-time, con regole diverse. L'effetto di ripresa di CONT avviene anche se il segnale è bloccato; un eventuale gestore può essere eseguito in seguito. <a href="https://man7.org/linux/man-pages/man7/signal.7.html">Manuale signal(7)</a>.</p>
+<p align="justify"><strong>Atteso:</strong> la shell mostra una riga simile a <code>[1] 12345</code>; echo stampa <code>12345</code>. I tuoi numeri saranno diversi. Il numero tra parentesi quadre servirà nella prova sui job; per ora usiamo il PID.</p>
+
+### 2. Osserva il processo
+
+```bash
+ps -p "$pid" -o pid,stat,comm
+```
+
+<p align="justify"><code>ps</code> mostra una fotografia dei processi. <code>-p "$pid"</code> seleziona quello con il PID conservato; <code>-o pid,stat,comm</code> sceglie tre colonne: numero del processo, stato e nome del comando.</p>
+
+```text
+    PID STAT COMMAND
+  12345 S    sleep
+```
+
+<p align="justify"><strong>Atteso:</strong> una riga con sleep e, normalmente, lo stato <code>S</code>: il processo sta aspettando. Non deve usare continuamente la CPU per essere ancora presente.</p>
+
+### 3. Invia TERM e controlla
+
+```bash
+kill -TERM "$pid"
+ps -p "$pid" -o pid,stat,comm
+```
+
+<p align="justify"><code>-TERM</code> sceglie il segnale di terminazione ordinaria; <code>"$pid"</code> indica a chi inviarlo. <strong>Atteso:</strong> la riga di sleep scompare. Può restare soltanto l'intestazione di ps e la shell può scrivere <code>Terminated</code> o un messaggio equivalente. Se la riga è ancora presente, ripeti ps dopo un istante.</p>
 
 ## Inviare segnali con kill e killall
 
-<p align="justify">Il comando <strong>kill invia un segnale</strong>. Il suo nome non significa che debba necessariamente terminare il destinatario: può anche sospenderlo o farlo riprendere. Per indicare il destinatario attraverso un PID positivo, la forma è:</p>
+<p align="justify">Per inviare un segnale con kill bastano il suo nome e il PID. Le tre forme seguenti richiedono tutte TERM; sono <strong>alternative</strong>, non una sequenza da eseguire:</p>
 
 ```bash
-kill -s SEGNALE PID
+kill -TERM "$pid"
+kill -s TERM "$pid"
+kill "$pid"
 ```
 
-<p align="justify"><code>SEGNALE</code> e <code>PID</code> sono segnaposto da sostituire. Usa i nomi simbolici dei segnali: alcuni numeri cambiano con l'architettura.</p>
+<p align="justify">Con <code>-s</code> il nome del segnale si scrive come argomento successivo. Senza specificare un segnale, kill usa TERM. Nelle prove useremo la prima forma. Il nome completo è <code>SIGTERM</code>, ma nel comando possiamo scrivere <code>TERM</code>. Per selezionare i processi per nome esiste anche <a href="#selezionare-per-nome-con-killall">killall, descritto negli approfondimenti</a>.</p>
+
+### I segnali più usati
+
+<p align="justify">Gli esempi presuppongono un processo appena avviato e il suo PID salvato come nella prova 1. <strong>Non eseguire tutte le righe sullo stesso processo:</strong> molti segnali lo terminano.</p>
 
 <table align="center">
-<thead><tr><th>Comando</th><th>Effetto richiesto</th></tr></thead>
+<thead><tr><th>Segnale</th><th>Esempio</th><th>Che cosa succede normalmente</th></tr></thead>
 <tbody>
-<tr><td><code>kill -s TERM PID</code></td><td>Terminazione ordinaria.</td></tr>
-<tr><td><code>kill -s STOP PID</code></td><td>Sospensione.</td></tr>
-<tr><td><code>kill -s CONT PID</code></td><td>Ripresa.</td></tr>
-<tr><td><code>kill -s KILL PID</code></td><td>Terminazione forzata.</td></tr>
+<tr><td><code>SIGTERM</code></td><td><code>kill -TERM "$pid"</code></td><td>Chiede la terminazione. È la prima scelta per chiudere un processo.</td></tr>
+<tr><td><code>SIGINT</code></td><td><code>kill -INT "$pid"</code></td><td>Interrompe e termina. È anche il segnale di Ctrl+C.</td></tr>
+<tr><td><code>SIGQUIT</code></td><td><code>kill -QUIT "$pid"</code></td><td>Termina e può produrre un file diagnostico. Da tastiera: Ctrl+\.</td></tr>
+<tr><td><code>SIGKILL</code></td><td><code>kill -KILL "$pid"</code></td><td>Forza la terminazione, senza permettere al programma di eseguire la propria procedura di chiusura.</td></tr>
+<tr><td><code>SIGSTOP</code></td><td><code>kill -STOP "$pid"</code></td><td>Sospende: il processo resta presente, ma non prosegue.</td></tr>
+<tr><td><code>SIGTSTP</code></td><td><code>kill -TSTP "$pid"</code></td><td>Sospende. È anche il segnale di Ctrl+Z.</td></tr>
+<tr><td><code>SIGCONT</code></td><td><code>kill -CONT "$pid"</code></td><td>Fa riprendere un processo sospeso.</td></tr>
+<tr><td><code>SIGHUP</code></td><td><code>kill -HUP "$pid"</code></td><td>Segnala normalmente la perdita del terminale. Di base termina; alcuni programmi lo usano per rileggere la configurazione.</td></tr>
+<tr><td><code>SIGUSR1</code></td><td><code>kill -USR1 "$pid"</code></td><td>Azione scelta dal programma; se non è prevista una gestione, termina.</td></tr>
+<tr><td><code>SIGUSR2</code></td><td><code>kill -USR2 "$pid"</code></td><td>Secondo segnale per un'azione scelta dal programma; di base termina.</td></tr>
+<tr><td><code>SIGALRM</code></td><td><code>kill -ALRM "$pid"</code></td><td>Segnala normalmente la scadenza di un timer; di base termina. Qui lo inviamo manualmente.</td></tr>
 </tbody>
 </table>
 
-<p align="justify">Scrivere <code>kill PID</code> equivale a richiedere TERM. Le forme abbreviate <code>kill -TERM PID</code>, <code>kill -STOP PID</code> e <code>kill -CONT PID</code>, usate nelle prove, specificano gli stessi segnali. Per elencare i nomi disponibili:</p>
+<p align="justify">Un programma può cambiare la risposta a molti segnali, per esempio salvare dati prima di chiudersi con TERM. <strong>KILL e STOP non possono essere gestiti, ignorati o bloccati.</strong> Per questo STOP e TSTP, pur sospendendo normalmente entrambi, non sono equivalenti. Sleep termina con HUP, USR1 e USR2: non ha azioni personalizzate per questi segnali.</p>
+
+<p align="justify">Puoi incontrare anche <code>kill -15</code> per TERM e <code>kill -9</code> per KILL. Preferisci i nomi: sono più leggibili e alcuni numeri cambiano tra architetture. Per vedere l'elenco disponibile:</p>
 
 ```bash
 kill -l
 ```
 
-<p align="justify">Prima di inviare un segnale, individua il processo e controlla il PID con <code>ps</code>. Negli esercizi useremo processi avviati da noi e conserveremo subito il loro PID.</p>
+### Altri segnali da riconoscere
 
-<p align="justify">In Linux <strong>killall seleziona i destinatari attraverso il nome</strong>:</p>
-
-```bash
-killall -i -s TERM nomeprogramma
-```
-
-<p align="justify">Il comando invia TERM ai processi corrispondenti al nome indicato; <code>-i</code> chiede conferma per ciascuno. Anche <code>nomeprogramma</code> è un segnaposto. Senza indicare il segnale, killall usa TERM.</p>
-
-<p align="justify">Con un PID positivo scegli un processo preciso; con killall puoi coinvolgere più esecuzioni dello stesso programma. Prima di usarlo controlla le corrispondenze con <code>pgrep</code>, evitando nomi generici come <code>bash</code>. Nella <a href="#prova-4-selezionare-per-nome-con-killall">prova 4</a> useremo due processi con un nome dedicato. <a href="https://manpages.ubuntu.com/manpages/noble/man1/killall.1.html">Manuale killall su Ubuntu</a>.</p>
-
-<p align="justify">Negli esercizi inviamo segnali a <strong>PID positivi appena acquisiti</strong>. In condizioni ordinarie un utente può segnalare i propri processi; per altri utenti servono permessi adeguati. <code>kill -0 "$lab_pid"</code> controlla esistenza e permessi senza inviare una notifica: il successo non dimostra che il processo stia lavorando correttamente. Anche uno zombie può risultare presente. <a href="https://man7.org/linux/man-pages/man2/kill.2.html">Manuale kill(2)</a>.</p>
-
-## Inviare segnali dalla tastiera: Ctrl+C e Ctrl+Z
-
-<p align="justify">Nel normale terminale interattivo, i segnali generati dalla tastiera raggiungono il <strong>gruppo di processi in primo piano</strong>: quello associato all'attività con cui stai interagendo.</p>
+<p align="justify">Questi segnali sono spesso generati dal sistema o dal programma stesso. Non è necessario provarli tutti; la sintassi per inviarli manualmente resta la stessa.</p>
 
 <table align="center">
-<thead><tr><th>Combinazione</th><th>Segnale</th><th>Comportamento ordinario</th></tr></thead>
+<thead><tr><th>Segnale</th><th>Esempio di invio</th><th>Situazione tipica e azione predefinita</th></tr></thead>
 <tbody>
-<tr><td><strong>Ctrl+C</strong></td><td><code>SIGINT</code></td><td>Termina l'attività.</td></tr>
-<tr><td><strong>Ctrl+Z</strong></td><td><code>SIGTSTP</code></td><td>Sospende l'attività e restituisce il prompt.</td></tr>
+<tr><td><code>SIGCHLD</code></td><td><code>kill -CHLD "$pid"</code></td><td>Avvisa il padre di un cambiamento di stato di un figlio; di base è ignorato.</td></tr>
+<tr><td><code>SIGPIPE</code></td><td><code>kill -PIPE "$pid"</code></td><td>Scrittura in un canale di comunicazione senza lettori; termina.</td></tr>
+<tr><td><code>SIGABRT</code></td><td><code>kill -ABRT "$pid"</code></td><td>Richiesta di arresto anomalo da parte del programma; termina.</td></tr>
+<tr><td><code>SIGSEGV</code></td><td><code>kill -SEGV "$pid"</code></td><td>Accesso non valido alla memoria; termina.</td></tr>
+<tr><td><code>SIGFPE</code></td><td><code>kill -FPE "$pid"</code></td><td>Errore aritmetico, per esempio certe divisioni per zero; termina.</td></tr>
+<tr><td><code>SIGWINCH</code></td><td><code>kill -WINCH "$pid"</code></td><td>Cambio delle dimensioni del terminale; di base è ignorato.</td></tr>
+<tr><td><code>SIGTTIN</code>, <code>SIGTTOU</code></td><td><code>kill -TTIN "$pid"</code><br><code>kill -TTOU "$pid"</code></td><td>Accessi al terminale da un gruppo in background, in determinate condizioni; sospendono.</td></tr>
 </tbody>
 </table>
 
-<p align="justify">Considera il comando:</p>
+<p align="justify">ABRT, SEGV e FPE possono anche produrre un file diagnostico, secondo la configurazione del sistema. Inviare SEGV con kill non provoca un vero accesso errato alla memoria: invia soltanto la notifica. Analogamente, inviare CHLD manualmente non crea né termina un figlio. <a href="https://man7.org/linux/man-pages/man7/signal.7.html">Riferimento sui segnali</a>.</p>
+
+## Prova 2: sospendere, riprendere e provare altri segnali
+
+### 1. Avvia un nuovo processo
 
 ```bash
-sleep 300
+sleep 300 &
+pid=$!
 ```
 
-<p align="justify">Premendo <strong>Ctrl+C</strong>, normalmente sleep termina. Premendo invece <strong>Ctrl+Z</strong>, il processo rimane presente ma sospeso: potrà essere ripreso.</p>
+<p align="justify">Il processo della prova 1 è terminato: questi comandi ne creano un altro e aggiornano la variabile pid.</p>
 
-<p align="justify">Questi comportamenti dipendono anche dalla gestione dei segnali prevista dal programma. Inoltre una pipeline può comprendere più processi: i tasti non identificano necessariamente un solo PID. La <a href="#prova-2-ctrlz-jobs-bg-e-fg">prova 2</a> guida alla sospensione e alla successiva ripresa. <a href="https://man7.org/linux/man-pages/man1/bash.1.html">Manuale Bash, sezioni JOB CONTROL e SIGNALS</a>.</p>
+### 2. Sospendilo con STOP
+
+```bash
+kill -STOP "$pid"
+ps -p "$pid" -o pid,stat,comm
+```
+
+<p align="justify"><strong>Atteso:</strong> compare <code>T</code>. Sleep esiste ancora, ma è sospeso. Se leggi ancora S, ripeti ps dopo un istante.</p>
+
+### 3. Fallo riprendere con CONT
+
+```bash
+kill -CONT "$pid"
+ps -p "$pid" -o pid,stat,comm
+```
+
+<p align="justify"><strong>Atteso:</strong> torna normalmente <code>S</code>, perché sleep continua ad aspettare la scadenza. Riprendere non significa necessariamente usare subito la CPU.</p>
+
+### 4. Terminalo con KILL
+
+```bash
+kill -KILL "$pid"
+ps -p "$pid" -o pid,stat,comm
+```
+
+<p align="justify"><strong>Atteso:</strong> la riga scompare; la shell può mostrare <code>Killed</code>. Qui usiamo KILL per impararne l'effetto. Nell'uso ordinario si prova prima TERM, così il programma può completare la propria chiusura.</p>
+
+### 5. Ripeti con un altro segnale
+
+<p align="justify">Per provare INT esegui questo piccolo blocco, sempre riga per riga nel terminale Bash:</p>
+
+```bash
+sleep 300 &
+pid=$!
+kill -INT "$pid"
+ps -p "$pid" -o pid,stat,comm
+```
+
+<p align="justify"><strong>Atteso:</strong> sleep termina. Ripeti lo stesso blocco sostituendo soltanto <code>-INT</code> con <code>-HUP</code>, <code>-USR1</code>, <code>-USR2</code>, <code>-ALRM</code> oppure <code>-QUIT</code>, un segnale alla volta. Ogni volta avvia un nuovo sleep: anche questi segnali lo terminano. I messaggi stampati dalla shell possono cambiare.</p>
+
+<p align="justify">Per provare <code>-TSTP</code>, ripeti invece i passi 1–4 sostituendo STOP con TSTP: osserverai sospensione, ripresa e terminazione. Queste prove vanno eseguite in un <strong>terminale Bash interattivo</strong>: uno script può trattare diversamente INT e QUIT per i comandi in background.</p>
 
 ## Primo piano, background e job: jobs, bg e fg
 
@@ -216,336 +218,184 @@ sleep 300
 <table align="center">
 <tr><td>
 &#10071; <strong>Importante</strong>
-<p align="justify">Un <strong>job della shell</strong> è un comando, o una pipeline, che la shell gestisce come un'unica attività. Può comprendere uno o più processi. Il numero del job vale nella shell corrente; il PID identifica un processo nel sistema.</p>
-<p align="justify">Un job in <strong>primo piano</strong> occupa il terminale per l'interazione: la shell attende prima di mostrare un nuovo prompt. Un job in <strong>background</strong> lascia invece disponibile il prompt mentre prosegue.</p>
+<p align="justify">Un <strong>job della shell</strong> è un'attività che la shell gestisce con un proprio numero. Può comprendere uno o più processi. Il numero del job vale soltanto nella shell che lo ha avviato; il PID identifica un processo nel sistema.</p>
 </td></tr>
 </table>
 <!-- /definition -->
 
-<p align="justify">Il carattere <code>&amp;</code> avvia un comando in background:</p>
-
-```bash
-sleep 300 &
-```
-
 <table align="center">
-<thead><tr><th>Comando</th><th>Funzione</th></tr></thead>
+<thead><tr><th>Comando o tasto</th><th>Che cosa fa</th></tr></thead>
 <tbody>
-<tr><td><code>jobs -l</code></td><td>Mostra i job della shell, con PID e stato.</td></tr>
-<tr><td><code>bg %1</code></td><td>Riprende il job 1 sospeso, lasciandolo in background.</td></tr>
-<tr><td><code>fg %1</code></td><td>Porta il job 1 in primo piano e lo riprende se sospeso.</td></tr>
+<tr><td><code>jobs</code></td><td>Elenca i job del terminale corrente e il loro stato.</td></tr>
+<tr><td><code>jobs -l</code></td><td>Aggiunge i PID all'elenco.</td></tr>
+<tr><td><strong>Ctrl+Z</strong></td><td>Invia TSTP all'attività in primo piano: normalmente la sospende e restituisce il prompt.</td></tr>
+<tr><td><code>bg %1</code></td><td>Riprende il job 1 sospeso, lasciando disponibile il prompt.</td></tr>
+<tr><td><code>fg %1</code></td><td>Porta il job 1 in primo piano; se era sospeso, lo riprende.</td></tr>
+<tr><td><strong>Ctrl+C</strong></td><td>Invia INT all'attività in primo piano: normalmente la termina.</td></tr>
 </tbody>
 </table>
 
-<p align="justify"><strong><code>%1</code> indica il job numero 1, non il processo con PID 1.</strong> Usa il numero effettivamente mostrato da <code>jobs</code>. Il comando jobs conosce le attività gestite da quella shell, mentre ps osserva i processi del sistema.</p>
+<p align="justify"><strong><code>%1</code> significa «job numero 1», non «PID 1».</strong> Se jobs mostra <code>[2]</code>, usa <code>%2</code>. I tasti Ctrl+C e Ctrl+Z raggiungono il gruppo di processi in primo piano; nelle nostre prove quel gruppo contiene soltanto sleep.</p>
 
-<p align="justify">Un processo in background può usare la CPU oppure attendere un evento. Allo stesso modo, un processo in primo piano può essere in attesa: queste posizioni rispetto al terminale non sono stati di esecuzione della CPU. <a href="https://man7.org/linux/man-pages/man1/bash.1.html">Manuale Bash, controllo dei job</a>.</p>
+## Prova 3: Ctrl+Z, jobs, bg e fg
 
-## Comprendere gli stati S, D, T e t di ps
+<p align="justify">Apri un <strong>nuovo terminale Bash</strong> e usalo per tutta questa prova: sarà più facile riconoscere l'unico job.</p>
 
-<p align="justify">Possiamo ora interpretare meglio la prima lettera della colonna <code>STAT</code>. In S, D, T e t il processo non sta eseguendo istruzioni sulla CPU: cambiano il motivo della pausa e ciò che permette di uscirne.</p>
-
-### S: attesa interrompibile
-
-<!-- definition -->
-<table align="center">
-<tr><td>
-&#10071; <strong>Importante</strong>
-<p align="justify">Un'<strong>attesa interrompibile</strong> è un'attesa dalla quale il processo può essere risvegliato anche da un segnale da trattare, oltre che dall'evento atteso.</p>
-</td></tr>
-</table>
-<!-- /definition -->
-
-<p align="justify">Durante <code>sleep 300</code>, il processo è normalmente in <code>S</code>: aspetta lo scadere del tempo. Può però essere terminato con TERM oppure sospeso con STOP prima della scadenza.</p>
-
-<p align="justify">“Interrompibile” riguarda <strong>l'attesa</strong>, non implica necessariamente la terminazione. L'effetto dipende dal segnale e dal suo trattamento: un segnale bloccato o ignorato non equivale a una richiesta immediatamente eseguita. <a href="https://docs.kernel.org/driver-api/basics.html">Documentazione del kernel, attese interrompibili</a>.</p>
-
-### D: attesa non interrompibile
-
-<!-- definition -->
-<table align="center">
-<tr><td>
-&#10071; <strong>Importante</strong>
-<p align="justify">Un'<strong>attesa non interrompibile</strong> è un'attesa del kernel che non viene interrotta dalla normale consegna dei segnali: occorre che diventi possibile uscire da quell'attesa.</p>
-</td></tr>
-</table>
-<!-- /definition -->
-
-<p align="justify">Spesso è collegata a operazioni di I/O, per esempio al completamento di un'operazione su un dispositivo. Tuttavia <strong>non tutte le attese di I/O sono in D</strong>: molte sono interrompibili e compaiono come S.</p>
-
-<p align="justify">Un processo in D può restare visibile anche dopo l'invio di SIGKILL: la terminazione può dover aspettare l'uscita dall'attesa. Questo non significa che il programma abbia scelto di ignorare SIGKILL.</p>
-
-<p align="justify">La differenza fra S e D non dipende dalla durata: un'attesa lunga può essere interrompibile. <a href="https://man7.org/linux/man-pages/man1/ps.1.html">Manuale ps, codici degli stati</a>.</p>
-
-### T: sospensione tramite un segnale di stop
-
-<!-- definition -->
-<table align="center">
-<tr><td>
-&#10071; <strong>Importante</strong>
-<p align="justify">Lo <strong>stato T</strong> indica che il processo è sospeso da un segnale di stop usato per il controllo dei job.</p>
-</td></tr>
-</table>
-<!-- /definition -->
-
-<p align="justify">Il processo può essere stato sospeso con SIGSTOP oppure, normalmente, con Ctrl+Z. La sospensione può essere rimossa con SIGCONT, anche attraverso <code>bg</code> o <code>fg</code>.</p>
-
-<p align="justify">Dopo la ripresa non è detto che usi subito la CPU: sleep, per esempio, può tornare in S perché deve ancora attendere.</p>
-
-### t: arresto per tracciamento
-
-<!-- definition -->
-<table align="center">
-<tr><td>
-&#10071; <strong>Importante</strong>
-<p align="justify">Lo <strong>stato t</strong>, con lettera minuscola, indica un arresto sotto il controllo di uno strumento di tracciamento, come un debugger.</p>
-<p align="justify">Un <strong>breakpoint</strong> è un punto di arresto impostato nel debugger per fermare l'esecuzione del programma e permetterne l'esame.</p>
-</td></tr>
-</table>
-<!-- /definition -->
-
-<p align="justify">Per esempio, quando il programma raggiunge un breakpoint, puoi esaminarne variabili e registri. La prosecuzione viene comandata dal debugger.</p>
-
-<p align="justify">Essere sotto debugger non significa essere sempre in t: questo stato indica che l'esecuzione è effettivamente arrestata per il tracciamento. <a href="https://man7.org/linux/man-pages/man2/ptrace.2.html">Manuale ptrace(2)</a>.</p>
-
-### Riepilogo della colonna STAT
-
-<table align="center">
-<thead><tr><th>Lettera</th><th>Significato in Linux</th><th>Che cosa permette di proseguire</th></tr></thead>
-<tbody>
-<tr><td><code>R</code></td><td>In esecuzione oppure pronto a eseguire.</td><td>Se pronto, assegnazione della CPU.</td></tr>
-<tr><td><code>S</code></td><td>Attesa interrompibile.</td><td>Evento atteso oppure segnale da trattare.</td></tr>
-<tr><td><code>D</code></td><td>Attesa non interrompibile nel kernel, spesso legata all'I/O.</td><td>Uscita dall'attesa; i segnali possono restare pendenti.</td></tr>
-<tr><td><code>T</code></td><td>Sospensione tramite un segnale di stop.</td><td>SIGCONT, anche attraverso fg o bg.</td></tr>
-<tr><td><code>t</code></td><td>Arresto per tracciamento.</td><td>Comando di prosecuzione dello strumento di tracciamento.</td></tr>
-<tr><td><code>Z</code></td><td>Terminato, con stato di uscita ancora da raccogliere: zombie.</td><td>Non riprende: il padre deve raccoglierne lo stato.</td></tr>
-<tr><td><code>I</code></td><td>Thread del kernel inattivo.</td><td>Risveglio quando è richiesto lavoro.</td></tr>
-</tbody>
-</table>
-
-<p align="justify">Per esempio, <code>SN</code> combina attesa interrompibile e priorità ridotta; <code>+</code> indica l'appartenenza al gruppo in primo piano del terminale. Uno zombie ha già finito di eseguire: inviare KILL non raccoglie il suo stato. <a href="https://man7.org/linux/man-pages/man5/proc_pid_status.5.html">Stati esposti dal kernel</a>.</p>
-
-## Prova 1: seguire un processo con ps e kill
-
-<p align="justify">Avvia un'attesa di cinque minuti in background e conserva subito il suo PID:</p>
-
-```bash
-sleep 300 &
-lab_pid=$!
-printf 'PID del laboratorio: %s\n' "$lab_pid"
-ps -p "$lab_pid" -o pid,ppid,stat,ni,etime,time,args
-```
-
-<p align="justify"><code>&amp;</code> restituisce il prompt mentre il comando continua; <code>$!</code> contiene il PID dell'ultimo comando avviato in background. La riga di ps dovrebbe mostrare sleep in stato <code>S</code>, CPU quasi nulla e PPID della shell. <code>echo "$$"</code> mostra il PID di Bash.</p>
-
-<p align="justify">Sospendi il processo, osserva, poi riprendilo e osserva ancora. Digita una riga alla volta:</p>
-
-```bash
-kill -STOP "$lab_pid"
-ps -p "$lab_pid" -o pid,stat,args
-kill -CONT "$lab_pid"
-ps -p "$lab_pid" -o pid,stat,args
-```
-
-<p align="justify"><strong>Atteso:</strong> dopo STOP compare <code>T</code>; dopo CONT sleep torna normalmente in <code>S</code>, perché deve ancora attendere. Riprendere un processo non implica che stia usando la CPU. Se il campionamento è troppo rapido, ripeti ps.</p>
-
-<p align="justify">Puoi anche leggere le informazioni esposte dal kernel:</p>
-
-```bash
-cat "/proc/$lab_pid/status"
-tr '\0' ' ' < "/proc/$lab_pid/cmdline"
-printf '\n'
-```
-
-<p align="justify">Cerca <code>Name</code>, <code>State</code>, <code>Pid</code> e <code>PPid</code>. Gli argomenti in cmdline sono separati da byte nulli; tr li rende leggibili. Ora termina e raccogli l'esito del figlio:</p>
-
-```bash
-kill -TERM "$lab_pid"
-wait "$lab_pid"
-lab_esito=$?
-printf 'Esito raccolto da Bash: %s\n' "$lab_esito"
-ps -p "$lab_pid" -o pid,stat,args
-unset lab_pid lab_esito
-```
-
-<p align="justify"><strong>Atteso:</strong> Bash può stampare una notifica di terminazione; per TERM l'esito è normalmente 143, cioè 128 + 15. Dopo wait, ps non mostra più la riga. Il comando wait della shell attende un proprio figlio e ne raccoglie l'esito; qui non è la funzione C <code>wait()</code>. Se trascorrono cinque minuti, sleep può terminare da solo: riparti dall'avvio per ripetere la prova.</p>
-
-## Prova 2: Ctrl+Z, jobs, bg e fg
-
-<p align="justify">Colleghiamo ora i segnali della tastiera, il controllo dei job e gli stati osservati con ps. In un terminale Bash nuovo esegui:</p>
+### 1. Avvia in primo piano
 
 ```bash
 sleep 300
 ```
 
-<ol>
-  <li>Premi <strong>Ctrl+Z</strong>: il comando viene sospeso e ritorna il prompt.</li>
-  <li>Esegui <code>jobs -l</code>: annota numero del job, PID e stato.</li>
-  <li>Esegui <code>ps -p PID -o pid,stat,args</code>, sostituendo <code>PID</code> con il numero annotato: dovresti vedere <code>T</code>.</li>
-  <li>Esegui <code>bg %1</code>: riprende in background. Se jobs mostra un altro numero, sostituisci <code>%1</code>.</li>
-  <li>Ripeti <code>ps -p PID -o pid,stat,args</code> con lo stesso PID: normalmente vedrai <code>S</code>, perché sleep continua ad aspettare. Esegui anche <code>jobs -l</code> per confrontare le due indicazioni.</li>
-  <li>Esegui <code>fg %1</code>: riporta il job in primo piano; premi <strong>Ctrl+C</strong> per terminarlo.</li>
-  <li>Esegui <code>jobs -l</code> per verificare che il job sia concluso.</li>
-</ol>
+<p align="justify">Questa volta manca <code>&amp;</code>. <strong>Atteso:</strong> il prompt non ritorna subito, perché la shell aspetta che sleep finisca. Il terminale non è bloccato.</p>
 
-<p align="justify"><strong>Atteso:</strong> puoi vedere “Running” in jobs e S in ps. Le due indicazioni sono compatibili: la shell segnala che il job non è sospeso, mentre ps mostra che il processo sta aspettando un evento. Se trascorrono cinque minuti, sleep può terminare da solo: riparti dall'avvio per ripetere la prova.</p>
+### 2. Sospendi e guarda l'elenco
 
-## Prova 3: nice e renice
+<p align="justify">Premi <strong>Ctrl+Z</strong>. Quando ritorna il prompt, digita:</p>
+
+```bash
+jobs
+jobs -l
+```
+
+<p align="justify"><strong>Atteso:</strong> una riga simile a questa nell'output di jobs -l:</p>
+
+```text
+[1]+ 12345 Stopped                 sleep 300
+```
+
+<p align="justify"><code>[1]</code> è il numero del job; <code>12345</code> è un PID di esempio; <code>Stopped</code> significa sospeso. Il simbolo <code>+</code> indica il job corrente, scelto dalla shell quando fg o bg vengono scritti senza numero. La lingua dei messaggi può variare.</p>
+
+### 3. Riprendi in background
+
+```bash
+bg %1
+jobs
+```
+
+<p align="justify"><strong>Atteso:</strong> jobs mostra <code>Running</code> e puoi ancora digitare comandi. Bg ha fatto riprendere il job con CONT. Running significa che il job non è sospeso: sleep sta ancora aspettando e ps può mostrarlo in S.</p>
+
+### 4. Riporta in primo piano e termina
+
+```bash
+fg %1
+```
+
+<p align="justify"><strong>Atteso:</strong> il prompt torna a non essere disponibile. Premi <strong>Ctrl+C</strong> per terminare sleep, poi controlla:</p>
+
+```bash
+jobs
+```
+
+<p align="justify"><strong>Atteso:</strong> nessun job attivo. Se compare ancora una notifica di conclusione, esegui jobs una seconda volta.</p>
+
+<p align="justify"><strong>Da ricordare:</strong> Ctrl+Z sospende; bg riprende lasciando libero il prompt; fg porta in primo piano; Ctrl+C normalmente termina. Jobs vede soltanto le attività di quella shell: un altro terminale ha un proprio elenco. <a href="https://man7.org/linux/man-pages/man1/bash.1.html">Manuale Bash, controllo dei job</a>.</p>
+
+## Comprendere gli stati S, D, T e t di ps
+
+<p align="justify">Per rileggere le prove basta guardare la prima lettera di <code>STAT</code>. Nei nostri esempi abbiamo osservato soprattutto S e T. Le definizioni seguenti spiegano anche D e t, senza doverli riprodurre.</p>
 
 <!-- definition -->
 <table align="center">
 <tr><td>
 &#10071; <strong>Importante</strong>
-<p align="justify">Il <strong>valore nice</strong> influenza la priorità relativa di CPU delle normali attività pianificate da Linux. Va da <strong>-20</strong>, più favorevole, a <strong>19</strong>, meno favorevole. Aumentare il numero riduce la priorità relativa.</p>
+<p align="justify">Lo <strong>stato S</strong> indica un'attesa interrompibile: il processo aspetta un evento, ma può essere risvegliato anche da un segnale da trattare.</p>
+<p align="justify">Lo <strong>stato D</strong> indica un'attesa non interrompibile nel kernel, cioè nel nucleo del sistema operativo: la normale consegna dei segnali non basta a far uscire il processo da quell'attesa.</p>
+<p align="justify">Lo <strong>stato T</strong> indica un processo sospeso da un segnale di stop.</p>
+<p align="justify">Lo <strong>stato t</strong>, minuscolo, indica un processo arrestato sotto il controllo di uno strumento di tracciamento o di un debugger, usato per esaminare l'esecuzione di un programma.</p>
 </td></tr>
 </table>
 <!-- /definition -->
 
-<p align="justify"><code>nice</code> avvia un comando applicando un incremento al valore ereditato; <code>renice</code> interviene su un processo già esistente. In Ubuntu useremo <code>renice 15 -p PID</code> per impostare il valore assoluto 15: questa forma evita le differenze che l'opzione <code>-n</code> può avere in presenza di <code>POSIXLY_CORRECT</code>.</p>
-
-```bash
-ps -p "$$" -o pid,ni,args
-nice -n 10 sleep 300 &
-lab_pid=$!
-ps -p "$lab_pid" -o pid,ni,stat,args
-renice 15 -p "$lab_pid"
-ps -p "$lab_pid" -o pid,ni,stat,args
-```
-
-<p align="justify"><strong>Atteso con shell a NI=0:</strong> il nuovo processo parte a 10 e passa a 15; <code>STAT</code> può mostrare <code>SN</code>. Per questa prova parti da una shell con NI=0. Se il valore iniziale è diverso, anche il risultato di nice cambia.</p>
-
-<p align="justify">Con l'utente normale prova a riportarlo a zero:</p>
-
-```bash
-renice 0 -p "$lab_pid"
-```
-
-<p align="justify"><strong>Atteso nella configurazione ordinaria:</strong> permesso negato. Senza privilegi o limiti appositamente configurati puoi aumentare il nice dei tuoi processi, ma non diminuirlo, neppure per annullare la modifica precedente. Chiudi la prova:</p>
-
-```bash
-kill -TERM "$lab_pid"
-wait "$lab_pid"
-unset lab_pid
-```
-
-<p align="justify">Sleep rende visibile NI, ma non misura una differenza di prestazioni: attende senza contendere la CPU. Il nice non è un limite percentuale di CPU e non garantisce un rapporto fisso fra tempi di esecuzione; contano carico, CPU disponibili e raggruppamento delle attività. <a href="https://man7.org/linux/man-pages/man1/nice.1.html">Manuale nice</a>; <a href="https://manpages.ubuntu.com/manpages/noble/man1/renice.1.html">renice su Ubuntu</a>.</p>
-
-## Prova 4: selezionare per nome con killall
-
-<p align="justify">Applichiamo la <a href="#inviare-segnali-con-kill-e-killall">selezione per nome con killall</a>, controllando prima le corrispondenze con pgrep.</p>
-
-<p align="justify">Creiamo due copie in esecuzione di sleep con un nome temporaneo comune, così la prova seleziona soltanto queste. <code>mktemp</code> crea una directory nuova; <code>cp</code> vi copia l'eseguibile con un nome breve e distinto:</p>
-
-```bash
-lab_dir=$(mktemp -d /tmp/tpsi-XXXXXX)
-lab_nome=${lab_dir##*/}
-cp /usr/bin/sleep "$lab_dir/$lab_nome"
-"$lab_dir/$lab_nome" 300 &
-lab_pid_a=$!
-"$lab_dir/$lab_nome" 300 &
-lab_pid_b=$!
-pgrep -a -u "$(id -u)" -x "$lab_nome"
-```
-
-<p align="justify"><strong>Atteso:</strong> due righe con i PID appena creati. <code>${lab_dir##*/}</code> ricava il nome finale della directory. Invia TERM chiedendo conferma per ogni corrispondenza:</p>
-
-```bash
-LC_ALL=C killall -i -u "$(id -un)" -s TERM -- "$lab_nome"
-```
-
-<p align="justify">Rispondi <code>y</code> a entrambe le richieste. <code>LC_ALL=C</code> rende prevedibile la lingua della conferma; <code>-u</code> limita la selezione al tuo utente; <code>-i</code> chiede conferma. Controlla e rimuovi soltanto il materiale temporaneo di questa prova:</p>
-
-```bash
-wait "$lab_pid_a"
-wait "$lab_pid_b"
-pgrep -a -u "$(id -u)" -x "$lab_nome"
-rm -- "$lab_dir/$lab_nome"
-rmdir -- "$lab_dir"
-unset lab_dir lab_nome lab_pid_a lab_pid_b
-```
-
-<p align="justify"><strong>Atteso:</strong> pgrep non trova più corrispondenze. Se rifiuti una conferma, quel processo continua: terminalo con il suo PID prima di eseguire wait. Evita nomi generici come bash: selezionerebbero anche altre sessioni. Il comportamento descritto riguarda killall di Linux; altri sistemi UNIX possono attribuire al comando significati diversi. <a href="https://manpages.ubuntu.com/manpages/noble/man1/killall.1.html">Manuale killall</a>.</p>
-
-## Prova 5: un programma che gestisce TERM e USR1
-
-<p align="justify">Qui osserviamo la differenza fra il segnale ricevuto e la risposta scelta dal programma. In un primo terminale esegui il blocco seguente. Avvia una Bash dedicata, che stampa il proprio PID e resta attiva al massimo circa un minuto:</p>
-
-```bash
-bash <<'BASH'
-trap 'printf "Richiesta USR1 ricevuta\n"' USR1
-trap 'printf "Chiusura richiesta con TERM\n"; exit 0' TERM
-trap 'printf "Procedura finale eseguita\n"' EXIT
-printf "Pronto. PID da usare nel secondo terminale: %s\n" "$$"
-for ((passo=0; passo<60; passo++)); do
-    sleep 1
-done
-BASH
-```
-
-<p align="justify">Attendi il messaggio <code>Pronto</code>. Nel secondo terminale assegna alla variabile il PID stampato, poi osserva il destinatario prima di inviargli segnali:</p>
-
-```bash
-read -r -p 'PID stampato nel primo terminale: ' lab_pid
-ps -p "$lab_pid" -o pid,user,args
-kill -USR1 "$lab_pid"
-```
-
-<p align="justify"><strong>Atteso nel primo terminale:</strong> compare il messaggio della richiesta e il processo continua. Invia poi:</p>
-
-```bash
-kill -TERM "$lab_pid"
-unset lab_pid
-```
-
-<p align="justify">Il programma stampa il messaggio di chiusura, esegue la procedura finale e termina. Bash può rinviare il gestore finché il comando sleep corrente ritorna: la risposta può richiedere circa un secondo.</p>
-
-<p align="justify">Ripeti l'avvio nel primo terminale, acquisisci il <strong>nuovo PID</strong> nel secondo e, dopo averlo verificato con ps, invia <code>kill -KILL "$lab_pid"</code>. Questa volta il programma non esegue i messaggi di chiusura né la procedura finale. La shell esterna può scrivere <code>Killed</code> e riportare il testo del comando terminato: quel testo non è l'esecuzione dei gestori. Elimina la variabile con <code>unset lab_pid</code>.</p>
-
-<p align="justify">Il comando <code>trap</code> di Bash associa azioni ai segnali; in C useremo <code>sigaction</code>, con vincoli specifici sulle funzioni eseguibili nel gestore. Il trap EXIT è un evento della shell, non un segnale Linux. <a href="02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md#segnali-notifiche-non-contenitori-generici">Prosegui con i segnali nel modulo 2</a>.</p>
-
-## Che cosa aggiornare rispetto alle pagine storiche
-
 <table align="center">
-<thead><tr><th>Argomento</th><th>Indicazione per Ubuntu attuale</th></tr></thead>
+<thead><tr><th>Stato</th><th>Esempio</th><th>Come prosegue</th></tr></thead>
 <tbody>
-<tr><td>ps, nice, renice, kill, killall</td><td>Sono ancora utilizzabili. Preferire opzioni esplicite, nomi dei segnali e PID acquisiti durante la prova.</td></tr>
-<tr><td>Stato S</td><td>Indica attesa interrompibile; non va interpretato come un'attesa inferiore a 20 secondi.</td></tr>
-<tr><td>RSS in ps</td><td>È espresso in KiB, non in numero di pagine.</td></tr>
-<tr><td>CONT e maschera dei segnali</td><td>La ripresa avviene anche se CONT è bloccato; la consegna al gestore può restare pendente.</td></tr>
-<tr><td>top</td><td>Impostare il periodo con <code>-d 1</code>; l'interfaccia e le opzioni attuali si consultano con <code>h</code> o <code>man top</code>.</td></tr>
-<tr><td>init, xinetd e servizi</td><td>Nelle normali VM Ubuntu moderne PID 1 è systemd. Verifica con <code>ps -p 1 -o pid,comm,args</code>. Gli esempi sui vecchi servizi dipendono da ciò che è installato; per un servizio gestito da systemd si consulta prima <code>systemctl status NOME.service</code>.</td></tr>
-<tr><td>HUP come “ricarica”</td><td>È una convenzione di alcuni programmi. Prima di usarlo controllare il manuale del servizio: l'azione predefinita è terminare.</td></tr>
-<tr><td>Processi con molto carico</td><td>Osservare CPU, memoria e stato prima di intervenire. La sequenza didattica è identificare, inviare TERM, verificare e ricorrere a KILL soltanto se necessario.</td></tr>
+<tr><td><code>S</code></td><td>Sleep aspetta lo scadere del tempo.</td><td>Scade il tempo, oppure arriva un segnale da trattare.</td></tr>
+<tr><td><code>D</code></td><td>Attesa di alcune operazioni su dispositivi.</td><td>Deve diventare possibile uscire dall'attesa. Anche KILL può avere effetto solo in seguito.</td></tr>
+<tr><td><code>T</code></td><td>Sleep dopo STOP o Ctrl+Z.</td><td>CONT, anche tramite bg o fg.</td></tr>
+<tr><td><code>t</code></td><td>Programma fermato per esaminarlo con un debugger.</td><td>Lo strumento di tracciamento ne comanda la prosecuzione.</td></tr>
 </tbody>
 </table>
 
-<p align="justify">Per approfondire l'osservazione puoi consultare <code>man proc</code> e <code>man strace</code>. Quest'ultimo permette di avviare un programma sotto osservazione, per esempio <code>strace sleep 1</code>, se il pacchetto strace è installato. Le chiamate mostrate dipendono da kernel, architettura e librerie.</p>
+<p align="justify">S e D non distinguono attese brevi e lunghe; non tutte le attese su dispositivi sono D. T e t sono stati diversi. Un programma sotto debugger compare in t soltanto quando è effettivamente arrestato per il tracciamento. <a href="https://man7.org/linux/man-pages/man1/ps.1.html">Manuale ps, codici degli stati</a>.</p>
+
+## Approfondimenti facoltativi
+
+### Osservare tutti i processi con ps e top
+
+<p align="justify">Per una panoramica dei processi del sistema:</p>
+
+```bash
+ps -ef
+top
+```
+
+<p align="justify">In ps, <code>-e</code> seleziona tutti i processi e <code>-f</code> mostra più informazioni, tra cui <code>PPID</code>, il PID del processo padre. Top aggiorna la vista nel tempo: premi <code>q</code> per uscire e tornare al prompt.</p>
+
+### Selezionare per nome con killall
+
+<p align="justify">Kill usa il PID; <code>killall</code> seleziona i processi per nome e può quindi raggiungerne più di uno. Avvia un nuovo sleep e annota il PID stampato da echo. Poi cerca i tuoi processi sleep e chiedi conferma prima di terminarli:</p>
+
+```bash
+sleep 300 &
+pid=$!
+echo "$pid"
+pgrep -a -u "$USER" -x sleep
+killall -i -u "$USER" -s TERM sleep
+```
+
+<p align="justify"><code>pgrep</code> cerca processi: <code>-a</code> mostra PID e comando, <code>-u "$USER"</code> limita la ricerca al tuo utente e <code>-x sleep</code> richiede esattamente quel nome. <code>$USER</code> contiene il nome dell'utente della sessione. In killall, <code>-i</code> chiede conferma per ogni processo, <code>-u</code> sceglie l'utente e <code>-s TERM</code> sceglie il segnale. Conferma soltanto il PID della prova; la risposta da digitare è indicata nella domanda, normalmente <code>y</code> per sì o <code>n</code> per no. Ripeti pgrep per controllare il risultato. <a href="https://manpages.ubuntu.com/manpages/noble/man1/killall.1.html">Manuale killall</a>.</p>
+
+### Cambiare la priorità con nice e renice
+
+<!-- definition -->
+<table align="center">
+<tr><td>
+&#10071; <strong>Importante</strong>
+<p align="justify">Il <strong>valore nice</strong> influenza la priorità relativa di CPU di un normale processo Linux. Va da -20 a 19: un numero più alto corrisponde a una priorità meno favorevole.</p>
+</td></tr>
+</table>
+<!-- /definition -->
+
+<p align="justify">Nice avvia un processo con una priorità modificata; renice interviene su uno già avviato. Per questa prova controlla prima il nice della shell:</p>
+
+```bash
+ps -p "$$" -o pid,ni,comm
+```
+
+<p align="justify"><code>$$</code> contiene il PID della shell; <code>NI</code> mostra il nice. Se vale 0, esegui:</p>
+
+```bash
+nice -n 10 sleep 300 &
+pid=$!
+ps -p "$pid" -o pid,ni,comm
+renice 15 -p "$pid"
+ps -p "$pid" -o pid,ni,comm
+kill -TERM "$pid"
+```
+
+<p align="justify"><strong>Atteso:</strong> NI passa da 10 a 15. <code>nice -n 10</code> aggiunge 10 al valore ereditato; <code>renice 15 -p</code> imposta 15 sul PID indicato. Senza privilegi, normalmente puoi aumentare il nice dei tuoi processi ma non diminuirlo. Sleep permette di vedere il valore: poiché aspetta, non è una prova delle prestazioni della CPU.</p>
 
 ## Verifica rapida
 
 <ol>
-  <li>Perché sleep compare in ps anche quando TIME è quasi zero?</li>
-  <li>Quale differenza osservi fra STOP, CONT e TERM?</li>
-  <li>Perché USR1 termina alcuni programmi e fa stampare un messaggio nella prova 5?</li>
-  <li>Se il nice della shell vale 5, quale valore richiede <code>nice -n 10</code> per il nuovo comando? Che cosa imposta <code>renice 15 -p PID</code>?</li>
-  <li>Quando useresti kill e quando killall? Quale controllo faresti prima?</li>
-  <li>Perché Ctrl+Z non equivale a Ctrl+C? Perché il job “Running” può apparire come S in ps?</li>
-  <li>Che cosa significa “interrompibile” nello stato S? Perché un processo in D può restare visibile dopo SIGKILL?</li>
-  <li>Che cosa distingue T da t? Perché essere sotto debugger non implica essere sempre in t?</li>
+  <li>Quale comando invia TERM al processo il cui PID è salvato nella variabile pid?</li>
+  <li>Che differenza c'è tra STOP, CONT e KILL?</li>
+  <li>Dopo Ctrl+Z, come fai riprendere il job 1 lasciando disponibile il prompt?</li>
+  <li>Come riporti il job 1 in primo piano? Come lo termini da tastiera?</li>
+  <li>Perché jobs può mostrare Running mentre ps mostra S?</li>
 </ol>
 
-<p align="justify"><strong>Consegna:</strong> per ogni prova annota PID, comando e stato osservato. Allega una spiegazione della differenza fra sospensione, attesa e terminazione e verifica di aver chiuso i processi creati.</p>
+<p align="justify"><strong>Consegna breve:</strong> annota tre comandi, uno per terminare, uno per sospendere e uno per riprendere. Per ciascuno scrivi una frase sul risultato osservato. Alla fine controlla con jobs, in ciascun terminale usato, che non rimangano job attivi o sospesi. Se ne rimane uno della prova, usa fg con il suo numero e poi Ctrl+C.</p>
 
 ## Fonti e note di revisione
 
 <ul>
-  <li>Spunto didattico: immagini del capitolo sul controllo dei processi del manuale di amministrazione di sistema di Nemeth e coautori, nella <a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#controllo-dei-processi">sezione indicata di 2cornot2c</a>, in particolare segnali, kill/killall, nice/renice e ps/top. Testo ed esercizi di questa scheda sono originali.</li>
-  <li>Osservazione: <a href="https://man7.org/linux/man-pages/man1/ps.1.html">ps</a>, <a href="https://man7.org/linux/man-pages/man1/pgrep.1.html">pgrep</a>, <a href="https://man7.org/linux/man-pages/man1/top.1.html">top</a>, <a href="https://man7.org/linux/man-pages/man5/proc_pid_status.5.html">proc_pid_status</a>.</li>
-  <li>Priorità: <a href="https://man7.org/linux/man-pages/man1/nice.1.html">nice</a> e <a href="https://manpages.ubuntu.com/manpages/noble/man1/renice.1.html">renice su Ubuntu 24.04</a>.</li>
-  <li>Segnali e shell: <a href="https://man7.org/linux/man-pages/man7/signal.7.html">signal(7)</a>, <a href="https://man7.org/linux/man-pages/man2/kill.2.html">kill(2)</a>, <a href="https://manpages.ubuntu.com/manpages/noble/man1/killall.1.html">killall su Ubuntu 24.04</a>, <a href="https://man7.org/linux/man-pages/man1/bash.1.html">Bash</a>.</li>
-  <li>Attese e tracciamento: <a href="https://docs.kernel.org/driver-api/basics.html">documentazione del kernel sulle attese</a> e <a href="https://man7.org/linux/man-pages/man2/ptrace.2.html">ptrace(2)</a>.</li>
-  <li>Ambiente del corso: Ubuntu 24.04.3 LTS nella macchina virtuale, versione confermata dal docente.</li>
-  <li>Verifica pratica del 26 settembre 2026: le cinque prove sono state eseguite su Ubuntu 24.04 in WSL, con utente senza privilegi, procps-ng 4.0.4 e util-linux 2.39.3. Verificati anche job control in un terminale e conferme interattive di killall. Il collaudo è stato svolto nell'ambiente locale WSL; l'esecuzione sulla VM del corso resta da effettuare.</li>
-  <li>Revisione del 9 ottobre 2026: ordinati i prerequisiti in segnali, kill/killall, tastiera e controllo dei job; aggiunta la spiegazione degli stati S, D, T e t e integrata la prova 2 con il confronto fra jobs e ps. Fonti ricontrollate per l'ampliamento; questa revisione non costituisce un nuovo collaudo dei comandi sulla VM.</li>
-  <li>Stato: <code>draft</code>; documentazione consultata il 26 settembre e il 9 ottobre 2026.</li>
+  <li>Spunto didattico: <a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#controllo-dei-processi">Controllo dei processi in 2cornot2c</a>. Testo ed esercizi sono originali.</li>
+  <li>Segnali: <a href="https://man7.org/linux/man-pages/man7/signal.7.html">signal(7)</a>; shell e job: <a href="https://man7.org/linux/man-pages/man1/bash.1.html">Bash</a>. Nel terminale si possono consultare anche <code>help kill</code>, <code>help jobs</code>, <code>help fg</code> e <code>help bg</code>.</li>
+  <li>Comandi: <a href="https://man7.org/linux/man-pages/man1/ps.1.html">ps</a>, <a href="https://man7.org/linux/man-pages/man1/pgrep.1.html">pgrep</a>, <a href="https://man7.org/linux/man-pages/man1/top.1.html">top</a>, <a href="https://manpages.ubuntu.com/manpages/noble/man1/killall.1.html">killall</a>, <a href="https://man7.org/linux/man-pages/man1/nice.1.html">nice</a>, <a href="https://manpages.ubuntu.com/manpages/noble/man1/renice.1.html">renice</a>.</li>
+  <li>Per approfondire la gestione dei segnali nei programmi: <a href="02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md#segnali-notifiche-non-contenitori-generici">segnali nel modulo 2</a>.</li>
+  <li>Revisione del 15 ottobre 2026: tre prove di base, esempi dei segnali più comuni, spiegazione di simboli e opzioni, approfondimenti facoltativi su ps/top, killall e nice/renice. Fonti sui segnali, Bash e ps ricontrollate.</li>
+  <li>Collaudo del 15 ottobre 2026 su Ubuntu 24.04 in WSL, con utente senza privilegi, Bash 5.2.21 e procps-ng 4.0.4: verificati i segnali elencati, gli stati S/T, Ctrl+Z e Ctrl+C in un terminale interattivo, jobs/bg/fg, nice/renice e pgrep/killall con conferma. La verifica sulla VM del corso resta da svolgere.</li>
+  <li>Ambiente previsto: VM Ubuntu 24.04.3 LTS del corso, con Bash interattiva. Stato: <code>draft</code>.</li>
 </ul>

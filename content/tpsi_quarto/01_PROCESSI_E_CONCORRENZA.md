@@ -1414,7 +1414,7 @@ pstree -p
 
 <p align="justify">L'albero non implica che il padre controlli ogni istruzione del figlio. Indica una relazione utile per creazione, attesa, ereditarietà di alcune risorse e raccolta dello stato di terminazione.</p>
 
-<p align="justify"><strong>&#128187; Prova nella VM:</strong> il <a href="01_LABORATORIO_PROCESSI_UBUNTU.md">laboratorio Ubuntu: osservare e gestire i processi</a> guida all'uso di <code>ps</code>, <code>top</code>, <code>nice</code>, <code>renice</code>, <code>kill</code> e <code>killall</code>, con cinque prove su stati, priorità e segnali.</p>
+<p align="justify"><strong>&#128187; Prova nella VM:</strong> il <a href="01_LABORATORIO_PROCESSI_UBUNTU.md">laboratorio Ubuntu: osservare e gestire i processi</a> propone tre prove brevi su segnali, stati e controllo dei job con <code>jobs</code>, <code>bg</code> e <code>fg</code>. Comprende approfondimenti facoltativi su <code>ps</code>, <code>top</code>, <code>killall</code>, <code>nice</code> e <code>renice</code>.</p>
 
 ## Creazione di processi: `fork`, `exec` e `wait`
 

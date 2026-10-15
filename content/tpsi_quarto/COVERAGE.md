@@ -100,7 +100,7 @@ Sezioni incluse nel lavoro di integrazione:
 
 Integrazione operativa:
 
-- [Laboratorio Ubuntu](01_LABORATORIO_PROCESSI_UBUNTU.md): osservazione con ps/top, priorità nice/renice, selezione per PID o nome, segnali e job control. Cinque prove guidate collegate ai moduli 1 e 2.
+- [Laboratorio Ubuntu](01_LABORATORIO_PROCESSI_UBUNTU.md): tre prove guidate su segnali, stati e job control con jobs/bg/fg, collegate ai moduli 1 e 2. Osservazione con ps/top, selezione per nome con killall e priorità nice/renice negli approfondimenti facoltativi.
 - Le immagini editoriali iniziali di `Controllo dei processi` restano escluse dall'importazione; gli argomenti richiesti sono rielaborati nella scheda originale con riferimenti ai manuali attuali.
 
 Nota di licenza: gli esempi presenti nella dispensa che dichiarano una provenienza editoriale esterna devono essere controllati singolarmente. Dove la licenza non consente la redistribuzione o non è chiara, il pacchetto deve usare una nuova implementazione originale.

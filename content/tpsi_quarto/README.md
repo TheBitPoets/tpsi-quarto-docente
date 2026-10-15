@@ -13,7 +13,7 @@ Questa cartella contiene materiali didattici originali per il quarto anno TPSI, 
 
 ### Laboratori guidati
 
-- [Ubuntu: osservare e gestire i processi](01_LABORATORIO_PROCESSI_UBUNTU.md): ps, top, nice, renice, kill, killall e segnali; cinque prove nella VM, collegate ai moduli 1 e 2.
+- [Ubuntu: osservare e gestire i processi](01_LABORATORIO_PROCESSI_UBUNTU.md): tre prove brevi su segnali, stati e jobs/bg/fg; approfondimenti facoltativi su ps/top, killall e nice/renice.
 
 ## File di controllo
 
