@@ -116,19 +116,19 @@ kill "$pid"
 <p align="justify">Gli esempi presuppongono un processo appena avviato e il suo PID salvato come nella prova 1. <strong>Non eseguire tutte le righe sullo stesso processo:</strong> molti segnali lo terminano.</p>
 
 <table align="center">
-<thead><tr><th>Segnale</th><th>Esempio</th><th>Che cosa succede normalmente</th></tr></thead>
+<thead><tr><th>Segnale</th><th width="22%">Esempio</th><th>Che cosa succede normalmente</th><th>Quando usarlo e quale alternativa preferire</th></tr></thead>
 <tbody>
-<tr><td><code>SIGTERM</code></td><td><code>kill -TERM "$pid"</code></td><td>Chiede la terminazione. È la prima scelta per chiudere un processo.</td></tr>
-<tr><td><code>SIGINT</code></td><td><code>kill -INT "$pid"</code></td><td>Interrompe e termina. È anche il segnale di Ctrl+C.</td></tr>
-<tr><td><code>SIGQUIT</code></td><td><code>kill -QUIT "$pid"</code></td><td>Termina e può produrre un file diagnostico. Da tastiera: Ctrl+\.</td></tr>
-<tr><td><code>SIGKILL</code></td><td><code>kill -KILL "$pid"</code></td><td>Forza la terminazione, senza permettere al programma di eseguire la propria procedura di chiusura.</td></tr>
-<tr><td><code>SIGSTOP</code></td><td><code>kill -STOP "$pid"</code></td><td>Sospende: il processo resta presente, ma non prosegue.</td></tr>
-<tr><td><code>SIGTSTP</code></td><td><code>kill -TSTP "$pid"</code></td><td>Sospende. È anche il segnale di Ctrl+Z.</td></tr>
-<tr><td><code>SIGCONT</code></td><td><code>kill -CONT "$pid"</code></td><td>Fa riprendere un processo sospeso.</td></tr>
-<tr><td><code>SIGHUP</code></td><td><code>kill -HUP "$pid"</code></td><td>Segnala normalmente la perdita del terminale. Di base termina; alcuni programmi lo usano per rileggere la configurazione.</td></tr>
-<tr><td><code>SIGUSR1</code></td><td><code>kill -USR1 "$pid"</code></td><td>Azione scelta dal programma; se non è prevista una gestione, termina.</td></tr>
-<tr><td><code>SIGUSR2</code></td><td><code>kill -USR2 "$pid"</code></td><td>Secondo segnale per un'azione scelta dal programma; di base termina.</td></tr>
-<tr><td><code>SIGALRM</code></td><td><code>kill -ALRM "$pid"</code></td><td>Segnala normalmente la scadenza di un timer; di base termina. Qui lo inviamo manualmente.</td></tr>
+<tr><td><code>SIGTERM</code></td><td><code>kill -TERM "$pid"</code></td><td>Chiede la terminazione. È la prima scelta per chiudere un processo.</td><td><strong>Prima scelta per chiedere a un processo di chiudersi.</strong> Il programma può gestirlo per salvare dati e liberare risorse. Preferiscilo a KILL quando puoi concedere il tempo necessario alla chiusura.</td></tr>
+<tr><td><code>SIGINT</code></td><td><code>kill -INT "$pid"</code></td><td>Interrompe e termina. È anche il segnale di Ctrl+C.</td><td>Quando vuoi <strong>interrompere un comando avviato nel terminale</strong>, normalmente con Ctrl+C. TERM esprime una richiesta generale di chiusura; INT un’interruzione richiesta dall’utente. Entrambi normalmente terminano, ma il programma può rispondere diversamente.</td></tr>
+<tr><td><code>SIGQUIT</code></td><td><code>kill -QUIT "$pid"</code></td><td>Termina e può produrre un file diagnostico. Da tastiera: Ctrl+\.</td><td>Quando vuoi interrompere un programma e ottenere, se configurato, un <strong>file diagnostico della memoria</strong>, utile per analizzare un problema. Per una normale interruzione preferisci INT; per una normale chiusura, TERM.</td></tr>
+<tr><td><code>SIGKILL</code></td><td><code>kill -KILL "$pid"</code></td><td>Forza la terminazione, senza permettere al programma di eseguire la propria procedura di chiusura.</td><td>Quando hai già inviato TERM e, dopo aver atteso e controllato, <strong>il processo non termina e devi forzarne la chiusura</strong>. A differenza di TERM, non permette al programma di salvare dati o completare le proprie operazioni di chiusura.</td></tr>
+<tr><td><code>SIGSTOP</code></td><td><code>kill -STOP "$pid"</code></td><td>Sospende: il processo resta presente, ma non prosegue.</td><td>Quando devi <strong>sospendere un processo senza consentirgli di rifiutare la richiesta</strong>. A differenza di TSTP, non può essere gestito o ignorato. Il processo rimane presente e potrà riprendere con CONT.</td></tr>
+<tr><td><code>SIGTSTP</code></td><td><code>kill -TSTP "$pid"</code></td><td>Sospende. È anche il segnale di Ctrl+Z.</td><td>Per una <strong>pausa durante il lavoro nel terminale</strong>, normalmente con Ctrl+Z. Preferiscilo a STOP nell’interazione ordinaria: il programma può prepararsi alla sospensione o scegliere di non sospendersi.</td></tr>
+<tr><td><code>SIGCONT</code></td><td><code>kill -CONT "$pid"</code></td><td>Fa riprendere un processo sospeso.</td><td>Per <strong>riprendere un processo sospeso</strong> con STOP o TSTP. Se stai gestendo un job della shell, preferisci <code>bg</code> per riprenderlo in background oppure <code>fg</code> per riportarlo in primo piano: CONT da solo non sceglie questa posizione.</td></tr>
+<tr><td><code>SIGHUP</code></td><td><code>kill -HUP "$pid"</code></td><td>Segnala normalmente la perdita del terminale. Di base termina; alcuni programmi lo usano per rileggere la configurazione.</td><td>Invialo manualmente per <strong>ricaricare la configurazione solo se il programma documenta questo comportamento</strong>. Non è un comando universale di ricarica: di base termina il processo. Per chiedere semplicemente la chiusura, preferisci TERM.</td></tr>
+<tr><td><code>SIGUSR1</code></td><td><code>kill -USR1 "$pid"</code></td><td>Azione scelta dal programma; se non è prevista una gestione, termina.</td><td>Quando il programma documenta una <strong>specifica azione associata a USR1</strong>, per esempio stampare statistiche. Non ha un significato universale e, senza una gestione apposita, normalmente termina il processo.</td></tr>
+<tr><td><code>SIGUSR2</code></td><td><code>kill -USR2 "$pid"</code></td><td>Secondo segnale per un'azione scelta dal programma; di base termina.</td><td>Come USR1, ma per <strong>un’altra azione definita dal programma</strong>. Non è una versione più forte di USR1: la scelta dipende esclusivamente da ciò che prevede il programma.</td></tr>
+<tr><td><code>SIGALRM</code></td><td><code>kill -ALRM "$pid"</code></td><td>Segnala normalmente la scadenza di un timer; di base termina. Qui lo inviamo manualmente.</td><td>Per notificare la <strong>scadenza di un timer</strong>. Normalmente viene generato dal sistema dopo che il programma ha impostato il timer. Inviarlo con <code>kill</code> serve soprattutto a provare la risposta del programma; per una normale chiusura usa TERM.</td></tr>
 </tbody>
 </table>
 
@@ -142,18 +142,18 @@ kill -l
 
 ### Altri segnali da riconoscere
 
-<p align="justify">Questi segnali sono spesso generati dal sistema o dal programma stesso. Non è necessario provarli tutti; la sintassi per inviarli manualmente resta la stessa.</p>
+<p align="justify">Questi segnali sono spesso generati dal sistema o dal programma stesso. Sono soprattutto <strong>notifiche da riconoscere</strong>, più che comandi da scegliere per gestire quotidianamente i processi. Non è necessario provarli tutti; la sintassi per inviarli manualmente resta la stessa.</p>
 
 <table align="center">
-<thead><tr><th>Segnale</th><th>Esempio di invio</th><th>Situazione tipica e azione predefinita</th></tr></thead>
+<thead><tr><th>Segnale</th><th width="22%">Esempio di invio</th><th>Situazione tipica e azione predefinita</th><th>Quando usarlo e quale alternativa preferire</th></tr></thead>
 <tbody>
-<tr><td><code>SIGCHLD</code></td><td><code>kill -CHLD "$pid"</code></td><td>Avvisa il padre di un cambiamento di stato di un figlio; di base è ignorato.</td></tr>
-<tr><td><code>SIGPIPE</code></td><td><code>kill -PIPE "$pid"</code></td><td>Scrittura in un canale di comunicazione senza lettori; termina.</td></tr>
-<tr><td><code>SIGABRT</code></td><td><code>kill -ABRT "$pid"</code></td><td>Richiesta di arresto anomalo da parte del programma; termina.</td></tr>
-<tr><td><code>SIGSEGV</code></td><td><code>kill -SEGV "$pid"</code></td><td>Accesso non valido alla memoria; termina.</td></tr>
-<tr><td><code>SIGFPE</code></td><td><code>kill -FPE "$pid"</code></td><td>Errore aritmetico, per esempio certe divisioni per zero; termina.</td></tr>
-<tr><td><code>SIGWINCH</code></td><td><code>kill -WINCH "$pid"</code></td><td>Cambio delle dimensioni del terminale; di base è ignorato.</td></tr>
-<tr><td><code>SIGTTIN</code>, <code>SIGTTOU</code></td><td><code>kill -TTIN "$pid"</code><br><code>kill -TTOU "$pid"</code></td><td>Accessi al terminale da un gruppo in background, in determinate condizioni; sospendono.</td></tr>
+<tr><td><code>SIGCHLD</code></td><td><code>kill -CHLD "$pid"</code></td><td>Avvisa il padre di un cambiamento di stato di un figlio; di base è ignorato.</td><td>Normalmente non lo invii: il sistema avvisa il padre dei cambiamenti di stato dei figli. Inviarlo manualmente non termina un figlio e non sostituisce la raccolta del suo stato di uscita da parte del padre.</td></tr>
+<tr><td><code>SIGPIPE</code></td><td><code>kill -PIPE "$pid"</code></td><td>Scrittura in un canale di comunicazione senza lettori; termina.</td><td>Normalmente segnala una scrittura verso un canale senza lettori. L’invio manuale serve a provare la gestione del segnale; per chiudere un processo usa TERM.</td></tr>
+<tr><td><code>SIGABRT</code></td><td><code>kill -ABRT "$pid"</code></td><td>Richiesta di arresto anomalo da parte del programma; termina.</td><td>Per un arresto anomalo, eventualmente con informazioni diagnostiche. È tipicamente generato dal programma stesso. Per una chiusura ordinaria preferisci TERM.</td></tr>
+<tr><td><code>SIGSEGV</code></td><td><code>kill -SEGV "$pid"</code></td><td>Accesso non valido alla memoria; termina.</td><td>Normalmente segnala un accesso non valido alla memoria. Invialo manualmente solo per prove: non riproduce un vero errore di memoria.</td></tr>
+<tr><td><code>SIGFPE</code></td><td><code>kill -FPE "$pid"</code></td><td>Errore aritmetico, per esempio certe divisioni per zero; termina.</td><td>Normalmente segnala un errore aritmetico. L’invio manuale prova la risposta al segnale, senza provocare realmente quell’errore.</td></tr>
+<tr><td><code>SIGWINCH</code></td><td><code>kill -WINCH "$pid"</code></td><td>Cambio delle dimensioni del terminale; di base è ignorato.</td><td>Normalmente arriva quando cambia la dimensione del terminale. Inviarlo può provare la risposta di un’applicazione, ma non ridimensiona il terminale.</td></tr>
+<tr><td><code>SIGTTIN</code>, <code>SIGTTOU</code></td><td><code>kill -TTIN "$pid"</code><br><code>kill -TTOU "$pid"</code></td><td>Accessi al terminale da un gruppo in background, in determinate condizioni; sospendono.</td><td>Normalmente riguardano accessi al terminale da processi in background. Per sospendere volontariamente usa TSTP o STOP; per interagire con il job usa <code>fg</code>.</td></tr>
 </tbody>
 </table>
 
@@ -393,9 +393,10 @@ kill -TERM "$pid"
 <ul>
   <li>Spunto didattico: <a href="https://github.com/TheBitPoets/2cornot2c/blob/main/LINUX_PROGRAMMING.md#controllo-dei-processi">Controllo dei processi in 2cornot2c</a>. Testo ed esercizi sono originali.</li>
   <li>Segnali: <a href="https://man7.org/linux/man-pages/man7/signal.7.html">signal(7)</a>; shell e job: <a href="https://man7.org/linux/man-pages/man1/bash.1.html">Bash</a>. Nel terminale si possono consultare anche <code>help kill</code>, <code>help jobs</code>, <code>help fg</code> e <code>help bg</code>.</li>
+  <li>Scelta dei segnali: <a href="https://man7.org/linux/man-pages/man1/kill.1.html">TERM e KILL</a>, <a href="https://man7.org/linux/man-pages/man5/core.5.html">file diagnostici della memoria</a>, <a href="https://man7.org/linux/man-pages/man2/alarm.2.html">timer e ALRM</a>; esempio di uso documentato di HUP: <a href="https://nginx.org/en/docs/control.html">ricarica della configurazione in nginx</a>.</li>
   <li>Comandi: <a href="https://man7.org/linux/man-pages/man1/ps.1.html">ps</a>, <a href="https://man7.org/linux/man-pages/man1/pgrep.1.html">pgrep</a>, <a href="https://man7.org/linux/man-pages/man1/top.1.html">top</a>, <a href="https://manpages.ubuntu.com/manpages/noble/man1/killall.1.html">killall</a>, <a href="https://man7.org/linux/man-pages/man1/nice.1.html">nice</a>, <a href="https://manpages.ubuntu.com/manpages/noble/man1/renice.1.html">renice</a>.</li>
   <li>Per approfondire la gestione dei segnali nei programmi: <a href="02_COMUNICAZIONE_E_SINCRONIZZAZIONE.md#segnali-notifiche-non-contenitori-generici">segnali nel modulo 2</a>.</li>
-  <li>Revisione del 15 ottobre 2026: tre prove di base, esempi dei segnali più comuni, spiegazione di simboli e opzioni, approfondimenti facoltativi su ps/top, killall e nice/renice. Fonti sui segnali, Bash e ps ricontrollate.</li>
+  <li>Revisione del 15 ottobre 2026: tre prove di base, esempi dei segnali più comuni, spiegazione di simboli e opzioni, approfondimenti facoltativi su ps/top, killall e nice/renice. Aggiunta alle due tabelle la colonna «Quando usarlo e quale alternativa preferire», con confronti fra segnali simili. Fonti sui segnali, Bash e ps ricontrollate.</li>
   <li>Collaudo del 15 ottobre 2026 su Ubuntu 24.04 in WSL, con utente senza privilegi, Bash 5.2.21 e procps-ng 4.0.4: verificati i segnali elencati, gli stati S/T, Ctrl+Z e Ctrl+C in un terminale interattivo, jobs/bg/fg, nice/renice e pgrep/killall con conferma. La verifica sulla VM del corso resta da svolgere.</li>
   <li>Ambiente previsto: VM Ubuntu 24.04.3 LTS del corso, con Bash interattiva. Stato: <code>draft</code>.</li>
 </ul>
